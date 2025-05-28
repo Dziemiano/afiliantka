@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-
 export function HeroSection() {
   return (
     <section className="bg-gradient-to-r from-yellow-100 via-amber-100 to-orange-200 text-gray-800 py-20">
