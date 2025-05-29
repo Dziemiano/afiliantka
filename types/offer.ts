@@ -9,11 +9,13 @@ export interface Offer {
     };
   };
   link: string;
+  featured: boolean;
   files?: Array<{
     asset: {
-      _ref: string;
+      _ref: string | null;
       _type: string;
-      url?: string;
+      url: string;
+      originalFilename?: string;
     };
     _key: string;
   }>;

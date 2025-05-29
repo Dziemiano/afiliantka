@@ -8,24 +8,27 @@ import { OffersSection } from "@/components/sections/offers-section";
 import { OffersGridSkeleton } from "@/components/ui/loading-skeleton";
 import { Offer } from "@/types/offer";
 
-// In your page.tsx or wherever you fetch offers
+// app/page.tsx
 async function getOffers(): Promise<Offer[]> {
-  const query = `*[_type == "offer"] | order(_createdAt desc) {
+  const query = `*[_type == "offer"] | order(featured desc, _createdAt desc) {
     _id,
     title,
     description,
     image,
     link,
+    featured,
     files[]{
+      _key,
       asset->{
         _ref,
         _type,
-        url
-      },
-      _key
+        url,
+        originalFilename
+      }
     }
   }`;
-  return await client.fetch(query);
+  const offers = await client.fetch(query);
+  return offers;
 }
 
 async function OffersContent() {

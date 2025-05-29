@@ -1,15 +1,18 @@
 // sanity.config.ts
 "use client";
-
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
+import { visionTool } from "@sanity/vision";
+
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET!;
 
 export default defineConfig({
   name: "default",
   title: "Offers Landing CMS",
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
-  plugins: [structureTool()],
+  projectId,
+  dataset,
+  plugins: [structureTool(), visionTool()],
   schema: {
     types: [
       {
@@ -41,6 +44,14 @@ export default defineConfig({
             title: "Link",
             type: "url",
             validation: (Rule) => Rule.required(),
+          },
+          {
+            name: "featured",
+            title: "Featured Offer",
+            type: "boolean",
+            description:
+              "Mark this offer as featured to display it prominently",
+            initialValue: false,
           },
           {
             name: "files",

@@ -17,8 +17,8 @@ export function OffersGrid({ offers }: OffersGridProps) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {offers.map((offer, index) => (
-        <OfferCard key={offer._id} offer={offer} featured={index === 0} />
+      {offers.map((offer) => (
+        <OfferCard key={offer._id} offer={offer} />
       ))}
     </div>
   );
