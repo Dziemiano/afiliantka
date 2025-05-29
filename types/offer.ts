@@ -2,9 +2,19 @@ export interface Offer {
   _id: string;
   title: string;
   description: string;
-  price: number;
-  image: any; // Sanity image reference
+  image: {
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
   link: string;
-  createdAt: Date;
-  updatedAt: Date;
+  files?: Array<{
+    asset: {
+      _ref: string;
+      _type: string;
+      url?: string;
+    };
+    _key: string;
+  }>;
 }

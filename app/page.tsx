@@ -1,4 +1,5 @@
-export const dynamic ='force-dynamic'
+// app/page.tsx
+export const dynamic = "force-dynamic";
 
 import { Suspense } from "react";
 import { client } from "../sanity/lib/client";
@@ -7,8 +8,23 @@ import { OffersSection } from "@/components/sections/offers-section";
 import { OffersGridSkeleton } from "@/components/ui/loading-skeleton";
 import { Offer } from "@/types/offer";
 
+// In your page.tsx or wherever you fetch offers
 async function getOffers(): Promise<Offer[]> {
-  const query = `*[_type == "offer"] | order(_createdAt desc)`;
+  const query = `*[_type == "offer"] | order(_createdAt desc) {
+    _id,
+    title,
+    description,
+    image,
+    link,
+    files[]{
+      asset->{
+        _ref,
+        _type,
+        url
+      },
+      _key
+    }
+  }`;
   return await client.fetch(query);
 }
 
@@ -19,17 +35,19 @@ async function OffersContent() {
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-neutral-50">
       <HeroSection />
 
       <Suspense
         fallback={
-          <section className="py-16">
+          <section className="py-16 bg-neutral-50">
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4">Featured Offers</h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Loading amazing offers...
+                <h2 className="text-3xl font-bold mb-4 text-stone-700">
+                  Aktualne Oferty
+                </h2>
+                <p className="text-stone-600 max-w-2xl mx-auto">
+                  Ładowanie dostępnych ofert...
                 </p>
               </div>
               <OffersGridSkeleton />

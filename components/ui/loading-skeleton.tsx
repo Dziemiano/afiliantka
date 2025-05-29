@@ -1,3 +1,4 @@
+// components/ui/loading-skeleton.tsx
 import {
   Card,
   CardContent,
@@ -8,17 +9,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function OfferCardSkeleton() {
   return (
-    <Card className="overflow-hidden">
-      <Skeleton className="h-48 w-full" />
+    <Card className="overflow-hidden bg-white border-stone-200">
+      <Skeleton className="h-48 w-full bg-stone-100" />
       <CardHeader>
-        <Skeleton className="h-6 w-3/4" />
+        <Skeleton className="h-6 w-3/4 bg-stone-100" />
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-4 w-full mb-2" />
-        <Skeleton className="h-4 w-2/3" />
+        <Skeleton className="h-4 w-full mb-2 bg-stone-100" />
+        <Skeleton className="h-4 w-2/3 bg-stone-100" />
       </CardContent>
       <CardFooter>
-        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full bg-stone-100" />
       </CardFooter>
     </Card>
   );

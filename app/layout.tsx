@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -6,8 +7,8 @@ import { Header } from "@/components/layout/header";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "OfferHub - Amazing Deals & Offers",
-  description: "Discover incredible deals and exclusive offers",
+  title: "Afiliantka Faceless - Sprawdzone Oferty Partnerskie",
+  description: "Profesjonalne rozwiązania dla Twojego biznesu online",
 };
 
 export default function RootLayout({
@@ -16,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="pl">
+      <body className={`${inter.className} bg-neutral-50`}>
         <Header />
         {children}
       </body>

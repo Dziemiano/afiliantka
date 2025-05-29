@@ -1,3 +1,4 @@
+// components/ui/offer-card.tsx
 import Image from "next/image";
 import {
   Card,
@@ -9,8 +10,9 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink } from "lucide-react";
-import { urlFor } from "../../lib/sanity-image";
+import { ExternalLink, FileText } from "lucide-react";
+import { urlFor } from "@/lib/sanity-image";
+import { client } from "@/sanity/lib/client";
 import { Offer } from "@/types/offer";
 
 interface OfferCardProps {
@@ -19,10 +21,14 @@ interface OfferCardProps {
 }
 
 export function OfferCard({ offer, featured = false }: OfferCardProps) {
+  const getFileUrl = (fileRef: string) => {
+    return `https://cdn.sanity.io/files/${client.config().projectId}/${client.config().dataset}/${fileRef.replace("file-", "").replace("-pdf", ".pdf")}`;
+  };
+
   return (
     <Card
-      className={`overflow-hidden hover:shadow-lg transition-all duration-300 ${
-        featured ? "ring-2 ring-blue-500 scale-105" : ""
+      className={`overflow-hidden hover:shadow-lg transition-all duration-300 bg-white border-stone-200 ${
+        featured ? "ring-2 ring-stone-400 scale-105" : ""
       }`}
     >
       <div className="relative h-48 overflow-hidden">
@@ -33,24 +39,53 @@ export function OfferCard({ offer, featured = false }: OfferCardProps) {
           className="object-cover transition-transform duration-300 hover:scale-110"
         />
         {featured && (
-          <Badge className="absolute top-3 right-3 bg-blue-600">Featured</Badge>
+          <Badge className="absolute top-3 right-3 bg-stone-600 text-white">
+            Polecane
+          </Badge>
         )}
       </div>
 
       <CardHeader>
-        <CardTitle className="line-clamp-2">{offer.title}</CardTitle>
+        <CardTitle className="line-clamp-2 text-stone-700">
+          {offer.title}
+        </CardTitle>
       </CardHeader>
 
       <CardContent>
-        <CardDescription className="line-clamp-3">
+        <CardDescription className="line-clamp-3 text-stone-600">
           {offer.description}
         </CardDescription>
+
+        {/* Display PDF files if they exist */}
+        {offer.files && offer.files.length > 0 && (
+          <div className="mt-4 space-y-2">
+            <p className="text-sm font-medium text-stone-700">
+              Pliki do pobrania:
+            </p>
+            {offer.files.map((file, index) => (
+              <a
+                key={file._key}
+                href={getFileUrl(file.asset._ref)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm text-stone-600 hover:text-stone-800 transition-colors"
+              >
+                <FileText className="h-4 w-4" />
+                PDF {index + 1}
+              </a>
+            ))}
+          </div>
+        )}
       </CardContent>
 
-      <CardFooter>
+      <CardFooter className="flex flex-col gap-2">
         <Button
           asChild
-          className="w-full"
+          className={`w-full ${
+            featured
+              ? "bg-stone-600 hover:bg-stone-700 text-white"
+              : "bg-stone-100 hover:bg-stone-200 text-stone-700 border-stone-300"
+          }`}
           variant={featured ? "default" : "outline"}
         >
           <a
@@ -59,7 +94,7 @@ export function OfferCard({ offer, featured = false }: OfferCardProps) {
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2"
           >
-            View Offer
+            Zobacz Szczegóły
             <ExternalLink className="h-4 w-4" />
           </a>
         </Button>

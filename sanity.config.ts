@@ -1,23 +1,15 @@
+// sanity.config.ts
 "use client";
 
-/**
- * This configuration is used to for the Sanity Studio that’s mounted on the `/app/studio/[[...tool]]/page.tsx` route
- */
-
-import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
-// Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
-
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET!;
 
 export default defineConfig({
   name: "default",
   title: "Offers Landing CMS",
-  projectId,
-  dataset,
-  plugins: [structureTool(), visionTool()],
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+  plugins: [structureTool()],
   schema: {
     types: [
       {
@@ -49,6 +41,20 @@ export default defineConfig({
             title: "Link",
             type: "url",
             validation: (Rule) => Rule.required(),
+          },
+          {
+            name: "files",
+            title: "Files (PDF)",
+            type: "array",
+            of: [
+              {
+                type: "file",
+                options: {
+                  accept: "application/pdf",
+                },
+              },
+            ],
+            validation: (Rule) => Rule.optional(),
           },
         ],
       },
