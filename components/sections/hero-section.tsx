@@ -1,6 +1,4 @@
 // components/sections/hero-section.tsx
-import { Button } from "@/components/ui/button";
-
 export function HeroSection() {
   return (
     <section className="bg-gradient-to-br from-stone-200 via-neutral-150 to-amber-100 text-gray-800 py-20 relative overflow-hidden">
