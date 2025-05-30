@@ -1,3 +1,4 @@
+// types/offer.ts
 export interface Offer {
   _id: string;
   title: string;
@@ -12,11 +13,23 @@ export interface Offer {
   featured: boolean;
   files?: Array<{
     asset: {
-      _ref: string | null;
+      _ref: string;
       _type: string;
       url: string;
       originalFilename?: string;
     };
     _key: string;
   }>;
+}
+
+export interface HeroContent {
+  _id: string;
+  title: string;
+  description: string;
+  image: {
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
 }

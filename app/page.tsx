@@ -4,11 +4,10 @@ export const dynamic = "force-dynamic";
 import { Suspense } from "react";
 import { client } from "../sanity/lib/client";
 import { HeroSection } from "@/components/sections/hero-section";
-import { OffersSection } from "@/components/sections/offers-section";
-import { OffersGridSkeleton } from "@/components/ui/loading-skeleton";
+import { FeaturedOffers } from "@/components/sections/featured-offers";
+import { AllOffersTable } from "@/components/sections/all-offers-table";
 import { Offer } from "@/types/offer";
 
-// app/page.tsx
 async function getOffers(): Promise<Offer[]> {
   const query = `*[_type == "offer"] | order(featured desc, _createdAt desc) {
     _id,
@@ -27,39 +26,41 @@ async function getOffers(): Promise<Offer[]> {
       }
     }
   }`;
-  const offers = await client.fetch(query);
-  return offers;
+  return await client.fetch(query);
 }
 
 async function OffersContent() {
   const offers = await getOffers();
-  return <OffersSection offers={offers} />;
+  return (
+    <>
+      <FeaturedOffers offers={offers} />
+      <AllOffersTable offers={offers} />
+    </>
+  );
 }
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-neutral-50">
-      <HeroSection />
+    <div
+      className="relative flex size-full min-h-screen flex-col bg-white"
+      style={{ fontFamily: '"Work Sans", "Noto Sans", sans-serif' }}
+    >
+      <div className="layout-container flex h-full grow flex-col">
+        <HeroSection />
 
-      <Suspense
-        fallback={
-          <section className="py-16 bg-neutral-50">
-            <div className="container mx-auto px-4">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4 text-stone-700">
-                  Aktualne Oferty
-                </h2>
-                <p className="text-stone-600 max-w-2xl mx-auto">
-                  Ładowanie dostępnych ofert...
-                </p>
-              </div>
-              <OffersGridSkeleton />
-            </div>
-          </section>
-        }
-      >
-        <OffersContent />
-      </Suspense>
-    </main>
+        <Suspense
+          fallback={<div className="py-8 text-center">Ładowanie ofert...</div>}
+        >
+          <OffersContent />
+        </Suspense>
+
+        {/* Compact Footer */}
+        <footer className="flex flex-col gap-4 px-5 py-6 text-center">
+          <p className="text-stone-500 text-sm font-normal leading-normal">
+            @2025 Afiliantka Faceless. Wszelkie prawa zastrzeżone.
+          </p>
+        </footer>
+      </div>
+    </div>
   );
 }

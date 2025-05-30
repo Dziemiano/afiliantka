@@ -69,6 +69,32 @@ export default defineConfig({
           },
         ],
       },
+      {
+        name: "heroSection",
+        title: "Hero Section",
+        type: "document",
+        fields: [
+          {
+            name: "title",
+            title: "Hero Title",
+            type: "string",
+            validation: (Rule) => Rule.required(),
+          },
+          {
+            name: "description",
+            title: "Hero Description",
+            type: "text",
+            validation: (Rule) => Rule.required(),
+          },
+          {
+            name: "image",
+            title: "Hero Background Image",
+            type: "image",
+            options: { hotspot: true },
+            validation: (Rule) => Rule.required(),
+          },
+        ],
+      },
     ],
   },
   basePath: "/studio",

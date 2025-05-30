@@ -12,20 +12,45 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, FileText } from "lucide-react";
 import { urlFor } from "@/lib/sanity-image";
-import { client } from "@/sanity/lib/client";
 import { Offer } from "@/types/offer";
 
 interface OfferCardProps {
   offer: Offer;
+  variant?: "featured" | "default";
 }
 
-export function OfferCard({ offer }: OfferCardProps) {
+export function OfferCard({ offer, variant = "default" }: OfferCardProps) {
+  if (variant === "featured") {
+    return (
+      <div className="flex h-full flex-col gap-3 rounded-lg min-w-60">
+        <div className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl flex flex-col relative overflow-hidden">
+          <Image
+            src={urlFor(offer.image).width(240).height(135).url()}
+            alt={offer.title}
+            fill
+            className="object-cover"
+          />
+          {offer.featured && (
+            <Badge className="absolute top-2 right-2 bg-stone-600 text-white text-xs px-2 py-1">
+              Polecane
+            </Badge>
+          )}
+        </div>
+        <div className="px-1">
+          <p className="text-stone-700 text-sm font-medium leading-normal mb-1 line-clamp-2">
+            {offer.title}
+          </p>
+          <p className="text-stone-500 text-xs font-normal leading-normal line-clamp-3">
+            {offer.description.substring(0, 80)}...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Default card layout for grid
   return (
-    <Card
-      className={`overflow-hidden hover:shadow-lg transition-all duration-300 bg-white border-stone-200 ${
-        offer.featured ? "ring-2 ring-stone-400 scale-105" : ""
-      }`}
-    >
+    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-white border-stone-200">
       <div className="relative h-48 overflow-hidden">
         <Image
           src={urlFor(offer.image).width(400).height(200).url()}
@@ -40,14 +65,14 @@ export function OfferCard({ offer }: OfferCardProps) {
         )}
       </div>
 
-      <CardHeader>
-        <CardTitle className="line-clamp-2 text-stone-700">
+      <CardHeader className="pb-3">
+        <CardTitle className="line-clamp-2 text-stone-700 text-base">
           {offer.title}
         </CardTitle>
       </CardHeader>
 
-      <CardContent>
-        <CardDescription className="line-clamp-3 text-stone-600">
+      <CardContent className="pt-0">
+        <CardDescription className="line-clamp-3 text-stone-600 text-sm">
           {offer.description}
         </CardDescription>
 
@@ -60,16 +85,11 @@ export function OfferCard({ offer }: OfferCardProps) {
                 Pliki do pobrania:
               </p>
               {offer.files.map((file, index) => {
-                // Use the direct URL from Sanity (no need to construct it)
                 const fileUrl = file?.asset?.url;
                 const fileName =
                   file?.asset?.originalFilename || `PDF ${index + 1}`;
 
-                // Skip if no URL is available
-                if (!fileUrl) {
-                  console.log("No URL found for file:", file);
-                  return null;
-                }
+                if (!fileUrl) return null;
 
                 return (
                   <a
@@ -88,15 +108,10 @@ export function OfferCard({ offer }: OfferCardProps) {
           )}
       </CardContent>
 
-      <CardFooter className="flex flex-col gap-2">
+      <CardFooter className="pt-0">
         <Button
           asChild
-          className={`w-full ${
-            offer.featured
-              ? "bg-stone-600 hover:bg-stone-700 text-white"
-              : "bg-stone-100 hover:bg-stone-200 text-stone-700 border-stone-300"
-          }`}
-          variant={offer.featured ? "default" : "outline"}
+          className="w-full bg-stone-600 hover:bg-stone-700 text-white"
         >
           <a
             href={offer.link}
@@ -104,7 +119,7 @@ export function OfferCard({ offer }: OfferCardProps) {
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2"
           >
-            Zobacz Szczegóły
+            Promuj
             <ExternalLink className="h-4 w-4" />
           </a>
         </Button>
