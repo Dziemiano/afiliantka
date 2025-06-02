@@ -1,3 +1,4 @@
+// components/sections/featured-offers.tsx
 "use client";
 
 import { OfferCard } from "@/components/ui/offer-card";
@@ -15,8 +16,6 @@ export function FeaturedOffers({ offers }: FeaturedOffersProps) {
   const carouselRef = useRef<HTMLDivElement>(null);
   const desktopCarouselRef = useRef<HTMLDivElement>(null);
 
-  if (featuredOffers.length === 0) return null;
-
   // Mobile carousel functions
   const handleMobileScroll = () => {
     if (!carouselRef.current) return;
@@ -27,16 +26,15 @@ export function FeaturedOffers({ offers }: FeaturedOffersProps) {
     setCurrentIndex(newIndex);
   };
 
-  // Desktop carousel functions - FIXED TO FIT CONTAINER
+  // Desktop carousel functions
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
     if (desktopCarouselRef.current) {
       const containerWidth = desktopCarouselRef.current.clientWidth;
       const gap = 12; // gap-3 = 12px
-      const cardWidth = (containerWidth - 2 * gap) / 3; // Calculate card width to fit 3 cards
+      const cardWidth = (containerWidth - 2 * gap) / 3;
       const cardsPerSlide = 3;
 
-      // Calculate scroll position to show 3 cards starting from index * 3
       const scrollPosition = index * cardsPerSlide * (cardWidth + gap);
 
       desktopCarouselRef.current.scrollTo({
@@ -58,10 +56,13 @@ export function FeaturedOffers({ offers }: FeaturedOffersProps) {
     goToSlide(newIndex);
   };
 
-  // Auto-play for mobile only
+  // FIXED: Move useEffect to top level - always called, but with conditional logic inside
   useEffect(() => {
+    // Check if it's mobile and if there are enough offers for autoplay
     const isMobile = window.innerWidth < 768;
-    if (!isMobile || featuredOffers.length <= 1) return;
+    if (!isMobile || featuredOffers.length <= 1) {
+      return; // Early return inside useEffect, not conditional calling
+    }
 
     const interval = setInterval(() => {
       if (carouselRef.current) {
@@ -75,7 +76,10 @@ export function FeaturedOffers({ offers }: FeaturedOffersProps) {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [currentIndex, featuredOffers.length]);
+  }, [currentIndex, featuredOffers.length]); // Always called with proper dependencies
+
+  // Early return after hooks are called
+  if (featuredOffers.length === 0) return null;
 
   const totalSlides = Math.ceil(featuredOffers.length / 3);
   const showDesktopControls = featuredOffers.length > 3;
@@ -101,7 +105,7 @@ export function FeaturedOffers({ offers }: FeaturedOffersProps) {
                   WebkitOverflowScrolling: "touch",
                 }}
               >
-                {featuredOffers.map((offer, index) => (
+                {featuredOffers.map((offer) => (
                   <div
                     key={offer._id}
                     className="w-full flex-shrink-0 snap-start px-2"
@@ -133,7 +137,7 @@ export function FeaturedOffers({ offers }: FeaturedOffersProps) {
             {/* Desktop Carousel - 3 Cards Fitting Container Width */}
             <div className="hidden sm:block">
               <div className="relative">
-                {/* Navigation Buttons - Outside the carousel */}
+                {/* Navigation Buttons */}
                 {showDesktopControls && (
                   <>
                     <button
@@ -151,7 +155,7 @@ export function FeaturedOffers({ offers }: FeaturedOffersProps) {
                   </>
                 )}
 
-                {/* Carousel Container - FLEXIBLE WIDTH TO FIT 3 CARDS */}
+                {/* Carousel Container */}
                 <div
                   ref={desktopCarouselRef}
                   className="flex overflow-hidden gap-3 pb-3 w-full"
