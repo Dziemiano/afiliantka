@@ -1,4 +1,3 @@
-// lib/sanity-file.ts
 import { client } from "../sanity/lib/client";
 
 export function getFileUrl(fileRef: string): string | null {

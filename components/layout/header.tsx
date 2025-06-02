@@ -1,4 +1,3 @@
-// components/layout/header.tsx
 import { Badge } from "@/components/ui/badge";
 
 export function Header() {

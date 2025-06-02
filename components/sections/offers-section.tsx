@@ -1,4 +1,3 @@
-// components/sections/offers-section.tsx
 import { OffersGrid } from "./offers-grid";
 import { Offer } from "@/types/offer";
 

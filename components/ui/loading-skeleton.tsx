@@ -1,4 +1,3 @@
-// components/ui/loading-skeleton.tsx
 import {
   Card,
   CardContent,

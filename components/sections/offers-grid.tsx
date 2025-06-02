@@ -1,4 +1,3 @@
-// components/sections/offers-grid.tsx
 import { OfferCard } from "@/components/ui/offer-card";
 import { Offer } from "@/types/offer";
 

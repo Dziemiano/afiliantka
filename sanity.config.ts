@@ -1,4 +1,3 @@
-// sanity.config.ts
 "use client";
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";

@@ -1,88 +1,59 @@
-// components/ui/offer-card.tsx
 import Image from "next/image";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, FileText } from "lucide-react";
 import { urlFor } from "@/lib/sanity-image";
-import { Offer } from "@/types/offer";
+import type { Offer } from "@/types/offer";
+import { cn } from "@/lib/utils";
 
 interface OfferCardProps {
   offer: Offer;
-  variant?: "featured" | "default";
+  className?: string;
 }
 
-export function OfferCard({ offer, variant = "default" }: OfferCardProps) {
-  if (variant === "featured") {
-    return (
-      <div className="flex h-full flex-col gap-3 rounded-lg min-w-60">
-        <div className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl flex flex-col relative overflow-hidden">
-          <Image
-            src={urlFor(offer.image).width(240).height(135).url()}
-            alt={offer.title}
-            fill
-            className="object-cover"
-          />
-          {offer.featured && (
-            <Badge className="absolute top-2 right-2 bg-stone-600 text-white text-xs px-2 py-1">
-              Polecane
-            </Badge>
-          )}
-        </div>
-        <div className="px-1">
-          <p className="text-stone-700 text-sm font-medium leading-normal mb-1 line-clamp-2">
-            {offer.title}
-          </p>
-          <p className="text-stone-500 text-xs font-normal leading-normal line-clamp-3">
-            {offer.description.substring(0, 80)}...
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Default card layout for grid
+export function OfferCard({ offer, className }: OfferCardProps) {
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-white border-stone-200">
-      <div className="relative h-48 overflow-hidden">
+    <Card
+      className={cn(
+        "p-0 m-0 overflow-hidden border-stone-200 bg-white hover:shadow-md transition-shadow duration-200 w-52 flex-shrink-0",
+        className
+      )}
+    >
+      {/* Image on top - much smaller */}
+      <div className="relative h-24 w-full overflow-hidden">
         <Image
-          src={urlFor(offer.image).width(400).height(200).url()}
+          src={urlFor(offer.image).width(208).height(96).url()}
           alt={offer.title}
           fill
-          className="object-cover transition-transform duration-300 hover:scale-110"
+          className="object-cover"
         />
         {offer.featured && (
-          <Badge className="absolute top-3 right-3 bg-stone-600 text-white">
+          <Badge className="absolute top-1 right-1 bg-stone-600 text-white text-[9px] px-1 py-0">
             Polecane
           </Badge>
         )}
       </div>
 
-      <CardHeader className="pb-3">
-        <CardTitle className="line-clamp-2 text-stone-700 text-base">
+      {/* Content - very compact */}
+      <div className="p-2 m-0 space-y-1">
+        {/* Title */}
+        <h3 className="text-xs font-medium text-stone-700 line-clamp-2 leading-tight p-0 m-0">
           {offer.title}
-        </CardTitle>
-      </CardHeader>
+        </h3>
 
-      <CardContent className="pt-0">
-        <CardDescription className="line-clamp-3 text-stone-600 text-sm">
-          {offer.description}
-        </CardDescription>
+        {/* Description */}
+        <p className="text-[9px] text-stone-500 line-clamp-1 p-0 m-0">
+          {offer.description.substring(0, 40)}...
+        </p>
 
-        {/* Display PDF files */}
+        {/* All Files - Downloadable */}
         {offer.files &&
           Array.isArray(offer.files) &&
           offer.files.length > 0 && (
-            <div className="mt-4 space-y-2">
-              <p className="text-sm font-medium text-stone-700">
-                Pliki do pobrania:
+            <div className="space-y-1 p-0 m-0">
+              <p className="text-[8px] font-medium text-stone-700 p-0 m-0">
+                Pliki:
               </p>
               {offer.files.map((file, index) => {
                 const fileUrl = file?.asset?.url;
@@ -95,35 +66,41 @@ export function OfferCard({ offer, variant = "default" }: OfferCardProps) {
                   <a
                     key={file._key || index}
                     href={fileUrl}
+                    download={fileName}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-stone-600 hover:text-stone-800 transition-colors"
+                    className="flex items-center gap-1 text-[8px] text-stone-600 hover:text-stone-800 transition-colors p-0 m-0"
                   >
-                    <FileText className="h-4 w-4" />
-                    {fileName}
+                    <FileText className="h-2 w-2" />
+                    <span className="truncate">
+                      {fileName.length > 12
+                        ? `${fileName.substring(0, 12)}...`
+                        : fileName}
+                    </span>
                   </a>
                 );
               })}
             </div>
           )}
-      </CardContent>
 
-      <CardFooter className="pt-0">
-        <Button
-          asChild
-          className="w-full bg-stone-600 hover:bg-stone-700 text-white"
-        >
-          <a
-            href={offer.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2"
+        {/* Button */}
+        <div className="pt-1 p-0 m-0">
+          <Button
+            asChild
+            className="bg-stone-600 hover:bg-stone-700 text-white h-5 px-2 py-0 text-[9px] w-full"
           >
-            Promuj
-            <ExternalLink className="h-4 w-4" />
-          </a>
-        </Button>
-      </CardFooter>
+            <a
+              href={offer.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-0.5"
+            >
+              Przejdź do oferty
+              <ExternalLink className="h-2 w-2" />
+            </a>
+          </Button>
+        </div>
+      </div>
     </Card>
   );
 }

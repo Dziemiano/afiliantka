@@ -1,4 +1,3 @@
-// app/page.tsx
 export const dynamic = "force-dynamic";
 
 import { Suspense } from "react";
@@ -49,15 +48,19 @@ export default function Home() {
         <HeroSection />
 
         <Suspense
-          fallback={<div className="py-8 text-center">Ładowanie ofert...</div>}
+          fallback={
+            <div className="py-8 text-center px-4">
+              <p className="text-stone-600">Ładowanie ofert...</p>
+            </div>
+          }
         >
           <OffersContent />
         </Suspense>
 
-        {/* Compact Footer */}
-        <footer className="flex flex-col gap-4 px-5 py-6 text-center">
-          <p className="text-stone-500 text-sm font-normal leading-normal">
-            @2025 Afiliantka Faceless. Wszelkie prawa zastrzeżone.
+        {/* Mobile-Optimized Footer */}
+        <footer className="flex flex-col gap-4 px-4 py-6 text-center">
+          <p className="text-stone-500 text-xs sm:text-sm font-normal leading-normal">
+            @2024 Afiliantka Faceless. Wszelkie prawa zastrzeżone.
           </p>
         </footer>
       </div>

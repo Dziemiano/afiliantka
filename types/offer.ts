@@ -1,4 +1,3 @@
-// types/offer.ts
 export interface Offer {
   _id: string;
   title: string;

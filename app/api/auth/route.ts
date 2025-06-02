@@ -1,4 +1,3 @@
-// app/api/auth/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
 const CORRECT_PASSWORD = process.env.SITE_PASSWORD || "afiliantka2025";
