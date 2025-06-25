@@ -1,6 +1,4 @@
 import { client } from "@/sanity/lib/client";
-import { urlFor } from "@/lib/sanity-image";
-import Image from "next/image";
 
 interface HeroContent {
   _id: string;
@@ -31,21 +29,6 @@ export async function HeroSection() {
     <section className="bg-gradient-to-br from-stone-100 via-neutral-50 to-amber-50 py-6 px-4 sm:py-8 sm:px-6 lg:px-40">
       <div className="flex flex-1 justify-center">
         <div className="layout-content-container flex flex-col w-full max-w-[960px] flex-1 space-y-8">
-          {/* Logo - No Card Wrapper */}
-          {heroContent?.image && (
-            <div className="relative w-full h-32 sm:h-40 lg:h-48">
-              <Image
-                src={urlFor(heroContent.image).width(1200).height(300).url()}
-                alt="Afiliantka Faceless Logo"
-                fill
-                className="object-contain"
-                priority
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 960px"
-              />
-            </div>
-          )}
-
-          {/* Hero Content */}
           <div className="text-center space-y-4">
             <h1 className="text-stone-700 text-xl sm:text-2xl lg:text-3xl font-bold leading-tight">
               {heroContent?.title || "Ekskluzywne Oferty Partnerskie"}
