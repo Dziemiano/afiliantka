@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AppLogo } from "@/components/app-logo";
+import { Header } from "@/components/layout/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="pl">
       <body className={`${inter.className} bg-neutral-50`}>
+        <Header />
         <AppLogo />
         {children}
       </body>

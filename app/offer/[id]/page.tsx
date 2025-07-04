@@ -79,7 +79,18 @@ export default async function OfferPage({
             </h2>
             <ul className="space-y-2">
               {offer.files.map(
-                (file: any, idx: number) =>
+                (
+                  file: {
+                    asset: {
+                      _ref: string;
+                      _type: string;
+                      url: string;
+                      originalFilename?: string;
+                    };
+                    _key: string;
+                  },
+                  idx: number
+                ) =>
                   file.asset?.url && (
                     <li key={file._key || idx}>
                       <a
