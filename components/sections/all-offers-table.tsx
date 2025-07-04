@@ -13,12 +13,63 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PortableText } from "@portabletext/react";
 
 interface AllOffersTableProps {
   offers: Offer[];
 }
 
+interface PortableTextBlock {
+  _type: string;
+  children?: PortableTextChild[];
+  [key: string]: unknown;
+}
+
+interface PortableTextChild {
+  _type: string;
+  text?: string;
+  [key: string]: unknown;
+}
+
 export function AllOffersTable({ offers }: AllOffersTableProps) {
+  const getTruncatedBlocks = (
+    blocks: PortableTextBlock[] = [],
+    maxLength = 80
+  ) => {
+    let length = 0;
+    const truncated: PortableTextBlock[] = [];
+    for (const block of blocks) {
+      if (block._type !== "block" || !block.children) continue;
+      const children: PortableTextChild[] = [];
+      for (const child of block.children) {
+        if (length >= maxLength) break;
+        const remaining = maxLength - length;
+        const text = child.text || "";
+        if (text.length > remaining) {
+          children.push({
+            ...child,
+            text: text.substring(0, remaining) + "...",
+          });
+          length = maxLength;
+        } else {
+          children.push(child);
+          length += text.length;
+        }
+      }
+      if (children.length > 0) {
+        truncated.push({ ...block, children });
+      }
+      if (length >= maxLength) break;
+    }
+    return truncated;
+  };
+
+  console.log("getTruncatedBlocks", getTruncatedBlocks(offers[0].description));
+
+  offers.forEach((offer) => {
+    console.log("AllOffersTable description (raw):", offer.description);
+  });
+
   return (
     <section className="py-6 px-2 sm:px-8 lg:px-16 xl:px-32">
       <div className="flex flex-1 justify-center">
@@ -46,10 +97,6 @@ export function AllOffersTable({ offers }: AllOffersTableProps) {
                         </Badge>
                       )}
                     </div>
-
-                    <p className="text-stone-500 text-xs leading-relaxed">
-                      {offer.description.substring(0, 100)}...
-                    </p>
 
                     {/* Files for mobile */}
                     {offer.files && offer.files.length > 0 && (
@@ -94,6 +141,10 @@ export function AllOffersTable({ offers }: AllOffersTableProps) {
                       </div>
                     )}
 
+                    <PortableText
+                      value={getTruncatedBlocks(offer.description, 80)}
+                    />
+
                     <Button
                       asChild
                       size="sm"
@@ -134,19 +185,12 @@ export function AllOffersTable({ offers }: AllOffersTableProps) {
                     </TableHeader>
                     <TableBody>
                       {offers.map((offer) => {
-                        const maxDescLength = 80;
-                        const isTruncated =
-                          offer.description.length > maxDescLength;
-                        const displayDesc = isTruncated
-                          ? offer.description.substring(0, maxDescLength) +
-                            "..."
-                          : offer.description;
                         return (
                           <TableRow
                             key={offer._id}
                             className="border-stone-300 cursor-pointer hover:bg-stone-100 transition"
                             onClick={() =>
-                              (window.location.href = `/offer/${offer._id}`)
+                              (window.location.href = `/oferta/${offer.slug.current}`)
                             }
                             tabIndex={0}
                             role="link"
@@ -169,7 +213,12 @@ export function AllOffersTable({ offers }: AllOffersTableProps) {
                             </TableCell>
                             <TableCell className="text-stone-500 text-sm font-normal py-3">
                               <span className="line-clamp-2">
-                                {displayDesc}
+                                <PortableText
+                                  value={getTruncatedBlocks(
+                                    offer.description,
+                                    80
+                                  )}
+                                />
                               </span>
                             </TableCell>
                             <TableCell className="py-3">

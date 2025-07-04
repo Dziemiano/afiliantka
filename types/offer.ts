@@ -1,7 +1,7 @@
 export interface Offer {
   _id: string;
   title: string;
-  description: string;
+  description?: any[];
   image: {
     asset: {
       _ref: string;
@@ -19,6 +19,9 @@ export interface Offer {
     };
     _key: string;
   }>;
+  slug: {
+    current: string;
+  };
 }
 
 export interface HeroContent {

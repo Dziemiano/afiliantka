@@ -28,7 +28,8 @@ export default defineConfig({
           {
             name: "description",
             title: "Description",
-            type: "text",
+            type: "array",
+            of: [{ type: "block" }],
             validation: (Rule) => Rule.required(),
           },
           {
@@ -65,6 +66,16 @@ export default defineConfig({
               },
             ],
             validation: (Rule) => Rule.optional(),
+          },
+          {
+            name: "slug",
+            title: "Slug",
+            type: "slug",
+            options: {
+              source: "title",
+              maxLength: 96,
+            },
+            validation: (Rule) => Rule.required(),
           },
         ],
       },

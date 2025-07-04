@@ -1,42 +1,6 @@
 export const dynamic = "force-dynamic";
 
-import { Suspense } from "react";
-import { client } from "../sanity/lib/client";
 import { HeroSection } from "@/components/sections/hero-section";
-import { FeaturedOffers } from "@/components/sections/featured-offers";
-import { AllOffersTable } from "@/components/sections/all-offers-table";
-import { Offer } from "@/types/offer";
-
-async function getOffers(): Promise<Offer[]> {
-  const query = `*[_type == "offer"] | order(featured desc, _createdAt desc) {
-    _id,
-    title,
-    description,
-    image,
-    link,
-    featured,
-    files[]{
-      _key,
-      asset->{
-        _ref,
-        _type,
-        url,
-        originalFilename
-      }
-    }
-  }`;
-  return await client.fetch(query);
-}
-
-async function OffersContent() {
-  const offers = await getOffers();
-  return (
-    <>
-      <FeaturedOffers offers={offers} />
-      <AllOffersTable offers={offers} />
-    </>
-  );
-}
 
 export default function Home() {
   return (
@@ -46,17 +10,18 @@ export default function Home() {
     >
       <div className="layout-container flex h-full grow flex-col">
         <HeroSection />
-
-        <Suspense
-          fallback={
-            <div className="py-8 text-center px-4">
-              <p className="text-stone-600">Ładowanie ofert...</p>
-            </div>
-          }
-        >
-          <OffersContent />
-        </Suspense>
-
+        {/* Info Section Below Banner */}
+        <section className="py-8 px-4 sm:px-8 lg:px-32 xl:px-64">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-stone-700 text-xl font-bold mb-2">
+              Witamy w Afiliantka!
+            </h2>
+            <p className="text-stone-600 text-base sm:text-lg">
+              To miejsce, gdzie znajdziesz najlepsze oferty afiliacyjne. Dołącz
+              do naszej społeczności i zacznij zarabiać już dziś!
+            </p>
+          </div>
+        </section>
         {/* Mobile-Optimized Footer */}
         <footer className="flex flex-col gap-4 px-4 py-6 text-center">
           <p className="text-stone-500 text-xs sm:text-sm font-normal leading-normal">

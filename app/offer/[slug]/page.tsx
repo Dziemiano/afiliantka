@@ -4,15 +4,16 @@ import { urlFor } from "@/lib/sanity-image";
 import Image from "next/image";
 import Link from "next/link";
 import { FileText, ExternalLink } from "lucide-react";
+import { PortableText } from "@portabletext/react";
 
 export default async function OfferPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
+  const { slug } = await params;
   const offer = await client.fetch(
-    `*[_type == "offer" && _id == $id][0]{
+    `*[_type == "offer" && slug.current == $slug][0]{
       _id,
       title,
       description,
@@ -23,7 +24,7 @@ export default async function OfferPage({
         asset->{ url, originalFilename }
       }
     }`,
-    { id },
+    { slug },
     { cache: "force-cache" }
   );
 
@@ -34,6 +35,12 @@ export default async function OfferPage({
       </div>
     );
   }
+
+  const safeBlocks = Array.isArray(offer.description)
+    ? offer.description.filter(
+        (block: { _type?: string }) => block && block._type
+      )
+    : [];
 
   return (
     <div className="bg-stone-50 min-h-screen py-6 px-2">
@@ -67,9 +74,9 @@ export default async function OfferPage({
         )}
 
         {/* Description */}
-        <p className="text-stone-700 mb-8 text-base sm:text-lg leading-relaxed">
-          {offer.description}
-        </p>
+        <div className="text-stone-700 mb-8 text-base sm:text-lg leading-relaxed">
+          <PortableText value={safeBlocks} />
+        </div>
 
         {/* Files */}
         {offer.files && offer.files.length > 0 && (

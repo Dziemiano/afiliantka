@@ -13,7 +13,7 @@ interface OfferCardProps {
 
 export function OfferCard({ offer, className }: OfferCardProps) {
   return (
-    <Link href={`/offer/${offer._id}`}>
+    <Link href={`/oferta/${offer.slug.current}`}>
       <Card
         className={cn(
           "p-0 m-0 overflow-hidden border-stone-200 bg-white hover:shadow-md transition-shadow duration-200 w-52 flex-shrink-0",
