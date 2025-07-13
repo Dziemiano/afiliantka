@@ -13,6 +13,11 @@ interface PortableTextChild {
   [key: string]: unknown;
 }
 
+interface LinkValue {
+  href: string;
+  [key: string]: unknown;
+}
+
 interface HeroContent {
   _id: string;
   title: string;
@@ -69,7 +74,7 @@ export async function HeroSection() {
         value,
         children,
       }: {
-        value?: any;
+        value?: LinkValue;
         children?: React.ReactNode;
       }) => (
         <a
