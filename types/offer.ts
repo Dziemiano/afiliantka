@@ -27,7 +27,7 @@ export interface Offer {
 export interface HeroContent {
   _id: string;
   title: string;
-  description: string;
+  description: any[];
   image: {
     asset: {
       _ref: string;

@@ -1,9 +1,10 @@
 import { client } from "@/sanity/lib/client";
+import { PortableText } from "@portabletext/react";
 
 interface HeroContent {
   _id: string;
   title: string;
-  description: string;
+  description: any[];
   image: {
     asset: {
       _ref: string;
@@ -33,10 +34,14 @@ export async function HeroSection() {
             <h1 className="text-stone-700 text-xl sm:text-2xl lg:text-3xl font-bold leading-tight">
               {heroContent?.title || "Ekskluzywne Oferty Partnerskie"}
             </h1>
-            <p className="text-stone-600 text-sm sm:text-base lg:text-lg font-normal leading-relaxed max-w-2xl mx-auto">
-              {heroContent?.description ||
-                "Odkryj starannie wyselekcjonowane najlepsze oferty partnerskie z wysokimi współczynnikami konwersji."}
-            </p>
+            {/* Description */}
+            <div className="text-stone-600 text-sm sm:text-base lg:text-lg font-normal leading-relaxed max-w-2xl mx-auto">
+              {heroContent?.description ? (
+                <PortableText value={heroContent.description} />
+              ) : (
+                "Odkryj starannie wyselekcjonowane najlepsze oferty partnerskie z wysokimi współczynnikami konwersji."
+              )}
+            </div>
           </div>
         </div>
       </div>
