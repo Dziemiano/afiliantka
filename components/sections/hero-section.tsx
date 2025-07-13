@@ -1,10 +1,22 @@
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
 
+interface PortableTextBlock {
+  _type: string;
+  children?: PortableTextChild[];
+  [key: string]: unknown;
+}
+
+interface PortableTextChild {
+  _type: string;
+  text?: string;
+  [key: string]: unknown;
+}
+
 interface HeroContent {
   _id: string;
   title: string;
-  description: any[];
+  description: PortableTextBlock[];
   image: {
     asset: {
       _ref: string;

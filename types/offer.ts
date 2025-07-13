@@ -24,10 +24,22 @@ export interface Offer {
   };
 }
 
+export interface PortableTextBlock {
+  _type: string;
+  children?: PortableTextChild[];
+  [key: string]: unknown;
+}
+
+export interface PortableTextChild {
+  _type: string;
+  text?: string;
+  [key: string]: unknown;
+}
+
 export interface HeroContent {
   _id: string;
   title: string;
-  description: any[];
+  description: PortableTextBlock[];
   image: {
     asset: {
       _ref: string;
