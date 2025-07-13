@@ -23,12 +23,12 @@ export function Header() {
           >
             Oferty
           </Link>
-          <Link
+          {/* <Link
             href="/news"
             className="text-stone-700 hover:text-stone-900 font-medium transition-colors"
           >
             News
-          </Link>
+          </Link> */}
         </nav>
       </div>
     </header>

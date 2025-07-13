@@ -9,9 +9,8 @@ export default function Home() {
       style={{ fontFamily: '"Work Sans", "Noto Sans", sans-serif' }}
     >
       <div className="layout-container flex h-full grow flex-col">
-        <HeroSection />
         {/* Info Section Below Banner */}
-        <section className="py-8 px-4 sm:px-8 lg:px-32 xl:px-64">
+        {/* <section className="py-8 px-4 sm:px-8 lg:px-32 xl:px-64">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-stone-700 text-xl font-bold mb-2">
               Witamy w Afiliantka!
@@ -21,11 +20,12 @@ export default function Home() {
               do naszej społeczności i zacznij zarabiać już dziś!
             </p>
           </div>
-        </section>
+        </section> */}
         {/* Mobile-Optimized Footer */}
+        <HeroSection />
         <footer className="flex flex-col gap-4 px-4 py-6 text-center">
           <p className="text-stone-500 text-xs sm:text-sm font-normal leading-normal">
-            @2024 Afiliantka Faceless. Wszelkie prawa zastrzeżone.
+            @2025 Afiliantka Faceless. Wszelkie prawa zastrzeżone.
           </p>
         </footer>
       </div>
