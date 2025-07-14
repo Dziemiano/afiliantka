@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(request: NextRequest) {
   // Skip password check for studio and API routes
   if (
+    //Password access deactiveted for now
+    request.nextUrl.pathname.startsWith("/") ||
     request.nextUrl.pathname.startsWith("/studio") ||
     request.nextUrl.pathname.startsWith("/api")
   ) {
