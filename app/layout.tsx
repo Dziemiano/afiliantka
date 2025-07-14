@@ -20,7 +20,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pl">
-      <body className={`${inter.className} bg-neutral-50`}>
+      <body
+        className={`${inter.className} bg-gradient-to-br from-stone-100 via-neutral-50 to-amber-50`}
+      >
         <Header />
         <AppLogo />
         {children}
