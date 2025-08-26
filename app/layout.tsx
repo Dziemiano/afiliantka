@@ -26,10 +26,10 @@ export default function RootLayout({
         className={`${inter.className} bg-gradient-to-br from-stone-100 via-neutral-50 to-amber-50`}
       >
         <Analytics />
-        <SpeedInsights />
         <Header />
         <AppLogo />
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
