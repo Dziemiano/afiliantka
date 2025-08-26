@@ -5,6 +5,7 @@ import "./globals.css";
 import { AppLogo } from "@/components/app-logo";
 import { Header } from "@/components/layout/header";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         className={`${inter.className} bg-gradient-to-br from-stone-100 via-neutral-50 to-amber-50`}
       >
         <Analytics />
+        <SpeedInsights />
         <Header />
         <AppLogo />
         {children}
