@@ -44,7 +44,7 @@ export default async function OfferPage({
     <div className="bg-stone-50 min-h-screen py-6 px-2">
       {/* Breadcrumbs */}
       <div className="max-w-3xl mx-auto mb-4 px-2 text-xs text-stone-400">
-        <Link href="/" className="hover:underline">
+        <Link href="/oferty" className="hover:underline">
           Oferty
         </Link>
         <span className="mx-1 text-stone-300">/</span>

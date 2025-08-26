@@ -45,9 +45,10 @@ export default function OfertyPage() {
       style={{ fontFamily: '"Work Sans", "Noto Sans", sans-serif' }}
     >
       <div className="layout-container flex h-full grow flex-col">
-        <h1 className="text-stone-700 text-2xl font-bold text-center py-8">
+        {/* <h1 className="text-stone-700 text-2xl font-bold text-center py-8">
           Oferty
-        </h1>
+        </h1> */}
+        {/* TODO: Add breadcrumbs */}
         <Suspense
           fallback={
             <div className="py-8 text-center px-4">
