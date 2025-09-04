@@ -66,7 +66,8 @@ export default async function OfferPage({
               fill
               className="object-cover"
               sizes="(max-width: 900px) 100vw, 900px"
-              priority
+              priority={false}
+              loading="lazy"
             />
           </div>
         )}

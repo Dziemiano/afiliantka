@@ -49,6 +49,8 @@ export function AllOffersTable({ offers }: AllOffersTableProps) {
                         alt={offer.title}
                         fill
                         className="object-cover"
+                        loading="lazy"
+                        sizes="(max-width: 640px) 100vw, 800px"
                       />
                       {offer.featured && (
                         <Badge className="absolute top-2 right-2 bg-stone-600 text-white text-xs">
@@ -123,6 +125,8 @@ export function AllOffersTable({ offers }: AllOffersTableProps) {
                                   alt={offer.title}
                                   fill
                                   className="object-contain p-1"
+                                  loading="lazy"
+                                  sizes="160px"
                                 />
                               </div>
                             </TableCell>

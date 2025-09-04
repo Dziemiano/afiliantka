@@ -27,6 +27,8 @@ export function OfferCard({ offer, className }: OfferCardProps) {
             alt={offer.title}
             fill
             className="object-cover"
+            loading="lazy"
+            sizes="(max-width: 640px) 100vw, 208px"
           />
           {offer.featured && (
             <Badge className="absolute top-1 right-1 bg-stone-600 text-white text-[9px] px-1 py-0">

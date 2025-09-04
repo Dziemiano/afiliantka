@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import { Suspense } from "react";
 import { client } from "../../sanity/lib/client";
 import { FeaturedOffers } from "@/components/sections/featured-offers";
@@ -25,7 +23,11 @@ async function getOffers(): Promise<Offer[]> {
     },
     slug
   }`;
-  return await client.fetch(query);
+  return await client.fetch(
+    query,
+    {},
+    { next: { revalidate: 300, tags: ["offers"] } }
+  );
 }
 
 async function OffersContent() {
