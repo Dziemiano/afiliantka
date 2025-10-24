@@ -1,36 +1,39 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 
 export default function LoginPage() {
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const supabase = createClient();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setMessage('');
 
-    const response = await fetch("/api/auth", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
 
-    if (response.ok) {
-      router.push("/");
+    if (error) {
+      setError("Could not authenticate user. Please check the email address or contact an administrator.");
     } else {
-      setError("Nieprawidłowe hasło");
-      setPassword("");
+      setMessage('Check your email for a magic link to sign in.');
     }
   };
 
@@ -42,27 +45,28 @@ export default function LoginPage() {
             Afiliantka Faceless
           </CardTitle>
           <CardDescription className="text-stone-600">
-            Wprowadź hasło aby uzyskać dostęp
+            Sign in with a magic link.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSignIn} className="space-y-4">
             <div>
               <Input
-                type="password"
-                placeholder="Hasło"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="border-stone-300 focus:border-stone-500"
                 autoFocus
               />
               {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+              {message && <p className="text-green-500 text-sm mt-2">{message}</p>}
             </div>
             <Button
               type="submit"
               className="w-full bg-stone-600 hover:bg-stone-700 text-white"
             >
-              Zaloguj się
+              Send Magic Link
             </Button>
           </form>
         </CardContent>
