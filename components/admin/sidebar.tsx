@@ -11,37 +11,86 @@ export function AdminSidebar() {
     { href: "/admin", label: "Dashboard" },
     { href: "/admin/users", label: "Users" },
     { href: "/admin/files", label: "Files" },
+    {
+      href: "/studio",
+      label: "Manage Content",
+      external: true,
+      description: "Edit offers, pages & content",
+    },
   ];
 
   return (
-    <aside className="w-64 border-r bg-neutral-50/95 p-6">
-      <div className="flex flex-col gap-4">
-        <div>
-          <h2 className="text-lg font-semibold text-stone-700">Admin Panel</h2>
-          <p className="text-sm text-stone-500">System Management</p>
-        </div>
-        <nav className="flex flex-col gap-2">
-          {navItems.map((item) => (
+    <aside className="w-64 border-r bg-white shadow-sm">
+      <div className="flex flex-col h-full">
+        {/* Header */}
+        <div className="p-6 border-b">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-red-600 to-orange-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">A</span>
+              </div>
+              <h2 className="text-xl font-bold text-gray-900">Admin</h2>
+            </div>
             <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                pathname === item.href
-                  ? "bg-stone-200 text-stone-900"
-                  : "text-stone-700 hover:bg-stone-100 hover:text-stone-900"
-              )}
+              href="/"
+              className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
             >
-              {item.label}
+              ← Website
             </Link>
-          ))}
+          </div>
+          <p className="text-sm text-gray-600">Administrative Panel</p>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-6">
+          <div className="space-y-2">
+            {navItems.map((item) => (
+              <div key={item.href} className="space-y-1">
+                <Link
+                  href={item.href}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
+                  className={cn(
+                    "flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                    pathname === item.href
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  )}
+                >
+                  {item.label}
+                  {item.external && (
+                    <svg
+                      className="w-3 h-3 ml-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
+                    </svg>
+                  )}
+                </Link>
+                {item.description && (
+                  <p className="text-xs text-gray-500 px-3 -mt-1">
+                    {item.description}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
         </nav>
-        <div className="mt-8 pt-4 border-t border-stone-200">
+
+        {/* Footer */}
+        <div className="p-6 border-t bg-gray-50">
           <Link
-            href="/panel"
-            className="text-sm text-stone-500 hover:text-stone-700 transition-colors"
+            href="/dashboard"
+            className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
           >
-            ← Back to Panel
+            ← Back to Dashboard
           </Link>
         </div>
       </div>

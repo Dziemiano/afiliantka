@@ -10,6 +10,7 @@ export interface Offer {
   };
   link: string;
   featured: boolean;
+  category?: "personal" | "business" | "credit-cards";
   files?: Array<{
     asset: {
       _ref: string;

@@ -12,11 +12,27 @@ import {
 
 export default function AdminDashboard() {
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
-      <p className="text-gray-600 mb-8">
-        Manage users, files, and system resources from the admin panel.
-      </p>
+    <div className="space-y-6">
+      {/* Welcome Section */}
+      <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-lg p-6 border border-red-200">
+        <div className="flex items-center space-x-3 mb-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-orange-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-xl">A</span>
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Admin Dashboard
+            </h1>
+            <p className="text-gray-600">
+              System administration and management
+            </p>
+          </div>
+        </div>
+        <p className="text-gray-700">
+          Manage users, files, and system resources from the admin panel. Use
+          the cards below to access different administrative functions.
+        </p>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card className="bg-white border-stone-200">

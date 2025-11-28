@@ -54,6 +54,20 @@ export default defineConfig({
             initialValue: false,
           },
           {
+            name: "category",
+            title: "Category",
+            type: "string",
+            options: {
+              list: [
+                { title: "Personal", value: "personal" },
+                { title: "Business", value: "business" },
+                { title: "Credit Cards", value: "credit-cards" },
+              ],
+              layout: "radio",
+            },
+            validation: (Rule) => Rule.required(),
+          },
+          {
             name: "files",
             title: "Files (PDF)",
             type: "array",

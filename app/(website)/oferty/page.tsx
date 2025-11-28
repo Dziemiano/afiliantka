@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { client } from "../../sanity/lib/client";
+import { client } from "@/sanity/lib/client";
 import { FeaturedOffers } from "@/components/sections/featured-offers";
 import { AllOffersTable } from "@/components/sections/all-offers-table";
 import { Offer } from "@/types/offer";

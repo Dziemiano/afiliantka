@@ -21,13 +21,13 @@ export default async function AdminLayout({
   const isAdmin = await isCurrentUserAdmin();
 
   if (!isAdmin) {
-    redirect("/panel");
+    redirect("/dashboard");
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50">
       <AdminSidebar />
-      <main className="flex-1 p-8">{children}</main>
+      <main className="flex-1 p-8 bg-white">{children}</main>
     </div>
   );
 }

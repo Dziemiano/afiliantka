@@ -1,9 +1,9 @@
-import { Sidebar } from "@/components/panel/sidebar";
+import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { isCurrentUserAdmin } from "@/lib/roles";
 
-export default async function PanelLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -21,9 +21,9 @@ export default async function PanelLayout({
   const isAdmin = await isCurrentUserAdmin();
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar isAdmin={isAdmin} />
-      <main className="flex-1 p-8">{children}</main>
+    <div className="flex min-h-screen bg-gray-50">
+      <DashboardSidebar isAdmin={isAdmin} user={user} />
+      <main className="flex-1 p-8 bg-white">{children}</main>
     </div>
   );
 }

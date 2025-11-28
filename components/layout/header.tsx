@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { createClient } from '@/lib/supabase/client';
-import { User } from '@supabase/supabase-js';
+import { createClient } from "@/lib/supabase/client";
+import { User } from "@supabase/supabase-js";
 
 export function Header() {
   const router = useRouter();
@@ -15,14 +15,18 @@ export function Header() {
 
   useEffect(() => {
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       setUser(user);
     };
     getUser();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user || null);
-    });
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user || null);
+      }
+    );
 
     return () => {
       authListener.subscription.unsubscribe();
@@ -31,7 +35,7 @@ export function Header() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push('/login');
+    router.push("/login");
   };
 
   return (
@@ -56,9 +60,21 @@ export function Header() {
             Oferty
           </Link>
           {user ? (
-            <Button onClick={handleLogout} variant="ghost" className="text-stone-700 hover:text-stone-900 font-medium transition-colors">
-              Logout
-            </Button>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/dashboard"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+              >
+                Dashboard
+              </Link>
+              <Button
+                onClick={handleLogout}
+                variant="ghost"
+                className="text-stone-700 hover:text-stone-900 font-medium transition-colors"
+              >
+                Logout
+              </Button>
+            </div>
           ) : (
             <Link
               href="/login"
