@@ -82,6 +82,13 @@ export default defineConfig({
             validation: (Rule) => Rule.optional(),
           },
           {
+            name: "requirement",
+            title: "Onboarding Requirement",
+            type: "string",
+            description:
+              "What the user must do for this offer during onboarding (e.g. 'Założyć konto i dokonać pierwszej transakcji')",
+          },
+          {
             name: "slug",
             title: "Slug",
             type: "slug",
@@ -121,14 +128,21 @@ export default defineConfig({
         ],
       },
       {
-        name: "news",
-        title: "News",
+        name: "blog",
+        title: "Blog Post",
         type: "document",
         fields: [
           {
             name: "title",
             title: "Title",
             type: "string",
+            validation: (Rule) => Rule.required(),
+          },
+          {
+            name: "slug",
+            title: "Slug",
+            type: "slug",
+            options: { source: "title", maxLength: 96 },
             validation: (Rule) => Rule.required(),
           },
           {
@@ -155,6 +169,62 @@ export default defineConfig({
             title: "Author",
             type: "string",
             validation: (Rule) => Rule.optional(),
+          },
+        ],
+      },
+      {
+        name: "faq",
+        title: "FAQ",
+        type: "document",
+        fields: [
+          {
+            name: "question",
+            title: "Question",
+            type: "string",
+            validation: (Rule) => Rule.required(),
+          },
+          {
+            name: "answer",
+            title: "Answer",
+            type: "text",
+            validation: (Rule) => Rule.required(),
+          },
+          {
+            name: "order",
+            title: "Order",
+            type: "number",
+            initialValue: 0,
+          },
+        ],
+      },
+      {
+        name: "howItWorks",
+        title: "How It Works",
+        type: "document",
+        fields: [
+          {
+            name: "title",
+            title: "Title",
+            type: "string",
+            validation: (Rule) => Rule.required(),
+          },
+          {
+            name: "description",
+            title: "Description",
+            type: "text",
+            validation: (Rule) => Rule.required(),
+          },
+          {
+            name: "icon",
+            title: "Icon (emoji or text)",
+            type: "string",
+            description: "An emoji or short text to display as the step icon",
+          },
+          {
+            name: "order",
+            title: "Order",
+            type: "number",
+            initialValue: 0,
           },
         ],
       },

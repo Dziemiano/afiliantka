@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server";
-import { createClient as createClientClient } from "@/lib/supabase/client";
 import { Role, UserWithRoles, Permission } from "@/types/role";
 
 export async function getUserRoles(userId: string): Promise<Role[]> {
@@ -19,7 +18,7 @@ export async function getUserRoles(userId: string): Promise<Role[]> {
     return [];
   }
 
-  return data?.map((item) => item.role).filter(Boolean) || [];
+  return (data?.map((item) => item.role).filter(Boolean) as unknown as Role[]) || [];
 }
 
 // Alternative method using RPC function to bypass RLS issues

@@ -1,34 +1,67 @@
-export const dynamic = "force-dynamic";
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import { AppLogo } from "@/components/app-logo";
+import { HowItWorksSection } from "@/components/sections/how-it-works-section";
+import { FaqSection } from "@/components/sections/faq-section";
+import { OffersFilter } from "@/components/sections/offers-filter";
+import { client } from "@/sanity/lib/client";
+import type { Offer } from "@/types/offer";
 
-import { HeroSection } from "@/components/sections/hero-section";
+export const metadata: Metadata = {
+  title: "Afiliantka Faceless - Sprawdzone Oferty Partnerskie",
+  description:
+    "Odkryj starannie wyselekcjonowane oferty partnerskie z wysokimi współczynnikami konwersji. Profesjonalne rozwiązania dla Twojego biznesu online.",
+};
+
+async function getOffers(): Promise<Offer[]> {
+  const query = `*[_type == "offer"] | order(featured desc, _createdAt desc) {
+    _id,
+    title,
+    description,
+    image,
+    link,
+    featured,
+    category,
+    files[]{
+      _key,
+      asset->{
+        _ref,
+        _type,
+        url,
+        originalFilename
+      }
+    },
+    slug
+  }`;
+  return await client.fetch(
+    query,
+    {},
+    { next: { revalidate: 300, tags: ["offers"] } }
+  );
+}
+
+async function OffersContent() {
+  const offers = await getOffers();
+  return <OffersFilter offers={offers} />;
+}
 
 export default function Home() {
   return (
-    <div
-      className="relative flex size-full min-h-screen flex-col"
-      style={{ fontFamily: '"Work Sans", "Noto Sans", sans-serif' }}
-    >
-      <div className="layout-container flex h-full grow flex-col ">
-        {/* Info Section Below Banner */}
-        {/* <section className="py-8 px-4 sm:px-8 lg:px-32 xl:px-64">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-stone-700 text-xl font-bold mb-2">
-              Witamy w Afiliantka!
-            </h2>
-            <p className="text-stone-600 text-base sm:text-lg">
-              To miejsce, gdzie znajdziesz najlepsze oferty afiliacyjne. Dołącz
-              do naszej społeczności i zacznij zarabiać już dziś!
-            </p>
+    <>
+      <Suspense fallback={null}>
+        <AppLogo />
+      </Suspense>
+      <HowItWorksSection />
+      <Suspense
+        fallback={
+          <div className="py-10 text-center px-4">
+            <p className="text-slate-500">Ładowanie ofert...</p>
           </div>
-        </section> */}
-        {/* Mobile-Optimized Footer */}
-        <HeroSection />
-        <footer className="flex flex-col gap-4 px-4 py-6 text-center bg-gradient-to-br from-stone-100 via-neutral-50 to-amber-50">
-          <p className="text-stone-500 text-xs sm:text-sm font-normal leading-normal">
-            @2025 Afiliantka Faceless. Wszelkie prawa zastrzeżone.
-          </p>
-        </footer>
-      </div>
-    </div>
+        }
+      >
+        <OffersContent />
+      </Suspense>
+      <FaqSection />
+    </>
   );
 }

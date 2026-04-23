@@ -11,6 +11,7 @@ export interface Offer {
   link: string;
   featured: boolean;
   category?: "personal" | "business" | "credit-cards";
+  requirement?: string;
   files?: Array<{
     asset: {
       _ref: string;

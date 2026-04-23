@@ -9,6 +9,10 @@ interface FileUploadProps {
   onFolderCreateSuccess: () => void;
 }
 
+interface BlobListItem {
+  pathname: string;
+}
+
 export function FileUpload({
   onUploadBegin,
   onUploadEnd,
@@ -32,7 +36,20 @@ export function FileUpload({
       const uniqueFolders = new Set<string>();
       uniqueFolders.add("/"); // Add root folder
 
-      data.forEach((blob: any) => {
+      if (!Array.isArray(data)) {
+        return;
+      }
+
+      data.forEach((blob) => {
+        if (
+          typeof blob !== "object" ||
+          blob === null ||
+          !("pathname" in blob) ||
+          typeof (blob as BlobListItem).pathname !== "string"
+        ) {
+          return;
+        }
+
         const parts = blob.pathname.split("/");
         let currentPath = "";
         for (let i = 0; i < parts.length - 1; i++) {
@@ -125,9 +142,7 @@ export function FileUpload({
         );
       }
 
-      const result = await response.json();
-      console.log("Upload successful:", result);
-
+      await response.json();
       // Clear the file input
       if (inputFileRef.current) {
         inputFileRef.current.value = "";

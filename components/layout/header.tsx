@@ -1,17 +1,34 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
+import { useState, useEffect, useMemo } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
+import { Menu, X } from "lucide-react";
+
+const NAV_LINKS = [
+  { href: "/oferty", label: "Oferty" },
+  { href: "/blog", label: "Blog" },
+];
 
 export function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const supabase = createClient();
+
+  const appOrigin = useMemo(() => {
+    if (process.env.NEXT_PUBLIC_APP_ORIGIN) {
+      return process.env.NEXT_PUBLIC_APP_ORIGIN;
+    }
+    if (typeof window !== "undefined") {
+      return `${window.location.protocol}//app.${window.location.host.replace(/^app\./, "")}`;
+    }
+    return "";
+  }, []);
 
   useEffect(() => {
     const getUser = async () => {
@@ -35,56 +52,122 @@ export function Header() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push("/login");
+    setMenuOpen(false);
+    if (appOrigin) {
+      window.location.href = `${appOrigin}/login`;
+    } else {
+      router.push("/login");
+    }
   };
 
+  const isActive = (href: string) => pathname === href;
+
   return (
-    <header className="border-b bg-neutral-50/95 backdrop-blur supports-[backdrop-filter]:bg-neutral-50/60 border-stone-200">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Link href="/" className="text-2xl font-bold text-stone-700">
-            Afiliantka Faceless
-          </Link>
-          <Badge
-            variant="secondary"
-            className="bg-stone-100 text-stone-600 border-stone-300"
-          >
-            Beta
-          </Badge>
-        </div>
-        <nav className="flex gap-6 items-center">
-          <Link
-            href="/oferty"
-            className="text-stone-700 hover:text-stone-900 font-medium transition-colors"
-          >
-            Oferty
-          </Link>
-          {user ? (
-            <div className="flex items-center gap-4">
+    <header className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/80 backdrop-blur-lg">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-1.5">
+          <span className="text-lg sm:text-xl font-bold text-brand">Afiliantka</span>
+          <span className="text-lg sm:text-xl font-light text-slate-400">Faceless</span>
+        </Link>
+
+        {/* Desktop nav */}
+        <nav className="hidden sm:flex gap-1 items-center">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                isActive(link.href)
+                  ? "text-brand bg-brand-light"
+                  : "text-slate-600 hover:text-brand hover:bg-slate-50"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          <div className="ml-4 flex items-center gap-2">
+            {user ? (
+              <>
+                <Link
+                  href={appOrigin ? `${appOrigin}/dashboard` : "/dashboard"}
+                  className="inline-flex items-center px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-brand to-teal-500 rounded-lg hover:opacity-90 transition-opacity"
+                >
+                  Dashboard
+                </Link>
+                <Button
+                  onClick={handleLogout}
+                  variant="ghost"
+                  className="text-slate-500 hover:text-slate-700 text-sm"
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
               <Link
-                href="/dashboard"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+                href={appOrigin ? `${appOrigin}/login` : "/login"}
+                className="inline-flex items-center px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-brand to-teal-500 rounded-lg hover:opacity-90 transition-opacity"
+              >
+                Zaloguj się
+              </Link>
+            )}
+          </div>
+        </nav>
+
+        {/* Mobile hamburger */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="sm:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-600 hover:bg-slate-100 rounded-lg"
+        >
+          {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      {menuOpen && (
+        <nav className="sm:hidden border-t border-slate-100 bg-white px-4 py-3 space-y-1">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setMenuOpen(false)}
+              className={`block px-4 py-3 min-h-[44px] rounded-lg text-sm font-medium transition-colors ${
+                isActive(link.href)
+                  ? "text-brand bg-brand-light"
+                  : "text-slate-700 hover:text-brand hover:bg-slate-50"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          {user ? (
+            <>
+              <Link
+                href={appOrigin ? `${appOrigin}/dashboard` : "/dashboard"}
+                onClick={() => setMenuOpen(false)}
+                className="block px-4 py-3 min-h-[44px] bg-gradient-to-r from-brand to-teal-500 text-white rounded-lg font-semibold text-sm text-center"
               >
                 Dashboard
               </Link>
-              <Button
+              <button
                 onClick={handleLogout}
-                variant="ghost"
-                className="text-stone-700 hover:text-stone-900 font-medium transition-colors"
+                className="block w-full px-4 py-3 min-h-[44px] text-slate-500 hover:text-slate-700 rounded-lg text-sm text-left"
               >
                 Logout
-              </Button>
-            </div>
+              </button>
+            </>
           ) : (
             <Link
-              href="/login"
-              className="text-stone-700 hover:text-stone-900 font-medium transition-colors"
+              href={appOrigin ? `${appOrigin}/login` : "/login"}
+              onClick={() => setMenuOpen(false)}
+              className="block px-4 py-3 min-h-[44px] bg-gradient-to-r from-brand to-teal-500 text-white rounded-lg font-semibold text-sm text-center"
             >
-              Login
+              Zaloguj się
             </Link>
           )}
         </nav>
-      </div>
+      )}
     </header>
   );
 }

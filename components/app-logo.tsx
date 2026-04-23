@@ -1,4 +1,3 @@
-// components/AppLogo.tsx
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/lib/sanity-image";
 import Image from "next/image";
@@ -13,16 +12,15 @@ export async function AppLogo({ className = "" }: { className?: string }) {
   if (!logo) return null;
   return (
     <div
-      className={`flex justify-center items-center w-full py-6 ${className}`}
-      style={{ minHeight: "96px" }}
+      className={`flex justify-center items-center w-full py-4 bg-gradient-to-br from-brand-light via-white to-teal-50 ${className}`}
     >
-      <div className="relative w-full h-24 sm:h-32 lg:h-40">
+      <div className="relative w-full max-w-3xl h-14 sm:h-18 lg:h-20 px-4">
         <Image
           src={urlFor(logo).width(960).height(240).url()}
           alt="Afiliantka Faceless Logo"
           fill
           className="object-contain"
-          loading="lazy"
+          priority
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 800px"
         />
       </div>

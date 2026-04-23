@@ -1,8 +1,19 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { client } from "@/sanity/lib/client";
-import { FeaturedOffers } from "@/components/sections/featured-offers";
-import { AllOffersTable } from "@/components/sections/all-offers-table";
-import { Offer } from "@/types/offer";
+import { OffersFilter } from "@/components/sections/offers-filter";
+import type { Offer } from "@/types/offer";
+
+export const metadata: Metadata = {
+  title: "Oferty partnerskie",
+  description:
+    "Przeglądaj sprawdzone oferty partnerskie — konta osobiste, biznesowe i karty kredytowe z wysokimi współczynnikami konwersji.",
+  openGraph: {
+    title: "Oferty partnerskie | Afiliantka Faceless",
+    description:
+      "Przeglądaj sprawdzone oferty partnerskie z wysokimi współczynnikami konwersji.",
+  },
+};
 
 async function getOffers(): Promise<Offer[]> {
   const query = `*[_type == "offer"] | order(featured desc, _createdAt desc) {
@@ -12,6 +23,7 @@ async function getOffers(): Promise<Offer[]> {
     image,
     link,
     featured,
+    category,
     files[]{
       _key,
       asset->{
@@ -32,35 +44,21 @@ async function getOffers(): Promise<Offer[]> {
 
 async function OffersContent() {
   const offers = await getOffers();
-  return (
-    <>
-      <FeaturedOffers offers={offers} />
-      <AllOffersTable offers={offers} />
-    </>
-  );
+  return <OffersFilter offers={offers} />;
 }
 
 export default function OfertyPage() {
   return (
-    <div
-      className="relative flex size-full min-h-screen flex-col bg-white"
-      style={{ fontFamily: '"Work Sans", "Noto Sans", sans-serif' }}
-    >
-      <div className="layout-container flex h-full grow flex-col">
-        {/* <h1 className="text-stone-700 text-2xl font-bold text-center py-8">
-          Oferty
-        </h1> */}
-        {/* TODO: Add breadcrumbs */}
-        <Suspense
-          fallback={
-            <div className="py-8 text-center px-4">
-              <p className="text-stone-600">Ładowanie ofert...</p>
-            </div>
-          }
-        >
-          <OffersContent />
-        </Suspense>
-      </div>
+    <div className="bg-white min-h-screen">
+      <Suspense
+        fallback={
+          <div className="py-16 text-center px-4">
+            <p className="text-slate-500">Ładowanie ofert...</p>
+          </div>
+        }
+      >
+        <OffersContent />
+      </Suspense>
     </div>
   );
 }

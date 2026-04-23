@@ -9,24 +9,40 @@ import { useState } from "react";
 
 interface DashboardSidebarProps {
   isAdmin: boolean;
+  isModerator?: boolean;
+  isOnboardOnly?: boolean;
   user: {
     id: string;
     email?: string;
-    user_metadata?: any;
+    user_metadata?: {
+      full_name?: string;
+    } | null;
   };
 }
 
-export function DashboardSidebar({ isAdmin, user }: DashboardSidebarProps) {
+export function DashboardSidebar({
+  isAdmin,
+  isModerator,
+  isOnboardOnly,
+  user,
+}: DashboardSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
-  const navItems = [
-    { href: "/dashboard/offers", label: "Offers" },
-    { href: "/dashboard/onboard", label: "Onboard" },
-    { href: "/dashboard/files", label: "Files" },
-    ...(isAdmin ? [{ href: "/admin", label: "Admin" }] : []),
-  ];
+  const navItems = isOnboardOnly
+    ? [
+        { href: "/dashboard/onboarding", label: "Onboarding" },
+        { href: "/dashboard/offers", label: "Oferty" },
+      ]
+    : [
+        { href: "/dashboard", label: "Panel" },
+        { href: "/dashboard/onboard", label: "Materiały" },
+        { href: "/dashboard/resources", label: "Zasoby" },
+        { href: "/dashboard/files", label: "Wszystkie pliki" },
+        { href: "/dashboard/profile", label: "Profil" },
+        ...(isAdmin || isModerator ? [{ href: "/admin", label: "Admin" }] : []),
+      ];
 
   const handleSignOut = async () => {
     setIsSigningOut(true);
@@ -42,7 +58,7 @@ export function DashboardSidebar({ isAdmin, user }: DashboardSidebarProps) {
   };
 
   return (
-    <aside className="w-64 border-r bg-white shadow-sm">
+    <aside className="w-64 h-full border-r bg-white shadow-sm">
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="p-6 border-b">
@@ -61,7 +77,7 @@ export function DashboardSidebar({ isAdmin, user }: DashboardSidebarProps) {
             </Link>
           </div>
           <p className="text-sm text-gray-600">
-            Welcome back, {user.email?.split("@")[0] || "User"}
+            Witaj, {user.user_metadata?.full_name || user.email?.split("@")[0] || "Użytkownik"}
           </p>
         </div>
 

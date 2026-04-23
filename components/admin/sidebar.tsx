@@ -4,13 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-export function AdminSidebar() {
+interface AdminSidebarProps {
+  isAdmin?: boolean;
+}
+
+export function AdminSidebar({ isAdmin = true }: AdminSidebarProps) {
   const pathname = usePathname();
 
   const navItems = [
     { href: "/admin", label: "Dashboard" },
-    { href: "/admin/users", label: "Users" },
+    ...(isAdmin ? [{ href: "/admin/users", label: "Users" }] : []),
     { href: "/admin/files", label: "Files" },
+    { href: "/admin/drive", label: "Drive Sources" },
+    ...(isAdmin ? [{ href: "/admin/activity", label: "Activity Log" }] : []),
     {
       href: "/studio",
       label: "Manage Content",
@@ -20,7 +26,7 @@ export function AdminSidebar() {
   ];
 
   return (
-    <aside className="w-64 border-r bg-white shadow-sm">
+    <aside className="w-64 h-full border-r bg-white shadow-sm">
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="p-6 border-b">

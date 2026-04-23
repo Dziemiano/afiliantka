@@ -15,14 +15,14 @@ export const createClient = async () => {
         set(name: string, value: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value, ...options })
-          } catch (_e) {
+          } catch {
             // This can be ignored when called from Server Components.
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: '', ...options })
-          } catch (_e) {
+          } catch {
             // This can be ignored when called from Server Components.
           }
         },
@@ -45,14 +45,14 @@ export const createAdminClient = async () => {
                 set(name: string, value: string, options: CookieOptions) {
                     try {
                         cookieStore.set({ name, value, ...options })
-                    } catch (_e) {
+                    } catch {
                         // This can be ignored when called from Server Components.
                     }
                 },
                 remove(name: string, options: CookieOptions) {
                     try {
                         cookieStore.set({ name, value: '', ...options })
-                    } catch (_e) {
+                    } catch {
                         // This can be ignored when called from Server Components.
                     }
                 },
