@@ -18,7 +18,8 @@ export function Header() {
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const supabase = createClient();
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 
   const appOrigin = useMemo(() => {
     if (process.env.NEXT_PUBLIC_APP_ORIGIN) {
@@ -31,6 +32,12 @@ export function Header() {
   }, []);
 
   useEffect(() => {
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return;
+    }
+
+    const supabase = createClient();
+
     const getUser = async () => {
       const {
         data: { user },
@@ -48,10 +55,13 @@ export function Header() {
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [supabase]);
+  }, [supabaseUrl, supabaseAnonKey]);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    if (supabaseUrl && supabaseAnonKey) {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    }
     setMenuOpen(false);
     if (appOrigin) {
       window.location.href = `${appOrigin}/login`;
