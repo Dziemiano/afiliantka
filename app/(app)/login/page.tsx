@@ -16,7 +16,8 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const supabase = createClient();
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 
   const appOrigin = useMemo(
     () => process.env.NEXT_PUBLIC_APP_ORIGIN ?? "",
@@ -33,6 +34,12 @@ export default function LoginPage() {
       return;
     }
 
+    if (!supabaseUrl || !supabaseAnonKey) {
+      setError("Brak konfiguracji Supabase w zmiennych środowiskowych.");
+      return;
+    }
+
+    const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
