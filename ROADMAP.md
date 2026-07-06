@@ -76,6 +76,17 @@ Full visual overhaul of the public-facing website. Clean, light base with a real
 - [ ] **Website layout** -- remove separate `AppLogo` component between header and content (integrate into hero or header), clean white base background instead of stone/amber gradient
 - [ ] **Login page** -- brand-colored accent, centered card with subtle shadow
 
+### Phase 4.6: Strona współpracy afiliacyjnej
+
+Priorytet biznesowy -- strona informująca o modelu współpracy faceless i kierująca do panelu (invite-only).
+
+- [ ] **Route `/wspolpraca`** -- nowa strona w `app/(website)/wspolpraca/` z layoutem publicznym
+- [ ] **Sanity schema `cooperationPage`** -- korzyści współpracy, opis procesu dołączenia, FAQ współpracy (edytowalne w Studio)
+- [ ] **CTA buttons** -- "Zaloguj się" (link do `app.afiliantkafaceless.pl/login`), "Poproś o zaproszenie" (mailto lub kontakt z adminem)
+- [ ] **Navigation** -- link "Współpraca" w headerze i footerze
+- [ ] **Affiliate disclosure** -- informacja o linkach partnerskich na stronach ofert (`/oferta/[slug]`)
+- [ ] **Sitemap** -- dodanie `/wspolpraca` do `app/sitemap.ts`
+
 ### Phase 4.7: Content & Engagement
 
 - [ ] **Newsletter signup** -- email capture form on home page and blog, stored in Supabase, admin export
@@ -104,3 +115,26 @@ Full visual overhaul of the public-facing website. Clean, light base with a real
 - [ ] **Testing** -- unit tests for role logic, integration tests for auth flow
 - [ ] **CI/CD** -- linting, type checking, preview deployments per branch
 - [ ] **Monitoring** -- error tracking (Sentry or similar)
+
+### Phase 6: Czat społecznościowy
+
+Klasyczny czat między użytkownikami współpracującymi -- komunikacja społecznościowa, bez AI.
+
+- [ ] **Supabase schema** -- tabele `conversations`, `messages` (ew. `chat_reports`); RLS per uczestnik konwersacji
+- [ ] **Real-time messaging** -- Supabase Realtime subscriptions na nowe wiadomości
+- [ ] **Wiadomości 1:1** -- prywatne konwersacje między współpracownikami (rola `user` i wyżej)
+- [ ] **Kanał ogólny** -- opcjonalny kanał grupowy dla całej społeczności
+- [ ] **Dashboard UI** -- nowa sekcja `/dashboard/czat` z listą konwersacji i widokiem wiadomości; mobile-first
+- [ ] **Moderacja** -- admin/moderator: przegląd zgłoszeń, blokowanie użytkowników w czacie
+- [ ] **Sidebar** -- link do czatu w nawigacji dashboardu (widoczny dla `user`, `moderator`, `admin`)
+
+### Phase 7: Narzędzia AI
+
+Asystent AI do rozwoju treści i profili społecznościowych -- późniejszy etap, niezależny od czatu użytkowników.
+
+- [ ] **LLM integration** -- integracja z zewnętrznym API (OpenAI / Anthropic -- do wyboru)
+- [ ] **Content assistant** -- pomoc w tworzeniu postów, opisów ofert, materiałów promocyjnych
+- [ ] **Social profile assistant** -- pomoc w budowaniu i optymalizacji profili social media
+- [ ] **Usage tracking** -- logowanie użycia AI, limity per użytkownik
+- [ ] **Dashboard UI** -- osobna sekcja (np. `/dashboard/narzedzia`); mobile-first
+- [ ] **API route** -- `/api/ai/generate` z auth check i rate limiting
