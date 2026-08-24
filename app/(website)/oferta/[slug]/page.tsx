@@ -6,6 +6,10 @@ import Link from "next/link";
 import { FileText, ExternalLink, ChevronRight, Home } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import { AffiliateDisclosure } from "@/components/affiliate-disclosure";
+import {
+  CATEGORY_LABELS,
+  CATEGORY_STYLES,
+} from "@/lib/offer-categories";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://afiliantkafaceless.pl";
@@ -57,6 +61,7 @@ export default async function OfferPage({ params }: OfferPageProps) {
       description,
       image,
       link,
+      category,
       files[]{
         _key,
         asset->{ url, originalFilename }
@@ -79,6 +84,12 @@ export default async function OfferPage({ params }: OfferPageProps) {
         (block: { _type?: string }) => block && block._type
       )
     : [];
+  const categoryLabel = offer.category
+    ? CATEGORY_LABELS[offer.category]
+    : undefined;
+  const categoryStyle = offer.category
+    ? CATEGORY_STYLES[offer.category]
+    : undefined;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -128,6 +139,15 @@ export default async function OfferPage({ params }: OfferPageProps) {
                 <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
                 <span className="text-white truncate">{offer.title}</span>
               </nav>
+              {categoryLabel && (
+                <span
+                  className={`mb-3 inline-flex rounded-full border px-3 py-1 text-sm font-medium ${
+                    categoryStyle || "border-white/30 bg-white/90 text-slate-700"
+                  }`}
+                >
+                  {categoryLabel}
+                </span>
+              )}
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight">
                 {offer.title}
               </h1>
@@ -149,9 +169,22 @@ export default async function OfferPage({ params }: OfferPageProps) {
               <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="text-slate-600 truncate">{offer.title}</span>
             </nav>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-8">
+            <h1
+              className={`text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 ${
+                categoryLabel ? "mb-3" : "mb-8"
+              }`}
+            >
               {offer.title}
             </h1>
+            {categoryLabel && (
+              <span
+                className={`mb-8 inline-flex rounded-full border px-3 py-1 text-sm font-medium ${
+                  categoryStyle || "border-slate-200 bg-slate-50 text-slate-700"
+                }`}
+              >
+                {categoryLabel}
+              </span>
+            )}
           </>
         )}
 

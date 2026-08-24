@@ -99,6 +99,29 @@ export default defineConfig({
             validation: (Rule) => Rule.required(),
           },
         ],
+        preview: {
+          select: {
+            title: "title",
+            category: "category",
+            featured: "featured",
+            media: "image",
+          },
+          prepare({ title, category, featured, media }) {
+            const categoryLabels: Record<string, string> = {
+              personal: "Konto osobiste",
+              business: "Konto firmowe",
+              "credit-cards": "Karta kredytowa",
+            };
+            const categoryLabel =
+              categoryLabels[category] || "Bez przypisanej kategorii";
+
+            return {
+              title,
+              subtitle: `${categoryLabel}${featured ? " · Polecana" : ""}`,
+              media,
+            };
+          },
+        },
       },
       {
         name: "heroSection",

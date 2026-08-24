@@ -117,7 +117,7 @@ flowchart TB
 |---|---|---|
 | `/` | `app/(website)/page.tsx` | Strona główna: logo (`AppLogo`), sekcja „Jak to działa”, filtr ofert z karuzelą wyróżnionych i listą, FAQ |
 | `/oferty` | `app/(website)/oferty/page.tsx` | Pełna lista ofert z filtrem kategorii i wyszukiwarką tekstową |
-| `/oferta/[slug]` | `app/(website)/oferta/[slug]/page.tsx` | Szczegóły oferty: opis (Portable Text), obraz, PDF-y, CTA „Przejdź do oferty” |
+| `/oferta/[slug]` | `app/(website)/oferta/[slug]/page.tsx` | Szczegóły oferty: badge kategorii, opis (Portable Text), obraz, PDF-y, CTA „Przejdź do oferty” |
 | `/blog` | `app/(website)/blog/page.tsx` | Lista wpisów (wyróżniony + siatka) |
 | `/blog/[slug]` | `app/(website)/blog/[slug]/page.tsx` | Szczegóły wpisu, czas czytania, JSON-LD `BlogPosting` |
 
@@ -132,6 +132,8 @@ flowchart TB
 | `credit-cards` | Karty kredytowe |
 
 **CMS (Sanity)** — typy zdefiniowane w `sanity.config.ts`:
+
+Lista ofert w Studio pokazuje w podglądzie kategorię oraz oznaczenie „Polecana”, dzięki czemu administrator może rozpoznać typ oferty bez otwierania dokumentu.
 
 | Typ | Pola kluczowe | Użycie |
 |---|---|---|
