@@ -9,18 +9,18 @@ const CARDS_PER_SLIDE = 4;
 
 interface FeaturedOffersProps {
   offers: Offer[];
-  compareMode: boolean;
-  selectedCompareIds: string[];
-  onCompareToggle: (offerId: string) => void;
-  maxCompare: number;
+  compareMode?: boolean;
+  selectedCompareIds?: string[];
+  onCompareToggle?: (offerId: string) => void;
+  maxCompare?: number;
 }
 
 export function FeaturedOffers({
   offers,
-  compareMode,
-  selectedCompareIds,
+  compareMode = false,
+  selectedCompareIds = [],
   onCompareToggle,
-  maxCompare,
+  maxCompare = 3,
 }: FeaturedOffersProps) {
   const featuredOffers = offers.filter((offer) => offer.featured);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -87,7 +87,7 @@ export function FeaturedOffers({
     offer,
     compareMode,
     isCompareSelected: selectedCompareIds.includes(offer._id),
-    onCompareToggle,
+    onCompareToggle: onCompareToggle ?? (() => {}),
     compareDisabled:
       selectedCompareIds.length >= maxCompare &&
       !selectedCompareIds.includes(offer._id),

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { HeroSection } from "@/components/sections/hero-section";
 import { HowItWorksSection } from "@/components/sections/how-it-works-section";
-import { TestimonialsSection } from "@/components/sections/testimonials-section";
+import { FeaturedOffers } from "@/components/sections/featured-offers";
 import { FaqSection } from "@/components/sections/faq-section";
-import { NewsletterSignup } from "@/components/sections/newsletter-signup";
-import { OffersFilter } from "@/components/sections/offers-filter";
 import { client } from "@/sanity/lib/client";
 import type { Offer } from "@/types/offer";
 
@@ -15,8 +15,8 @@ export const metadata: Metadata = {
     "Odkryj starannie wyselekcjonowane oferty partnerskie z wysokimi współczynnikami konwersji. Profesjonalne rozwiązania dla Twojego biznesu online.",
 };
 
-async function getOffers(): Promise<Offer[]> {
-  const query = `*[_type == "offer"] | order(featured desc, _createdAt desc) {
+async function getFeaturedOffers(): Promise<Offer[]> {
+  const query = `*[_type == "offer" && featured == true] | order(_createdAt desc) {
     _id,
     title,
     description,
@@ -42,9 +42,25 @@ async function getOffers(): Promise<Offer[]> {
   );
 }
 
-async function OffersContent() {
-  const offers = await getOffers();
-  return <OffersFilter offers={offers} />;
+async function FeaturedOffersContent() {
+  const offers = await getFeaturedOffers();
+  return <FeaturedOffers offers={offers} />;
+}
+
+function AllOffersCta() {
+  return (
+    <section className="px-4 sm:px-6 lg:px-8 pb-10 sm:pb-14">
+      <div className="max-w-6xl mx-auto flex justify-center">
+        <Link
+          href="/oferty"
+          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 min-h-[44px] text-base font-semibold text-white bg-cta hover:bg-cta-hover rounded-xl shadow-lg shadow-cta/25 transition-all duration-200 hover:shadow-xl hover:shadow-cta/30 hover:-translate-y-0.5"
+        >
+          Zobacz wszystkie oferty
+          <ArrowRight className="h-5 w-5" aria-hidden="true" />
+        </Link>
+      </div>
+    </section>
+  );
 }
 
 export default function Home() {
@@ -55,15 +71,16 @@ export default function Home() {
       <Suspense
         fallback={
           <div className="py-10 text-center px-4">
-            <p className="text-slate-500">Ładowanie ofert...</p>
+            <p className="text-slate-500 text-sm sm:text-base">
+              Ładowanie ofert...
+            </p>
           </div>
         }
       >
-        <OffersContent />
+        <FeaturedOffersContent />
       </Suspense>
-      <TestimonialsSection />
+      <AllOffersCta />
       <FaqSection />
-      <NewsletterSignup source="home" />
     </>
   );
 }
