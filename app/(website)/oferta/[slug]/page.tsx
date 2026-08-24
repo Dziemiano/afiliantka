@@ -3,10 +3,12 @@ import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/lib/sanity-image";
 import Image from "next/image";
 import Link from "next/link";
-import { FileText, ExternalLink, ChevronRight } from "lucide-react";
+import { FileText, ExternalLink, ChevronRight, Home } from "lucide-react";
 import { PortableText } from "@portabletext/react";
+import { AffiliateDisclosure } from "@/components/affiliate-disclosure";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://afiliantka.pl";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://afiliantkafaceless.pl";
 
 interface OfferPageProps {
   params: Promise<{ slug: string }>;
@@ -84,7 +86,7 @@ export default async function OfferPage({ params }: OfferPageProps) {
     name: offer.title,
     url: `${siteUrl}/oferta/${slug}`,
     ...(offer.image && {
-      image: urlFor(offer.image).width(900).height(300).url(),
+      image: urlFor(offer.image).width(1200).height(400).url(),
     }),
   };
 
@@ -95,37 +97,65 @@ export default async function OfferPage({ params }: OfferPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Breadcrumbs */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
-        <nav className="flex items-center gap-1.5 text-sm text-slate-400">
-          <Link href="/oferty" className="hover:text-brand transition-colors">
-            Oferty
-          </Link>
-          <ChevronRight className="h-3.5 w-3.5" />
-          <span className="text-slate-600 truncate">{offer.title}</span>
-        </nav>
-      </div>
-
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-6">
-          {offer.title}
-        </h1>
-
-        {offer.image && (
-          <div className="w-full aspect-[3/1] relative mb-8 rounded-2xl overflow-hidden bg-slate-100">
-            <Image
-              src={urlFor(offer.image).width(1200).height(400).url()}
-              alt={offer.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 900px) 100vw, 900px"
-              priority={false}
-              loading="lazy"
-            />
+      {offer.image && (
+        <div className="relative w-full aspect-[21/9] sm:aspect-[3/1] max-h-[420px] bg-slate-100">
+          <Image
+            src={urlFor(offer.image).width(1600).height(500).url()}
+            alt={offer.title}
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-8">
+            <div className="max-w-3xl mx-auto">
+              <nav
+                className="flex items-center gap-1.5 text-sm text-white/70 mb-3"
+                aria-label="Breadcrumb"
+              >
+                <Link
+                  href="/"
+                  className="hover:text-white transition-colors inline-flex items-center gap-1"
+                >
+                  <Home className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span className="sr-only sm:not-sr-only">Strona główna</span>
+                </Link>
+                <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+                <Link href="/oferty" className="hover:text-white transition-colors">
+                  Oferty
+                </Link>
+                <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+                <span className="text-white truncate">{offer.title}</span>
+              </nav>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight">
+                {offer.title}
+              </h1>
+            </div>
           </div>
+        </div>
+      )}
+
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+        {!offer.image && (
+          <>
+            <nav
+              className="flex items-center gap-1.5 text-sm text-slate-400 mb-6"
+              aria-label="Breadcrumb"
+            >
+              <Link href="/oferty" className="hover:text-brand transition-colors">
+                Oferty
+              </Link>
+              <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="text-slate-600 truncate">{offer.title}</span>
+            </nav>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-8">
+              {offer.title}
+            </h1>
+          </>
         )}
 
-        <div className="text-slate-700 text-base sm:text-lg leading-relaxed space-y-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_a]:text-brand [&_a]:underline [&_a:hover]:text-brand-dark">
+        <div className="prose-offer text-slate-700 text-base sm:text-lg leading-relaxed space-y-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_a]:text-brand [&_a]:underline [&_a:hover]:text-brand-dark [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-slate-800 [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-slate-800 [&_h3]:mt-6 [&_h3]:mb-2">
           <PortableText value={safeBlocks} />
         </div>
 
@@ -155,9 +185,9 @@ export default async function OfferPage({ params }: OfferPageProps) {
                         download={file.asset.originalFilename}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-brand hover:text-brand-dark transition-colors font-medium"
+                        className="inline-flex items-center gap-2 text-brand hover:text-brand-dark transition-colors font-medium min-h-[44px]"
                       >
-                        <FileText className="h-4 w-4" />
+                        <FileText className="h-4 w-4" aria-hidden="true" />
                         {file.asset.originalFilename || `PDF ${idx + 1}`}
                       </a>
                     </li>
@@ -167,16 +197,16 @@ export default async function OfferPage({ params }: OfferPageProps) {
           </div>
         )}
 
+        <AffiliateDisclosure />
+
         {offer.link && (
-          <div className="mt-10">
+          <div className="mt-8">
             <a
-              href={offer.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-cta hover:bg-cta-hover text-white text-base font-semibold rounded-xl shadow-lg shadow-cta/25 transition-all duration-200 hover:shadow-xl"
+              href={`/go/${slug}`}
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 min-h-[44px] bg-cta hover:bg-cta-hover text-white text-base font-semibold rounded-xl shadow-lg shadow-cta/25 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5"
             >
               Przejdź do oferty
-              <ExternalLink className="h-5 w-5" />
+              <ExternalLink className="h-5 w-5" aria-hidden="true" />
             </a>
           </div>
         )}

@@ -148,7 +148,21 @@ export default defineConfig({
           {
             name: "content",
             title: "Content",
-            type: "text",
+            type: "array",
+            of: [
+              { type: "block" },
+              {
+                type: "image",
+                options: { hotspot: true },
+                fields: [
+                  {
+                    name: "alt",
+                    title: "Alt text",
+                    type: "string",
+                  },
+                ],
+              },
+            ],
             validation: (Rule) => Rule.required(),
           },
           {
@@ -169,6 +183,49 @@ export default defineConfig({
             title: "Author",
             type: "string",
             validation: (Rule) => Rule.optional(),
+          },
+          {
+            name: "relatedOffers",
+            title: "Powiązane oferty",
+            type: "array",
+            of: [{ type: "reference", to: [{ type: "offer" }] }],
+          },
+        ],
+      },
+      {
+        name: "testimonial",
+        title: "Testimonial",
+        type: "document",
+        fields: [
+          {
+            name: "quote",
+            title: "Cytat",
+            type: "text",
+            validation: (Rule) => Rule.required(),
+          },
+          {
+            name: "author",
+            title: "Autor",
+            type: "string",
+            validation: (Rule) => Rule.required(),
+          },
+          {
+            name: "role",
+            title: "Rola / opis",
+            type: "string",
+            description: "np. Współpracownik od 2024",
+          },
+          {
+            name: "image",
+            title: "Zdjęcie",
+            type: "image",
+            options: { hotspot: true },
+          },
+          {
+            name: "order",
+            title: "Kolejność",
+            type: "number",
+            initialValue: 0,
           },
         ],
       },
@@ -225,6 +282,78 @@ export default defineConfig({
             title: "Order",
             type: "number",
             initialValue: 0,
+          },
+        ],
+      },
+      {
+        name: "cooperationPage",
+        title: "Strona współpracy",
+        type: "document",
+        fields: [
+          {
+            name: "heroTitle",
+            title: "Tytuł hero",
+            type: "string",
+          },
+          {
+            name: "heroSubtitle",
+            title: "Podtytuł hero",
+            type: "text",
+          },
+          {
+            name: "benefits",
+            title: "Korzyści współpracy",
+            type: "array",
+            of: [
+              {
+                type: "object",
+                fields: [
+                  { name: "title", title: "Tytuł", type: "string" },
+                  { name: "description", title: "Opis", type: "text" },
+                  {
+                    name: "icon",
+                    title: "Ikona (emoji)",
+                    type: "string",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "processSteps",
+            title: "Proces dołączenia",
+            type: "array",
+            of: [
+              {
+                type: "object",
+                fields: [
+                  { name: "title", title: "Tytuł", type: "string" },
+                  { name: "description", title: "Opis", type: "text" },
+                  { name: "order", title: "Kolejność", type: "number" },
+                ],
+              },
+            ],
+          },
+          {
+            name: "faq",
+            title: "FAQ współpracy",
+            type: "array",
+            of: [
+              {
+                type: "object",
+                fields: [
+                  { name: "question", title: "Pytanie", type: "string" },
+                  { name: "answer", title: "Odpowiedź", type: "text" },
+                ],
+              },
+            ],
+          },
+          {
+            name: "inviteEmail",
+            title: "Email do zaproszeń",
+            type: "string",
+            description:
+              "Adres używany w przycisku „Poproś o zaproszenie”",
           },
         ],
       },

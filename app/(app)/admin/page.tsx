@@ -72,12 +72,54 @@ export default function AdminDashboard() {
         <Card className="bg-white border-stone-200">
           <CardHeader>
             <CardTitle className="text-lg text-stone-700">
-              System Overview
+              Newsletter
             </CardTitle>
-            <CardDescription>Monitor system status and usage</CardDescription>
+            <CardDescription>
+              Subskrybenci ze strony publicznej i eksport CSV
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-stone-600">Coming soon...</p>
+            <Link href="/admin/newsletter">
+              <Button className="w-full bg-stone-600 hover:bg-stone-700 text-white">
+                Zarządzaj newsletterem
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-white border-stone-200">
+          <CardHeader>
+            <CardTitle className="text-lg text-stone-700">
+              Publikacja treści
+            </CardTitle>
+            <CardDescription>
+              Ogłoś nowe materiały i powiadom użytkowników
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/admin/content">
+              <Button className="w-full bg-stone-600 hover:bg-stone-700 text-white">
+                Opublikuj treść
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-white border-stone-200">
+          <CardHeader>
+            <CardTitle className="text-lg text-stone-700">
+              Analityka
+            </CardTitle>
+            <CardDescription>
+              Ruch na stronie publicznej, kliknięcia ofert, onboarding
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/admin/analytics">
+              <Button className="w-full bg-stone-600 hover:bg-stone-700 text-white">
+                Zobacz analitykę
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </div>

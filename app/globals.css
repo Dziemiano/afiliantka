@@ -129,4 +129,12 @@
   body {
     @apply bg-background text-foreground;
   }
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  summary:focus-visible {
+    @apply outline-none ring-2 ring-brand ring-offset-2;
+  }
 }

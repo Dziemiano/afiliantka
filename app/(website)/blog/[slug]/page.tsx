@@ -3,17 +3,20 @@ import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/lib/sanity-image";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Clock, ChevronRight } from "lucide-react";
+import { ArrowLeft, Clock, ChevronRight, Home } from "lucide-react";
+import {
+  BlogContent,
+  excerptFromContent,
+  readingTimeFromContent,
+} from "@/components/blog/blog-content";
+import { RelatedOffers } from "@/components/sections/related-offers";
+import type { Offer } from "@/types/offer";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://afiliantka.pl";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://afiliantkafaceless.pl";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
-}
-
-function readingTime(text: string): number {
-  const words = text?.trim().split(/\s+/).length || 0;
-  return Math.max(1, Math.ceil(words / 200));
 }
 
 export async function generateMetadata({
@@ -28,16 +31,17 @@ export async function generateMetadata({
 
   if (!post) return { title: "Wpis nie znaleziony" };
 
+  const description = excerptFromContent(post.content);
   const ogImage = post.image
     ? urlFor(post.image).width(1200).height(630).url()
     : undefined;
 
   return {
     title: post.title,
-    description: post.content?.slice(0, 160),
+    description,
     openGraph: {
       title: `${post.title} | Blog | Afiliantka Faceless`,
-      description: post.content?.slice(0, 160),
+      description,
       type: "article",
       url: `${siteUrl}/blog/${slug}`,
       ...(ogImage && { images: [{ url: ogImage, width: 1200, height: 630 }] }),
@@ -56,7 +60,21 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const post = await client.fetch(
     `*[_type == "blog" && slug.current == $slug][0]{
-      _id, title, content, image, date, author
+      _id,
+      title,
+      content,
+      image,
+      date,
+      author,
+      relatedOffers[]->{
+        _id,
+        title,
+        slug,
+        image,
+        link,
+        featured,
+        category
+      }
     }`,
     { slug },
     { next: { revalidate: 300 } }
@@ -70,6 +88,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     );
   }
 
+  const relatedOffers = (post.relatedOffers || []).filter(
+    (offer: Offer | null): offer is Offer => !!offer?.slug?.current
+  );
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -78,7 +100,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     ...(post.author && { author: { "@type": "Person", name: post.author } }),
     url: `${siteUrl}/blog/${slug}`,
     ...(post.image && {
-      image: urlFor(post.image).width(900).height(300).url(),
+      image: urlFor(post.image).width(1200).height(500).url(),
     }),
   };
 
@@ -89,54 +111,71 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Breadcrumbs */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-6">
-        <nav className="flex items-center gap-1.5 text-sm text-slate-400">
+      {post.image && (
+        <div className="relative w-full aspect-[21/9] sm:aspect-[3/1] max-h-[400px] bg-slate-100">
+          <Image
+            src={urlFor(post.image).width(1400).height(500).url()}
+            alt={post.title}
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+        </div>
+      )}
+
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+        <nav
+          className="flex items-center gap-1.5 text-sm text-slate-400 mb-6"
+          aria-label="Breadcrumb"
+        >
+          <Link
+            href="/"
+            className="hover:text-brand transition-colors inline-flex items-center gap-1"
+          >
+            <Home className="h-3.5 w-3.5" aria-hidden="true" />
+          </Link>
+          <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
           <Link href="/blog" className="hover:text-brand transition-colors">
             Blog
           </Link>
-          <ChevronRight className="h-3.5 w-3.5" />
+          <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
           <span className="text-slate-600 truncate">{post.title}</span>
         </nav>
-      </div>
 
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
         <Link
           href="/blog"
           className="inline-flex items-center gap-1.5 text-sm text-brand hover:text-brand-dark mb-6 min-h-[44px] transition-colors"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Wróć do bloga
         </Link>
 
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-4 leading-tight">
           {post.title}
         </h1>
 
-        <div className="flex items-center text-sm text-slate-400 mb-8 gap-3">
-          <span>{new Date(post.date).toLocaleDateString("pl-PL")}</span>
+        <div className="flex flex-wrap items-center text-sm text-slate-400 mb-8 gap-3">
+          <time dateTime={post.date}>
+            {new Date(post.date).toLocaleDateString("pl-PL", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
           {post.author && <span>• {post.author}</span>}
           <span className="inline-flex items-center gap-1">
-            <Clock className="h-3.5 w-3.5" />
-            {readingTime(post.content)} min czytania
+            <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+            {readingTimeFromContent(post.content)} min czytania
           </span>
         </div>
 
-        {post.image && (
-          <div className="w-full aspect-[3/1] relative mb-8 rounded-2xl overflow-hidden bg-slate-100">
-            <Image
-              src={urlFor(post.image).width(900).height(300).url()}
-              alt={post.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 900px) 100vw, 900px"
-            />
-          </div>
-        )}
+        <BlogContent content={post.content} />
 
-        <article className="text-slate-700 text-base sm:text-lg leading-relaxed whitespace-pre-line [&_p]:mb-4">
-          {post.content}
-        </article>
+        {relatedOffers.length > 0 && (
+          <RelatedOffers offers={relatedOffers} />
+        )}
       </main>
     </div>
   );

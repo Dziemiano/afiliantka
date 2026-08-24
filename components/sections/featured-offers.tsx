@@ -1,6 +1,6 @@
 "use client";
 
-import { OfferCard } from "@/components/ui/offer-card";
+import { CompareOfferCard } from "@/components/ui/compare-offer-card";
 import { Offer } from "@/types/offer";
 import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -9,9 +9,19 @@ const CARDS_PER_SLIDE = 4;
 
 interface FeaturedOffersProps {
   offers: Offer[];
+  compareMode: boolean;
+  selectedCompareIds: string[];
+  onCompareToggle: (offerId: string) => void;
+  maxCompare: number;
 }
 
-export function FeaturedOffers({ offers }: FeaturedOffersProps) {
+export function FeaturedOffers({
+  offers,
+  compareMode,
+  selectedCompareIds,
+  onCompareToggle,
+  maxCompare,
+}: FeaturedOffersProps) {
   const featuredOffers = offers.filter((offer) => offer.featured);
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -73,15 +83,24 @@ export function FeaturedOffers({ offers }: FeaturedOffersProps) {
   const totalSlides = Math.ceil(featuredOffers.length / CARDS_PER_SLIDE);
   const showDesktopControls = featuredOffers.length > CARDS_PER_SLIDE;
 
+  const cardProps = (offer: Offer) => ({
+    offer,
+    compareMode,
+    isCompareSelected: selectedCompareIds.includes(offer._id),
+    onCompareToggle,
+    compareDisabled:
+      selectedCompareIds.length >= maxCompare &&
+      !selectedCompareIds.includes(offer._id),
+  });
+
   return (
     <section className="py-4 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-slate-800 text-lg sm:text-xl font-bold mb-3">
-          Polecane Oferty
+        <h2 className="text-slate-800 text-xl sm:text-2xl font-bold mb-6">
+          Polecane oferty
         </h2>
 
         <div className="relative">
-          {/* Mobile Carousel */}
           <div className="block sm:hidden">
             <div
               ref={carouselRef}
@@ -98,8 +117,8 @@ export function FeaturedOffers({ offers }: FeaturedOffersProps) {
                   key={offer._id}
                   className="w-full flex-shrink-0 snap-start px-1"
                 >
-                  <OfferCard
-                    offer={offer}
+                  <CompareOfferCard
+                    {...cardProps(offer)}
                     className="w-full max-w-sm mx-auto"
                   />
                 </div>
@@ -120,13 +139,13 @@ export function FeaturedOffers({ offers }: FeaturedOffersProps) {
             )}
           </div>
 
-          {/* Desktop Carousel -- 4 cards per slide */}
           <div className="hidden sm:block">
             <div className="flex items-center w-full">
               {showDesktopControls && (
                 <button
                   onClick={prevSlide}
-                  className="bg-white hover:bg-brand-light text-brand rounded-full p-2 shadow-md transition-all duration-200 z-10 border border-slate-200 mr-2 flex-shrink-0"
+                  aria-label="Poprzednie oferty"
+                  className="bg-white hover:bg-brand-light text-brand rounded-full p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center shadow-md transition-all duration-200 z-10 border border-slate-200 mr-2 flex-shrink-0"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
@@ -144,14 +163,15 @@ export function FeaturedOffers({ offers }: FeaturedOffersProps) {
                     className="flex-shrink-0"
                     style={{ width: "calc((100% - 3 * 12px) / 4)" }}
                   >
-                    <OfferCard offer={offer} className="w-full" />
+                    <CompareOfferCard {...cardProps(offer)} />
                   </div>
                 ))}
               </div>
               {showDesktopControls && (
                 <button
                   onClick={nextSlide}
-                  className="bg-white hover:bg-brand-light text-brand rounded-full p-2 shadow-md transition-all duration-200 z-10 border border-slate-200 ml-2 flex-shrink-0"
+                  aria-label="Następne oferty"
+                  className="bg-white hover:bg-brand-light text-brand rounded-full p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center shadow-md transition-all duration-200 z-10 border border-slate-200 ml-2 flex-shrink-0"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>

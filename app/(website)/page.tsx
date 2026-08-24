@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { AppLogo } from "@/components/app-logo";
+import { HeroSection } from "@/components/sections/hero-section";
 import { HowItWorksSection } from "@/components/sections/how-it-works-section";
+import { TestimonialsSection } from "@/components/sections/testimonials-section";
 import { FaqSection } from "@/components/sections/faq-section";
+import { NewsletterSignup } from "@/components/sections/newsletter-signup";
 import { OffersFilter } from "@/components/sections/offers-filter";
 import { client } from "@/sanity/lib/client";
 import type { Offer } from "@/types/offer";
@@ -48,9 +50,7 @@ async function OffersContent() {
 export default function Home() {
   return (
     <>
-      <Suspense fallback={null}>
-        <AppLogo />
-      </Suspense>
+      <HeroSection />
       <HowItWorksSection />
       <Suspense
         fallback={
@@ -61,7 +61,9 @@ export default function Home() {
       >
         <OffersContent />
       </Suspense>
+      <TestimonialsSection />
       <FaqSection />
+      <NewsletterSignup source="home" />
     </>
   );
 }

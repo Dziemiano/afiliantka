@@ -11,6 +11,7 @@ import { Menu, X } from "lucide-react";
 const NAV_LINKS = [
   { href: "/oferty", label: "Oferty" },
   { href: "/blog", label: "Blog" },
+  { href: "/wspolpraca", label: "Współpraca" },
 ];
 
 export function Header() {
@@ -81,12 +82,12 @@ export function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden sm:flex gap-1 items-center">
+        <nav className="hidden sm:flex gap-1 items-center" aria-label="Główne menu">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 ${
                 isActive(link.href)
                   ? "text-brand bg-brand-light"
                   : "text-slate-600 hover:text-brand hover:bg-slate-50"
@@ -108,9 +109,9 @@ export function Header() {
                 <Button
                   onClick={handleLogout}
                   variant="ghost"
-                  className="text-slate-500 hover:text-slate-700 text-sm"
+                  className="text-slate-500 hover:text-slate-700 text-sm min-h-[44px]"
                 >
-                  Logout
+                  Wyloguj
                 </Button>
               </>
             ) : (
@@ -126,8 +127,11 @@ export function Header() {
 
         {/* Mobile hamburger */}
         <button
+          type="button"
           onClick={() => setMenuOpen(!menuOpen)}
-          className="sm:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-600 hover:bg-slate-100 rounded-lg"
+          className="sm:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-600 hover:bg-slate-100 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          aria-label={menuOpen ? "Zamknij menu" : "Otwórz menu"}
+          aria-expanded={menuOpen}
         >
           {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -135,13 +139,16 @@ export function Header() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <nav className="sm:hidden border-t border-slate-100 bg-white px-4 py-3 space-y-1">
+        <nav
+          className="sm:hidden border-t border-slate-100 bg-white px-4 py-3 space-y-1"
+          aria-label="Menu mobilne"
+        >
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className={`block px-4 py-3 min-h-[44px] rounded-lg text-sm font-medium transition-colors ${
+              className={`block px-4 py-3 min-h-[44px] rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
                 isActive(link.href)
                   ? "text-brand bg-brand-light"
                   : "text-slate-700 hover:text-brand hover:bg-slate-50"
@@ -164,7 +171,7 @@ export function Header() {
                 onClick={handleLogout}
                 className="block w-full px-4 py-3 min-h-[44px] text-slate-500 hover:text-slate-700 rounded-lg text-sm text-left"
               >
-                Logout
+                Wyloguj
               </button>
             </>
           ) : (

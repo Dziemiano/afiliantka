@@ -79,8 +79,12 @@ export async function middleware(req: NextRequest) {
     }
 
     const publicUrls = ["/login", "/auth/callback", "/auth/auth-code-error"];
+    const isPublicApi =
+      pathname === "/api/newsletter/subscribe" ||
+      pathname === "/api/analytics/track" ||
+      pathname === "/api/auth/magic-link";
 
-    if (!session && !publicUrls.includes(pathname)) {
+    if (!session && !publicUrls.includes(pathname) && !isPublicApi) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
 

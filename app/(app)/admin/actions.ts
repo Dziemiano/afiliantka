@@ -3,6 +3,7 @@
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import { UserWithRoles, Role } from "@/types/role";
 import type { UserOnboarding, UserOfferSelection } from "@/types/onboarding";
+import { notifyUser } from "@/lib/user-notifications";
 
 async function requireAdmin(): Promise<boolean> {
   const supabase = await createClient();
@@ -436,6 +437,18 @@ export async function verifyAccounts(
     .from("user_onboarding")
     .update({ status: "accounts_verified" })
     .eq("user_id", userId);
+
+  const { data: verifiedUser } = await supabase.auth.admin.getUserById(userId);
+
+  await notifyUser({
+    userId,
+    email: verifiedUser?.user?.email,
+    type: "onboarding_status",
+    title: "Konta zweryfikowane",
+    message:
+      "Administrator zweryfikował Twoje konta. Możesz teraz przejść do dodatkowych materiałów i dokończyć wymagania.",
+    link: "/dashboard/onboarding",
+  });
 
   return { success: true };
 }

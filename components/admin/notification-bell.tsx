@@ -56,11 +56,14 @@ export function NotificationBell() {
   return (
     <div className="relative" ref={panelRef}>
       <button
+        type="button"
         onClick={() => setOpen(!open)}
-        className="relative p-2 text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
-        aria-label="Powiadomienia"
+        className="relative p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+        aria-label="Powiadomienia administracyjne"
+        aria-expanded={open}
+        aria-haspopup="true"
       >
-        <Bell className="h-5 w-5" />
+        <Bell className="h-5 w-5" aria-hidden="true" />
         {unreadCount > 0 && (
           <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-medium">
             {unreadCount > 9 ? "9+" : unreadCount}

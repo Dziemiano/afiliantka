@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { notifyUser } from "@/lib/user-notifications";
 
 export async function POST(request: Request) {
   const supabase = await createClient();
@@ -73,6 +74,20 @@ export async function POST(request: Request) {
         { onConflict: "user_id,role_id" }
       );
   }
+
+  const { data: approvedUser } = await adminSupabase.auth.admin.getUserById(
+    user_id
+  );
+
+  await notifyUser({
+    userId: user_id,
+    email: approvedUser?.user?.email,
+    type: "onboarding_status",
+    title: "Onboarding zatwierdzony!",
+    message:
+      "Gratulacje! Administrator zatwierdził Twój onboarding. Masz teraz pełny dostęp do materiałów platformy.",
+    link: "/dashboard",
+  });
 
   return NextResponse.json({ success: true });
 }

@@ -34,9 +34,11 @@ export function DashboardSidebar({
     ? [
         { href: "/dashboard/onboarding", label: "Onboarding" },
         { href: "/dashboard/offers", label: "Oferty" },
+        { href: "/dashboard/co-nowego", label: "Co nowego" },
       ]
     : [
         { href: "/dashboard", label: "Panel" },
+        { href: "/dashboard/co-nowego", label: "Co nowego" },
         { href: "/dashboard/onboard", label: "Materiały" },
         { href: "/dashboard/resources", label: "Zasoby" },
         { href: "/dashboard/files", label: "Wszystkie pliki" },
@@ -82,14 +84,14 @@ export function DashboardSidebar({
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-6">
+        <nav className="flex-1 p-6" aria-label="Menu główne">
           <div className="space-y-2">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                  "flex items-center px-3 py-2.5 min-h-[44px] text-sm font-medium rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2",
                   pathname === item.href
                     ? "bg-blue-100 text-blue-700"
                     : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -122,7 +124,7 @@ export function DashboardSidebar({
           <button
             onClick={handleSignOut}
             disabled={isSigningOut}
-            className="w-full flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center px-3 py-2.5 min-h-[44px] text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSigningOut ? (
               <>
@@ -131,6 +133,7 @@ export function DashboardSidebar({
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <circle
                     className="opacity-25"
@@ -146,7 +149,7 @@ export function DashboardSidebar({
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                Signing out...
+                Wylogowywanie...
               </>
             ) : (
               <>
@@ -155,6 +158,7 @@ export function DashboardSidebar({
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -163,7 +167,7 @@ export function DashboardSidebar({
                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                   />
                 </svg>
-                Sign Out
+                Wyloguj się
               </>
             )}
           </button>

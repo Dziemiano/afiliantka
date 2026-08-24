@@ -26,7 +26,29 @@ export default function DashboardPage() {
 
       {/* Quick Navigation */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Link href="/dashboard/onboard" className="block">
+        <Link
+          href="/dashboard/co-nowego"
+          className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-lg"
+        >
+          <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow h-full">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="text-teal-600 font-semibold" aria-hidden="true">
+                  ✨
+                </span>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Co nowego</h3>
+                <p className="text-sm text-gray-600">Nowe materiały i aktualizacje</p>
+              </div>
+            </div>
+          </div>
+        </Link>
+
+        <Link
+          href="/dashboard/onboard"
+          className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-lg"
+        >
           <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow cursor-pointer">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -40,7 +62,10 @@ export default function DashboardPage() {
           </div>
         </Link>
 
-        <Link href="/dashboard/resources" className="block">
+        <Link
+          href="/dashboard/resources"
+          className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-lg"
+        >
           <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow cursor-pointer">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -54,7 +79,10 @@ export default function DashboardPage() {
           </div>
         </Link>
 
-        <Link href="/dashboard/files" className="block">
+        <Link
+          href="/dashboard/files"
+          className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-lg"
+        >
           <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow cursor-pointer">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">

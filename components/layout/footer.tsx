@@ -18,6 +18,7 @@ const NAV_LINKS = [
   { href: "/", label: "Strona główna" },
   { href: "/oferty", label: "Oferty" },
   { href: "/blog", label: "Blog" },
+  { href: "/wspolpraca", label: "Współpraca" },
 ];
 
 const LEGAL_LINKS = [
@@ -97,7 +98,7 @@ export function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white transition-colors"
+                  className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white transition-colors"
                   aria-label={link.label}
                 >
                   <link.icon className="h-5 w-5" />

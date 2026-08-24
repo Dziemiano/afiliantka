@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { notifyUser } from "@/lib/user-notifications";
 
 export async function POST(request: Request) {
   const supabase = await createClient();
@@ -62,6 +63,20 @@ export async function POST(request: Request) {
       })
       .eq("user_id", selection.user_id);
   }
+
+  const admin = await createAdminClient();
+  const { data: rejectedUser } = await admin.auth.admin.getUserById(
+    selection.user_id
+  );
+
+  await notifyUser({
+    userId: selection.user_id,
+    email: rejectedUser?.user?.email,
+    type: "onboarding_status",
+    title: "Oferta wymaga poprawy",
+    message: `Administrator odrzucił wymaganie dla oferty „${selection.offer_name}”. Powód: ${reason.trim()}`,
+    link: "/dashboard/onboarding",
+  });
 
   return NextResponse.json({ success: true });
 }

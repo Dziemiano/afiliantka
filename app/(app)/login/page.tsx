@@ -1,7 +1,6 @@
-'use client';
+"use client";
 
 import { useMemo, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,54 +15,56 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+  const [loading, setLoading] = useState(false);
 
-  const appOrigin = useMemo(
-    () => process.env.NEXT_PUBLIC_APP_ORIGIN ?? "",
-    []
-  );
+  const magicLinkUrl = useMemo(() => {
+    if (process.env.NEXT_PUBLIC_APP_ORIGIN) {
+      return `${process.env.NEXT_PUBLIC_APP_ORIGIN}/api/auth/magic-link`;
+    }
+    if (typeof window !== "undefined") {
+      const host = window.location.host.replace(/^app\./, "");
+      return `${window.location.protocol}//app.${host}/api/auth/magic-link`;
+    }
+    return "/api/auth/magic-link";
+  }, []);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setMessage("");
+    setLoading(true);
 
-    if (!appOrigin) {
-      setError("Brak NEXT_PUBLIC_APP_ORIGIN w konfiguracji.");
-      return;
-    }
+    try {
+      const res = await fetch(magicLinkUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = (await res.json()) as { message?: string };
 
-    if (!supabaseUrl || !supabaseAnonKey) {
-      setError("Brak konfiguracji Supabase w zmiennych środowiskowych.");
-      return;
-    }
+      if (!res.ok) {
+        setError(data.message || "Nie udało się wysłać linku logowania.");
+        return;
+      }
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${appOrigin}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      setError("Could not authenticate user. Please check the email address or contact an administrator.");
-    } else {
-      setMessage("Check your email for a magic link to sign in.");
+      setMessage(data.message || "Sprawdź skrzynkę email — wysłaliśmy link do logowania.");
+    } catch {
+      setError("Wystąpił błąd połączenia. Spróbuj ponownie.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-light to-white flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-white border-slate-200 shadow-xl">
-        <CardHeader className="text-center">
+    <div className="min-h-screen bg-gradient-to-br from-brand-light via-white to-teal-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-white border-slate-200 shadow-xl shadow-slate-200/50">
+        <CardHeader className="text-center pb-2">
           <CardTitle className="text-2xl">
             <span className="text-brand font-bold">Afiliantka</span>{" "}
             <span className="text-slate-400 font-light">Faceless</span>
           </CardTitle>
           <CardDescription className="text-slate-500">
-            Sign in with a magic link.
+            Zaloguj się za pomocą magic linka
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -71,20 +72,25 @@ export default function LoginPage() {
             <div>
               <Input
                 type="email"
-                placeholder="Email"
+                placeholder="Adres email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="border-slate-200 focus:border-brand focus:ring-brand/30 min-h-[44px]"
                 autoFocus
+                required
+                disabled={loading}
               />
               {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-              {message && <p className="text-green-500 text-sm mt-2">{message}</p>}
+              {message && (
+                <p className="text-green-600 text-sm mt-2">{message}</p>
+              )}
             </div>
             <Button
               type="submit"
-              className="w-full min-h-[44px] bg-brand hover:bg-brand-dark text-white"
+              disabled={loading}
+              className="w-full min-h-[44px] bg-brand hover:bg-brand-dark text-white font-semibold"
             >
-              Send Magic Link
+              {loading ? "Wysyłanie..." : "Wyślij link logowania"}
             </Button>
           </form>
         </CardContent>

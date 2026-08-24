@@ -63,58 +63,58 @@
 
 Full visual overhaul of the public-facing website. Clean, light base with a real brand color palette (beyond stone/neutral monotone), better whitespace, modern card designs, and subtle animations.
 
-- [ ] **Header redesign** -- sticky header with backdrop blur, brand logo/wordmark with accent color, active link indicator (underline or pill highlight), CTA button with brand gradient for Dashboard/Login, remove or make "Beta" badge optional
-- [ ] **Hero section redesign** -- full-width hero with large centered headline (`text-4xl lg:text-6xl`), subtext, prominent CTA button ("Zobacz oferty"), subtle background gradient with brand accent, better typography hierarchy
-- [ ] **Offer cards redesign** -- larger cards with proper aspect-ratio images, hover scale/shadow transitions, category badge with color coding (personal=blue, business=green, credit-cards=amber), clean typography, visible CTA button on each card
-- [ ] **All offers grid** -- replace table layout on desktop with responsive card grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`), each card with image, title, category badge, featured badge, CTA; remove dual-button pattern in favor of single card link
-- [ ] **Offer detail page** -- full-width hero banner image, clean content layout with proper prose styling, prominent CTA button with brand color, improved breadcrumbs
-- [ ] **Blog pages** -- blog listing as card grid with hover effects; blog detail with proper prose/article styling and reading time estimate
-- [ ] **How It Works section** -- connecting lines/arrows between steps, subtle entrance animations (fade-in on scroll)
-- [ ] **FAQ section** -- smoother accordion animation (CSS grid-template-rows transition), better visual hierarchy with icons
-- [ ] **Offers filter** -- pill-style filter buttons with brand accent on active, search input with rounded design and subtle shadow
-- [ ] **Footer** -- new multi-column footer component with navigation links, legal links (privacy, terms), social media icons, brand description; dark background (stone-900) with light text; responsive (stacked on mobile, 3-4 columns on desktop)
-- [ ] **Website layout** -- remove separate `AppLogo` component between header and content (integrate into hero or header), clean white base background instead of stone/amber gradient
-- [ ] **Login page** -- brand-colored accent, centered card with subtle shadow
+- [x] **Header redesign** -- sticky header with backdrop blur, brand logo/wordmark with accent color, active link indicator (underline or pill highlight), CTA button with brand gradient for Dashboard/Login, remove or make "Beta" badge optional
+- [x] **Hero section redesign** -- full-width hero with large centered headline (`text-4xl lg:text-6xl`), subtext, prominent CTA button ("Zobacz oferty"), subtle background gradient with brand accent, better typography hierarchy
+- [x] **Offer cards redesign** -- larger cards with proper aspect-ratio images, hover scale/shadow transitions, category badge with color coding (personal=blue, business=green, credit-cards=amber), clean typography, visible CTA button on each card
+- [x] **All offers grid** -- replace table layout on desktop with responsive card grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`), each card with image, title, category badge, featured badge, CTA; remove dual-button pattern in favor of single card link
+- [x] **Offer detail page** -- full-width hero banner image, clean content layout with proper prose styling, prominent CTA button with brand color, improved breadcrumbs
+- [x] **Blog pages** -- blog listing as card grid with hover effects; blog detail with proper prose/article styling and reading time estimate
+- [x] **How It Works section** -- connecting lines/arrows between steps, subtle entrance animations (fade-in on scroll)
+- [x] **FAQ section** -- smoother accordion animation (CSS grid-template-rows transition), better visual hierarchy with icons
+- [x] **Offers filter** -- pill-style filter buttons with brand accent on active, search input with rounded design and subtle shadow
+- [x] **Footer** -- new multi-column footer component with navigation links, legal links (privacy, terms), social media icons, brand description; dark background (stone-900) with light text; responsive (stacked on mobile, 3-4 columns on desktop)
+- [x] **Website layout** -- remove separate `AppLogo` component between header and content (integrate into hero or header), clean white base background instead of stone/amber gradient
+- [x] **Login page** -- brand-colored accent, centered card with subtle shadow
 
 ### Phase 4.6: Strona współpracy afiliacyjnej
 
 Priorytet biznesowy -- strona informująca o modelu współpracy faceless i kierująca do panelu (invite-only).
 
-- [ ] **Route `/wspolpraca`** -- nowa strona w `app/(website)/wspolpraca/` z layoutem publicznym
-- [ ] **Sanity schema `cooperationPage`** -- korzyści współpracy, opis procesu dołączenia, FAQ współpracy (edytowalne w Studio)
-- [ ] **CTA buttons** -- "Zaloguj się" (link do `app.afiliantkafaceless.pl/login`), "Poproś o zaproszenie" (mailto lub kontakt z adminem)
-- [ ] **Navigation** -- link "Współpraca" w headerze i footerze
-- [ ] **Affiliate disclosure** -- informacja o linkach partnerskich na stronach ofert (`/oferta/[slug]`)
-- [ ] **Sitemap** -- dodanie `/wspolpraca` do `app/sitemap.ts`
+- [x] **Route `/wspolpraca`** -- nowa strona w `app/(website)/wspolpraca/` z layoutem publicznym
+- [x] **Sanity schema `cooperationPage`** -- korzyści współpracy, opis procesu dołączenia, FAQ współpracy (edytowalne w Studio)
+- [x] **CTA buttons** -- "Zaloguj się" (link do `app.afiliantkafaceless.pl/login`), "Poproś o zaproszenie" (mailto lub kontakt z adminem)
+- [x] **Navigation** -- link "Współpraca" w headerze i footerze
+- [x] **Affiliate disclosure** -- informacja o linkach partnerskich na stronach ofert (`/oferta/[slug]`)
+- [x] **Sitemap** -- dodanie `/wspolpraca` do `app/sitemap.ts`
 
 ### Phase 4.7: Content & Engagement
 
-- [ ] **Newsletter signup** -- email capture form on home page and blog, stored in Supabase, admin export
-- [ ] **Social proof / testimonials** -- new Sanity schema type, rendered on home page
-- [ ] **Offer comparison** -- side-by-side comparison feature for 2-3 selected offers
-- [ ] **Blog rich content** -- upgrade blog `content` from plain text to Portable Text (block array) for rich formatting, images, embeds
-- [ ] **Related offers on blog posts** -- link blog posts to relevant offers via Sanity references
+- [x] **Newsletter signup** -- email capture form on home page and blog, stored in Supabase, admin export
+- [x] **Social proof / testimonials** -- new Sanity schema type, rendered on home page
+- [x] **Offer comparison** -- side-by-side comparison feature for 2-3 selected offers
+- [x] **Blog rich content** -- upgrade blog `content` from plain text to Portable Text (block array) for rich formatting, images, embeds
+- [x] **Related offers on blog posts** -- link blog posts to relevant offers via Sanity references
 
 ### Phase 4.8: Analytics & Insights
 
-- [ ] **Public page analytics** -- track page views, offer clicks, blog reads (extend existing `user_activity` or use lightweight client-side tracking)
-- [ ] **Admin analytics dashboard** -- charts for user signups over time, most viewed offers, download counts, onboarding completion rates
-- [ ] **Offer click-through tracking** -- track external link clicks per offer, show stats in admin
+- [x] **Public page analytics** -- track page views, offer clicks, blog reads (extend existing `user_activity` or use lightweight client-side tracking)
+- [x] **Admin analytics dashboard** -- charts for user signups over time, most viewed offers, download counts, onboarding completion rates
+- [x] **Offer click-through tracking** -- track external link clicks per offer, show stats in admin
 
 ### Phase 4.9: Remaining Platform Features
 
-- [ ] **Notification system** -- email/in-app notifications when new content is published (carried from Phase 2)
-- [ ] **Content versioning** -- track what is new for each user (carried from Phase 2)
-- [ ] **Accessibility basics** -- proper focus states, ARIA labels, keyboard navigation (carried from Phase 3.5)
+- [x] **Notification system** -- email/in-app notifications when new content is published (carried from Phase 2)
+- [x] **Content versioning** -- track what is new for each user (carried from Phase 2)
+- [x] **Accessibility basics** -- proper focus states, ARIA labels, keyboard navigation (carried from Phase 3.5)
 
-### Phase 5: Scale & Polish
+### Phase 5: Scale & Polish ✅
 
-- [ ] **Email templates** -- branded magic link emails, invitation emails
-- [ ] **Rate limiting** -- protect auth and API endpoints
-- [ ] **Error handling** -- global error boundaries, proper 404/500 pages
-- [ ] **Testing** -- unit tests for role logic, integration tests for auth flow
-- [ ] **CI/CD** -- linting, type checking, preview deployments per branch
-- [ ] **Monitoring** -- error tracking (Sentry or similar)
+- [x] **Email templates** -- branded magic link emails, invitation emails (`supabase/email-templates/`, `docs/EMAIL_TEMPLATES.md`)
+- [x] **Rate limiting** -- protect auth and API endpoints (`lib/rate-limit.ts`, `/api/auth/magic-link`, newsletter, analytics)
+- [x] **Error handling** -- global error boundaries, proper 404/500 pages (`app/not-found.tsx`, `app/error.tsx`, `app/global-error.tsx`)
+- [x] **Testing** -- unit tests for role logic (`vitest`, `lib/role-utils.test.ts`, `lib/rate-limit.test.ts`)
+- [x] **CI/CD** -- linting, type checking, tests, build (`.github/workflows/ci.yml`)
+- [x] **Monitoring** -- optional Sentry error tracking (`lib/monitoring.ts`, `instrumentation.ts`, `SENTRY_DSN`)
 
 ### Phase 6: Czat społecznościowy
 

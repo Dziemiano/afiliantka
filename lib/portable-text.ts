@@ -1,39 +1,31 @@
 interface PortableTextBlock {
-  _type: string;
-  children?: PortableTextChild[];
-  [key: string]: unknown;
+  _type?: string;
+  children?: Array<{ text?: string }>;
 }
 
-interface PortableTextChild {
-  _type: string;
-  text?: string;
-  [key: string]: unknown;
+export function portableTextToPlainText(content: unknown): string {
+  if (typeof content === "string") return content;
+  if (!Array.isArray(content)) return "";
+
+  return content
+    .filter(
+      (block): block is PortableTextBlock =>
+        !!block && typeof block === "object" && block._type === "block"
+    )
+    .map((block) => {
+      if (!Array.isArray(block.children)) return "";
+      return block.children.map((child) => child.text ?? "").join("");
+    })
+    .join("\n\n")
+    .trim();
 }
 
-export function portableTextToString(
-  portableText: PortableTextBlock[] | string | null | undefined
-): string {
-  if (!portableText) return "";
-
-  // If it's already a string, return it
-  if (typeof portableText === "string") return portableText;
-
-  // If it's an array, process each block
-  if (Array.isArray(portableText)) {
-    return portableText
-      .map((block: PortableTextBlock) => {
-        if (block._type === "block") {
-          return (
-            block.children
-              ?.map((child: PortableTextChild) => child.text || "")
-              .join("") || ""
-          );
-        }
-        return "";
-      })
-      .join(" ")
-      .trim();
-  }
-
-  return "";
+export function filterPortableTextBlocks(
+  content: unknown
+): PortableTextBlock[] {
+  if (!Array.isArray(content)) return [];
+  return content.filter(
+    (block): block is PortableTextBlock =>
+      !!block && typeof block === "object" && !!block._type
+  );
 }

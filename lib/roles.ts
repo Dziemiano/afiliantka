@@ -1,4 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
+import {
+  hasModeratorOrAdminRole,
+  mergePermissionsFromRoles,
+} from "@/lib/role-utils";
 import { Role, UserWithRoles, Permission } from "@/types/role";
 
 export async function getUserRoles(userId: string): Promise<Role[]> {
@@ -162,17 +166,7 @@ export async function getCurrentUserRoles(): Promise<Role[]> {
 
 export async function getCurrentUserPermissions(): Promise<Permission[]> {
   const roles = await getCurrentUserRoles();
-  const permissions: Permission[] = [];
-
-  roles.forEach((role) => {
-    Object.entries(role.permissions).forEach(([key, value]) => {
-      if (value && !permissions.includes(key as Permission)) {
-        permissions.push(key as Permission);
-      }
-    });
-  });
-
-  return permissions;
+  return mergePermissionsFromRoles(roles);
 }
 
 export async function isCurrentUserAdmin(): Promise<boolean> {
@@ -194,7 +188,5 @@ export async function isCurrentUserAdmin(): Promise<boolean> {
 
 export async function isCurrentUserModerator(): Promise<boolean> {
   const roles = await getCurrentUserRoles();
-  return roles.some(
-    (role) => role.name === "moderator" || role.name === "admin"
-  );
+  return hasModeratorOrAdminRole(roles);
 }

@@ -14,9 +14,12 @@ export function AdminSidebar({ isAdmin = true }: AdminSidebarProps) {
   const navItems = [
     { href: "/admin", label: "Dashboard" },
     ...(isAdmin ? [{ href: "/admin/users", label: "Users" }] : []),
+    ...(isAdmin ? [{ href: "/admin/newsletter", label: "Newsletter" }] : []),
+    ...(isAdmin ? [{ href: "/admin/content", label: "Publikacje" }] : []),
     { href: "/admin/files", label: "Files" },
     { href: "/admin/drive", label: "Drive Sources" },
     ...(isAdmin ? [{ href: "/admin/activity", label: "Activity Log" }] : []),
+    ...(isAdmin ? [{ href: "/admin/analytics", label: "Analytics" }] : []),
     {
       href: "/studio",
       label: "Manage Content",

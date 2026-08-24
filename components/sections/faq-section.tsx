@@ -1,5 +1,5 @@
 import { client } from "@/sanity/lib/client";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, CircleHelp } from "lucide-react";
 
 interface FaqItem {
   _id: string;
@@ -34,16 +34,22 @@ export async function FaqSection() {
           {items.map((item) => (
             <details
               key={item._id}
-              className="group bg-white border border-slate-200 rounded-xl overflow-hidden transition-all duration-200 hover:border-slate-300"
+              className="group bg-white border border-slate-200 rounded-xl overflow-hidden transition-all duration-200 hover:border-brand/30 hover:shadow-sm"
             >
               <summary className="flex items-center justify-between gap-4 px-5 sm:px-6 py-5 cursor-pointer text-slate-800 font-medium text-sm sm:text-base min-h-[44px] list-none [&::-webkit-details-marker]:hidden select-none">
-                <span>{item.question}</span>
+                <span className="flex items-center gap-3 text-left">
+                  <CircleHelp
+                    className="h-5 w-5 text-brand flex-shrink-0"
+                    aria-hidden="true"
+                  />
+                  {item.question}
+                </span>
                 <ChevronDown className="h-5 w-5 text-slate-400 flex-shrink-0 transition-transform duration-300 group-open:rotate-180" />
               </summary>
-              <div className="grid grid-rows-[0fr] group-open:grid-rows-[1fr] transition-[grid-template-rows] duration-300">
+              <div className="grid grid-rows-[0fr] group-open:grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-in-out">
                 <div className="overflow-hidden">
                   <div className="px-5 sm:px-6 pb-5 pt-0 text-slate-600 text-sm sm:text-base leading-relaxed whitespace-pre-line border-t border-slate-100">
-                    <div className="pt-4">{item.answer}</div>
+                    <div className="pt-4 pl-8">{item.answer}</div>
                   </div>
                 </div>
               </div>

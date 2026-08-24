@@ -44,7 +44,7 @@ async function getOffers(): Promise<Offer[]> {
 
 async function OffersContent() {
   const offers = await getOffers();
-  return <OffersFilter offers={offers} />;
+  return <OffersFilter offers={offers} showPageHeader />;
 }
 
 export default function OfertyPage() {

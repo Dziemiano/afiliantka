@@ -1,4 +1,5 @@
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
+import { UserNotificationBell } from "@/components/dashboard/user-notification-bell";
 import { AppShell } from "@/components/layout/app-shell";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
@@ -38,7 +39,11 @@ export default async function DashboardLayout({
 
   const headerList = await headers();
   const pathname = headerList.get("x-pathname") || "";
-  const allowedOnboardPaths = ["/dashboard/onboarding", "/dashboard/offers"];
+  const allowedOnboardPaths = [
+    "/dashboard/onboarding",
+    "/dashboard/offers",
+    "/dashboard/co-nowego",
+  ];
   if (
     isOnboardOnly &&
     !allowedOnboardPaths.some((p) => pathname.startsWith(p))
@@ -56,6 +61,7 @@ export default async function DashboardLayout({
           user={user}
         />
       }
+      header={<UserNotificationBell />}
     >
       {children}
     </AppShell>
