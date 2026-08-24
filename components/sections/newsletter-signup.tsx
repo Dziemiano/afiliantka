@@ -120,8 +120,8 @@ export function NewsletterSignup({
           Zapisz się do newslettera
         </h2>
         <p className="text-slate-300 text-sm sm:text-base mb-6">
-          Otrzymuj informacje o nowych ofertach, promocjach i poradach
-          afiliacyjnych.
+          Otrzymuj informacje o nowych promocjach bankowych i poradach dotyczących
+          ofert.
         </p>
         {form}
         {message && (

@@ -5,13 +5,13 @@ import { OffersFilter } from "@/components/sections/offers-filter";
 import type { Offer } from "@/types/offer";
 
 export const metadata: Metadata = {
-  title: "Oferty partnerskie",
+  title: "Oferty bankowe",
   description:
-    "Przeglądaj sprawdzone oferty partnerskie — konta osobiste, biznesowe i karty kredytowe z wysokimi współczynnikami konwersji.",
+    "Przeglądaj aktualne promocje bankowe — konta osobiste, firmowe i karty kredytowe z bonusem za założenie.",
   openGraph: {
-    title: "Oferty partnerskie | Afiliantka Faceless",
+    title: "Oferty bankowe | Afiliantka Faceless",
     description:
-      "Przeglądaj sprawdzone oferty partnerskie z wysokimi współczynnikami konwersji.",
+      "Przeglądaj aktualne promocje kont i kart — porównaj i wybierz ofertę z korzyścią za założenie.",
   },
 };
 

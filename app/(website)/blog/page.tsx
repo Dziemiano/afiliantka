@@ -10,11 +10,11 @@ import { excerptFromContent, readingTimeFromContent } from "@/components/blog/bl
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Aktualności, porady i artykuły dotyczące ofert partnerskich i marketingu afiliacyjnego.",
+    "Aktualności, porady i artykuły o promocjach bankowych oraz zakładaniu kont.",
   openGraph: {
     title: "Blog | Afiliantka Faceless",
     description:
-      "Aktualności, porady i artykuły dotyczące ofert partnerskich.",
+      "Aktualności, porady i artykuły o promocjach bankowych.",
   },
 };
 
@@ -64,7 +64,7 @@ export default async function BlogPage() {
             Blog
           </h1>
           <p className="text-slate-600 text-base sm:text-lg max-w-xl mx-auto">
-            Aktualności, porady i artykuły o marketingu afiliacyjnym
+            Aktualności, porady i artykuły o promocjach bankowych
           </p>
         </div>
       </section>
