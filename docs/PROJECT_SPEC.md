@@ -2,7 +2,7 @@
 
 > Dokument referencyjny dla deweloperów i agentów kodujących. Opisuje wizję produktu, aktualny stan implementacji, planowane funkcje oraz kluczowe przepływy biznesowe.
 >
-> **Powiązane dokumenty:** [`.cursor/rules/guidelines.mdc`](../.cursor/rules/guidelines.mdc) (konwencje kodu), [`ROADMAP.md`](../ROADMAP.md) (lista zadań technicznych).
+> **Powiązane dokumenty:** [`AGENTS.md`](../AGENTS.md) (workflow agentów + Linear), [`.cursor/rules/guidelines.mdc`](../.cursor/rules/guidelines.mdc) (konwencje kodu), [`ROADMAP.md`](../ROADMAP.md) (lista zadań technicznych).
 
 ---
 
@@ -12,14 +12,14 @@
 
 | Powierzchnia | Domena produkcyjna | Cel |
 |---|---|---|
-| **Strona publiczna** | `afiliantkafaceless.pl` | Landing z aktualnymi promocjami bankowymi, linkami afiliacyjnymi, treścią edukacyjną i stroną współpracy afiliacyjnej |
+| **Strona publiczna** | `afiliantkafaceless.pl` | Katalog promocji bankowych dla odwiedzających (korzyść / bonus za założenie konta), blog, FAQ; treść o współpracy afiliacyjnej wyłącznie na `/wspolpraca` |
 | **Panel SaaS** | `app.afiliantkafaceless.pl` | Portal dla współpracowników i administratorów: onboarding, zarządzanie użytkownikami, dostęp do materiałów; docelowo czat społecznościowy i narzędzia AI |
 
 **Model dostępu:** invite-only — nowi współpracownicy dołączają wyłącznie na zaproszenie administratora (magic link OTP przez Supabase). Strona `/wspolpraca` informuje o procesie współpracy i kieruje do logowania lub prośby o zaproszenie — bez samodzielnej rejestracji.
 
-**Język UI:** polski (wyjątek: strona logowania jest częściowo po angielsku — do ujednolicenia).
+**Język UI:** polski.
 
-**Stan projektu:** rdzeń platformy (onboarding, role, pliki, panel admina, strona publiczna z ofertami i blogiem) jest zaimplementowany. Priorytetowe braki biznesowe: strona współpracy, strony prawne, affiliate disclosure, przebudowa UI publicznej. Docelowo: czat między użytkownikami, potem narzędzia AI do tworzenia treści.
+**Stan projektu:** rdzeń platformy (onboarding, role, pliki, panel admina, strona publiczna z ofertami, blogiem, newsletterem, analityką, `/wspolpraca`) jest zaimplementowany (fazy 1–5). **Aktualny priorytet:** Phase 5.5 — przeprofilowanie home na oferty bankowe dla odwiedzających (bez pitchu afiliacyjnego na `/`). Potem: strony prawne, czat (Phase 6), AI (Phase 7).
 
 ---
 
@@ -41,7 +41,8 @@ flowchart TB
         Oferty["/oferty"]
         OfertaDetail["/oferta/slug"]
         Blog["/blog"]
-        Wspolpraca["/wspolpraca - planowane"]
+        Wspolpraca["/wspolpraca"]
+        Go["/go/slug"]
     end
 
     subgraph appHost [app.afiliantkafaceless.pl]
@@ -115,11 +116,13 @@ flowchart TB
 
 | Trasa | Plik | Opis |
 |---|---|---|
-| `/` | `app/(website)/page.tsx` | Strona główna: logo (`AppLogo`), sekcja „Jak to działa”, filtr ofert z karuzelą wyróżnionych i listą, FAQ |
-| `/oferty` | `app/(website)/oferty/page.tsx` | Pełna lista ofert z filtrem kategorii i wyszukiwarką tekstową |
-| `/oferta/[slug]` | `app/(website)/oferta/[slug]/page.tsx` | Szczegóły oferty: badge kategorii, opis (Portable Text), obraz, PDF-y, CTA „Przejdź do oferty” |
+| `/` | `app/(website)/page.tsx` | Hero (`HeroSection`), Jak to działa, oferty (filtr + featured + lista), testimonials, FAQ, newsletter |
+| `/oferty` | `app/(website)/oferty/page.tsx` | Pełna lista ofert z filtrem kategorii, wyszukiwarką i porównywarką |
+| `/oferta/[slug]` | `app/(website)/oferta/[slug]/page.tsx` | Szczegóły oferty, Portable Text, PDF-y, affiliate disclosure, CTA → `/go/[slug]` |
 | `/blog` | `app/(website)/blog/page.tsx` | Lista wpisów (wyróżniony + siatka) |
-| `/blog/[slug]` | `app/(website)/blog/[slug]/page.tsx` | Szczegóły wpisu, czas czytania, JSON-LD `BlogPosting` |
+| `/blog/[slug]` | `app/(website)/blog/[slug]/page.tsx` | Szczegóły wpisu (Portable Text), powiązane oferty, czas czytania, JSON-LD |
+| `/wspolpraca` | `app/(website)/wspolpraca/page.tsx` | Model współpracy faceless (CMS `cooperationPage`), CTA login / prośba o zaproszenie |
+| `/go/[slug]` | `app/(website)/go/[slug]/route.ts` | Proxy redirect z trackingiem kliknięć |
 
 **Layout:** `app/(website)/layout.tsx` — `Header` + `Footer`.
 
@@ -131,70 +134,52 @@ flowchart TB
 | `business` | Biznesowe |
 | `credit-cards` | Karty kredytowe |
 
-**CMS (Sanity)** — typy zdefiniowane w `sanity.config.ts`:
-
-Lista ofert w Studio pokazuje w podglądzie kategorię oraz oznaczenie „Polecana”, dzięki czemu administrator może rozpoznać typ oferty bez otwierania dokumentu.
+**CMS (Sanity)** — typy w `sanity.config.ts`:
 
 | Typ | Pola kluczowe | Użycie |
 |---|---|---|
 | `offer` | title, description, image, link, featured, category, files (PDF), requirement, slug | Oferty publiczne + onboarding |
-| `heroSection` | title, description, image | Hero (częściowo — tylko `image` przez `AppLogo`) |
-| `blog` | title, slug, content (plain text), image, date, author | Blog |
+| `heroSection` | title, description, image | Hero na stronie głównej |
+| `blog` | title, slug, content (Portable Text), image, date, author, relatedOffers | Blog |
 | `faq` | question, answer, order | FAQ na stronie głównej |
 | `howItWorks` | title, description, icon, order | Sekcja „Jak to działa” |
+| `testimonial` | quote, author, image, order | Social proof na home |
+| `cooperationPage` | korzyści, proces, FAQ współpracy, CTA | `/wspolpraca` |
 
 **SEO i wydajność:**
 - Metadata + OG na layout i stronach
-- `app/sitemap.ts` — home, `/oferty`, `/blog`, wszystkie slugi ofert i bloga
+- `app/sitemap.ts` — home, `/oferty`, `/blog`, `/wspolpraca`, slugi ofert i bloga
 - `app/robots.ts` — publiczne dozwolone, app/admin/studio/api zablokowane
 - JSON-LD: `Organization` (root), `Product` (oferty), `BlogPosting` (blog)
 - ISR (`revalidate: 300`), `generateStaticParams` na slugach
 
 **Nawigacja:**
-- Header: Oferty, Blog, Login/Dashboard (link do subdomeny app)
-- Footer: linki nawigacyjne; polityka prywatności i regulamin to placeholdery (`href="#"`)
+- Header: Oferty, Blog, Współpraca, Login/Dashboard
+- Footer: linki nawigacyjne + social; polityka prywatności i regulamin nadal placeholdery (`href="#"`)
 
-**Przepływ afiliacyjny (publiczny):**
-1. Karta oferty → link wewnętrzny `/oferta/[slug]`
-2. Strona szczegółów → przycisk „Przejdź do oferty” → zewnętrzny URL (`offer.link`, `target="_blank"`)
-3. Brak proxy `/go/[slug]` i trackingu kliknięć
-4. Brak affiliate disclosure na stronach ofert
+**Przepływ kliknięcia oferty (publiczny):**
+1. Karta oferty → `/oferta/[slug]`
+2. „Przejdź do oferty” → `/go/[slug]` (tracking) → zewnętrzny `offer.link`
 
-**Uwaga:** komponent `components/sections/hero-section.tsx` (pełny hero z tytułem, opisem, CTA) istnieje, ale **nie jest używany** na stronie głównej — zamiast niego renderowany jest `AppLogo`.
+### 4.2 Docelowy układ home (Phase 5.5 — w toku)
 
-### 4.2 Planowane — strona publiczna
+Priorytet przed Phase 6/7. Linear: DZI-48 (docs), DZI-49 (layout), DZI-50 (copy).
 
-#### Faza A — Strona współpracy afiliacyjnej (priorytet biznesowy)
+**Target `/`:**
+Header → powitanie/hero (oferty bankowe + bonus) → Jak to działa → tylko polecane oferty → CTA „Zobacz wszystkie oferty” → `/oferty` → FAQ → Footer
 
-| Element | Opis |
-|---|---|
-| Trasa `/wspolpraca` | Nowa strona w `app/(website)/wspolpraca/` |
-| CMS | Nowy typ Sanity `cooperationPage`: korzyści współpracy, opis procesu dołączenia, FAQ współpracy |
-| CTA „Zaloguj się” | Link do `app.afiliantkafaceless.pl/login` |
-| CTA „Poproś o zaproszenie” | Początkowo mailto lub kontakt z adminem (bez samodzielnej rejestracji) |
-| Nawigacja | Link w headerze i footerze |
-| Affiliate disclosure | Informacja o linkach partnerskich na stronach ofert |
+Usunąć z home: pełną listę / filtr / compare, testimonials, newsletter (newsletter zostaje na blogu). Messaging afiliacyjny tylko na `/wspolpraca`.
 
-#### Faza B — Przebudowa UI (ROADMAP Phase 4.5)
+### 4.3 Ukończone wcześniej — fazy publiczne (A–D / 4.5–4.8)
 
-- Pełny hero z nagłówkiem i CTA „Zobacz oferty”
-- Redesign kart ofert, grida, filtra, footera (kolumny, social, legal)
-- Strony prawne: Polityka prywatności, Regulamin
-- Ujednolicony layout — integracja logo z hero/headerem
+| Faza | Zakres | Status |
+|---|---|---|
+| A / 4.6 | `/wspolpraca`, disclosure, `cooperationPage` | ✅ |
+| B / 4.5 | Rebuild UI publicznej (hero, karty, footer) | ✅ (layout home zmienia Phase 5.5) |
+| C / 4.7 | Newsletter, testimonials, compare, Portable Text blog | ✅ |
+| D / 4.8 | `/go/[slug]`, analytics, `/admin/analytics` | ✅ |
 
-#### Faza C — Content & engagement (ROADMAP Phase 4.7)
-
-- Newsletter (zapis email → Supabase, eksport admin)
-- Testimonials (nowy typ Sanity)
-- Porównywarka 2–3 ofert
-- Blog: Portable Text zamiast plain text; powiązane oferty
-- Rozszerzenie schematu `offer`: kwota bonusu, warunki, data ważności, nazwa banku
-
-#### Faza D — Analityka publiczna (ROADMAP Phase 4.8)
-
-- Tracking wyświetleń stron i kliknięć w linki afiliacyjne
-- Proxy redirect `/go/[slug]` z logowaniem kliknięć
-- Dashboard analityczny w panelu admina
+Pozostałe otwarte poza 5.5: strony prawne (Polityka / Regulamin), rozszerzenie schematu `offer` (bonus, bank, data ważności).
 
 ---
 
@@ -221,6 +206,7 @@ Lista ofert w Studio pokazuje w podglądzie kategorię oraz oznaczenie „Poleca
 | `/dashboard/resources` | Materiały zasobów |
 | `/dashboard/files` | Zunifikowana przeglądarka Blob + Drive z zakładkami sekcji |
 | `/dashboard/profile` | Profil: dane, role, status onboardingu, liczba aktywności |
+| `/dashboard/co-nowego` | Wersjonowanie treści — „co nowego” dla użytkownika |
 
 **Routing roli `onboard`:** użytkownicy z samą rolą `onboard` (bez `user`/`admin`/`moderator`) są przekierowywani do `/dashboard/onboarding` — wyjątki: `/dashboard/onboarding` i `/dashboard/offers` (`dashboard/layout.tsx`).
 
@@ -266,11 +252,14 @@ stateDiagram-v2
 
 | Trasa | Dostęp | Opis |
 |---|---|---|
-| `/admin` | admin / moderator | Karty nawigacyjne; „System Overview” = stub „Coming soon” |
-| `/admin/users` | admin | Zaproszenia (email + imię), przypisywanie ról, status onboardingu, weryfikacja kont, approve/reject |
+| `/admin` | admin / moderator | Karty nawigacyjne do sekcji admina |
+| `/admin/users` | admin | Zaproszenia (email + imię), role, onboarding, weryfikacja kont, approve/reject |
 | `/admin/files` | admin / moderator | Upload do Vercel Blob |
-| `/admin/drive` | admin / moderator | Konfiguracja źródeł Google Drive (picker, sekcja, `role_required`) |
-| `/admin/activity` | admin | Log aktywności użytkowników (paginacja) |
+| `/admin/drive` | admin / moderator | Źródła Google Drive (picker, sekcja, `role_required`) |
+| `/admin/activity` | admin | Log aktywności (paginacja) |
+| `/admin/newsletter` | admin | Subskrybenci newslettera / eksport |
+| `/admin/content` | admin | Publikacje / content releases |
+| `/admin/analytics` | admin | Analityka publiczna (wyświetlenia, kliknięcia ofert) |
 
 **Zaproszenia:** admin wysyła invite przez `inviteUserByEmail` z opcjonalnym imieniem (`user_metadata.full_name`). Nowy użytkownik dostaje automatycznie rolę `onboard` (trigger na `auth.users` INSERT).
 
@@ -310,26 +299,20 @@ API: `POST /api/activity/track`, `GET /api/admin/activity`.
 
 ### 5.7 Planowane — panel SaaS
 
-#### Faza E — Dojrzałość platformy (ROADMAP Phase 4.9 + 5)
+#### Ukończone (Phase 4.9 + 5)
 
-- Powiadomienia email (nowe treści, zmiana statusu onboardingu)
-- Wersjonowanie treści („co nowego” per użytkownik)
-- Brandowane szablony email (magic link, zaproszenie)
-- Rate limiting na auth i API
-- Globalne error boundaries, strony 404/500
-- Testy jednostkowe (logika ról) i integracyjne (auth flow)
-- CI/CD (lint, typecheck, preview deployments)
-- Monitoring błędów (Sentry lub podobne)
-- Zaostrzenie RLS na `user_roles`
+Powiadomienia / „co nowego”, szablony email, rate limiting, error boundaries, Vitest, CI, opcjonalny Sentry, dashboard analityczny — **zaimplementowane**.
+
+#### Pozostały dług / polish
+
 - Guard roli admin na `/studio`
-- Server-side filtrowanie Blob (obecnie client-side)
+- Server-side filtrowanie Blob
 - Migracja seed roli `onboard`
-- Pełne wykorzystanie tabeli `invitations` (token-based invites)
+- Pełne wykorzystanie tabeli `invitations`
 - Dezaktywacja/usuwanie użytkowników w UI admina
-- Dashboard analityczny (rejestracje, completion rate onboardingu, popularne oferty/pliki)
-- Ujednolicenie języka UI (login po polsku)
+- Zaostrzenie RLS na `user_roles`
 
-#### Faza F — Czat społecznościowy (priorytet docelowy)
+#### Faza F — Czat społecznościowy (Phase 6)
 
 Klasyczny czat między użytkownikami współpracującymi — **nie** chatbot wsparcia.
 
@@ -345,7 +328,7 @@ Klasyczny czat między użytkownikami współpracującymi — **nie** chatbot ws
 
 **Planowane tabele Supabase:** `conversations`, `messages`, ewentualnie `chat_reports`.
 
-#### Faza G — Narzędzia AI (późniejszy etap)
+#### Faza G — Narzędzia AI (Phase 7 — później)
 
 Asystent AI w panelu — narzędzie rozwoju, **nie** pierwsza linia wsparcia.
 
@@ -379,7 +362,7 @@ sequenceDiagram
     App->>User: Redirect /dashboard/onboarding
 ```
 
-### 6.2 Kliknięcie linku afiliacyjnego (publiczny)
+### 6.2 Kliknięcie linku oferty (publiczny)
 
 ```mermaid
 sequenceDiagram
@@ -391,9 +374,8 @@ sequenceDiagram
     Visitor->>Website: Klik karty oferty
     Website->>Visitor: /oferta/slug
     Visitor->>Website: Klik "Przejdź do oferty"
-    Website->>Bank: Redirect offer.link (zewnętrzny URL)
-
-    Note over Website: Planowane: /go/slug z trackingiem
+    Website->>Website: /go/slug tracking
+    Website->>Bank: Redirect offer.link
 ```
 
 ### 6.3 Onboarding — pełny cykl
@@ -425,11 +407,11 @@ flowchart TD
 |---|---|---|
 | `offer` | Zaimplementowany | title, description (Portable Text), image, link, featured, category, files (PDF), requirement, slug |
 | `heroSection` | Zaimplementowany | title, description, image |
-| `blog` | Zaimplementowany | title, slug, content (plain text), image, date, author |
+| `blog` | Zaimplementowany | title, slug, content (Portable Text), image, date, author, relatedOffers |
 | `faq` | Zaimplementowany | question, answer, order |
 | `howItWorks` | Zaimplementowany | title, description, icon, order |
-| `cooperationPage` | Planowany | sekcje treści, CTA, FAQ współpracy |
-| `testimonial` | Planowany | cytat, autor, zdjęcie, order |
+| `cooperationPage` | Zaimplementowany | sekcje treści, CTA, FAQ współpracy |
+| `testimonial` | Zaimplementowany | cytat, autor, zdjęcie, order |
 
 ### 7.2 Supabase
 
@@ -443,7 +425,9 @@ flowchart TD
 | `admin_notifications` | Zaimplementowany | Powiadomienia dla admina |
 | `drive_sources` | Zaimplementowany | Mapowanie plików/folderów Google Drive |
 | `user_activity` | Zaimplementowany | Audit log aktywności |
-| `newsletter_subscribers` | Planowany | Zapis newslettera |
+| `newsletter_subscribers` | Zaimplementowany | Zapis newslettera |
+| Public analytics tables | Zaimplementowany | Wyświetlenia / kliknięcia (migracje `public_analytics`) |
+| User notifications / content | Zaimplementowany | „Co nowego” / content releases |
 | `conversations` | Planowany | Czat — konwersacje |
 | `messages` | Planowany | Czat — wiadomości |
 
@@ -502,7 +486,7 @@ flowchart TD
 | **Bezpieczeństwo** | Każda trasa API: `getSession()`; admin: `isCurrentUserAdmin()`; Drive download walidowany względem `drive_sources` |
 | **SEO** | Strona publiczna indeksowalna; panel/admin/studio/api — `noindex` |
 | **Wydajność** | ISR na stronach publicznych; `generateStaticParams` na slugach |
-| **Dostępność** | Planowane: focus states, ARIA, keyboard nav (ROADMAP Phase 4.9) |
+| **Dostępność** | Focus states, ARIA, keyboard nav — basics w Phase 4.9; kontynuować przy nowych UI |
 | **Kod** | TypeScript strict, brak `any`, brak `console.log`, polski tekst UI |
 
 Szczegóły implementacji UI: [`.cursor/skills/frontend-ui/SKILL.md`](../.cursor/skills/frontend-ui/SKILL.md).
@@ -519,33 +503,33 @@ Agent kodujący powinien uwzględniać te punkty przy każdej pracy:
 | 2 | `/studio` bez guarda admin | Każdy zalogowany może edytować CMS | Dodać sprawdzenie roli admin w layoucie studio |
 | 3 | RLS `user_roles` zbyt permissive | Każdy auth user może zarządzać rolami na poziomie DB | Zaostrzyć polityki RLS |
 | 4 | `/api/blobs/list` bez filtrowania serwerowego | Wszystkie bloby widoczne dla zalogowanych | Filtrować po roli/sekcji server-side |
-| 5 | Tabela `invitations` nieużywana | Token-based invite flow nieaktywny | Zintegrować z flow zaproszeń lub usunąć |
+| 5 | Tabela `invitations` niedowykorzystana | Token-based invite flow słaby | Zintegrować lub usunąć |
 | 6 | `NEXT_PUBLIC_SITE_URL` fallback `afiliantka.pl` | Niezgodność z produkcyjną domeną | Zmienić na `afiliantkafaceless.pl` |
-| 7 | `HeroSection` nieużywany na home | CMS hero niewykorzystany | Użyć w Phase 4.5 lub usunąć `AppLogo` |
-| 8 | Footer: linki prawne `#` | Brak compliance | Dodać strony polityki i regulaminu |
-| 9 | Brak `/wspolpraca` | Brak strony o współpracy afiliacyjnej | Phase 4.6 |
-| 10 | README nieaktualny | Mylące dla nowych deweloperów | Zaktualizować przy okazji |
-| 11 | Login częściowo po angielsku | Niespójność językowa | Przetłumaczyć na PL |
-| 12 | Guidelines mówią o schemacie `news` | Nieaktualna dokumentacja | Już poprawione na `blog` w kodzie |
+| 7 | Footer: linki prawne `#` | Brak compliance | Dodać Politykę i Regulamin |
+| 8 | Social footer `#` | Martwe linki | Podpiąć prawdziwe URL |
+| 9 | README może być nieaktualny | Mylące dla nowych deweloperów | Zaktualizować przy okazji |
+| 10 | Phase 5.5 home layout / copy | Home nadal ma full offers + messaging partnerski | DZI-49, DZI-50 |
+| 11 | Schemat `offer` bez bonus/bank/expiry | Słabsze dane porównawcze | Rozszerzyć Sanity gdy potrzeba |
 
 ---
 
 ## 12. Roadmapa produktowa (skrót)
 
-Pełna lista zadań technicznych: [`ROADMAP.md`](../ROADMAP.md).
+Pełna lista zadań technicznych: [`ROADMAP.md`](../ROADMAP.md). Workflow agentów: [`AGENTS.md`](../AGENTS.md).
 
 | Faza | Nazwa | Status |
 |---|---|---|
 | 1–3.5 | Fundament, Drive, onboarding, UX | ✅ Ukończone |
 | 4 | SEO, filtry, blog, CMS home | ✅ Ukończone |
-| 4.5 | Przebudowa UI strony publicznej | 🔲 Planowane |
-| 4.6 | Strona współpracy afiliacyjnej (`/wspolpraca`) | 🔲 Planowane — priorytet |
-| 4.7 | Newsletter, testimonials, porównywarka, blog rich | 🔲 Planowane |
-| 4.8 | Analityka publiczna, tracking kliknięć | 🔲 Planowane |
-| 4.9 | Powiadomienia email, wersjonowanie treści, a11y | 🔲 Planowane |
-| 5 | Email templates, rate limiting, testy, CI/CD, monitoring | 🔲 Planowane |
+| 4.5 | Przebudowa UI strony publicznej | ✅ Ukończone |
+| 4.6 | Strona współpracy afiliacyjnej (`/wspolpraca`) | ✅ Ukończone |
+| 4.7 | Newsletter, testimonials, porównywarka, blog rich | ✅ Ukończone |
+| 4.8 | Analityka publiczna, tracking kliknięć | ✅ Ukończone |
+| 4.9 | Powiadomienia, wersjonowanie treści, a11y basics | ✅ Ukończone |
+| 5 | Email templates, rate limiting, testy, CI/CD, monitoring | ✅ Ukończone |
+| 5.5 | Public visitor repositioning (home offers-first) | 🔲 **Priorytet** (DZI-48–50) |
 | 6 | Czat społecznościowy między użytkownikami | 🔲 Planowane |
-| 7 | Narzędzia AI (treści, profile social media) | 🔲 Planowane (późniejszy etap) |
+| 7 | Narzędzia AI (treści, profile social media) | 🔲 Planowane (później) |
 
 ---
 
@@ -553,15 +537,16 @@ Pełna lista zadań technicznych: [`ROADMAP.md`](../ROADMAP.md).
 
 Przy implementacji nowych funkcji:
 
-1. **Przeczytaj tę specyfikację** — zrozum kontekst biznesowy przed kodowaniem
-2. **Stosuj konwencje z** [`.cursor/rules/guidelines.mdc`](../.cursor/rules/guidelines.mdc) — route groups, API auth, mobile-first, polski UI
-3. **UI:** użyj skill [frontend-ui](../.cursor/skills/frontend-ui/SKILL.md) przy każdej zmianie TSX
-4. **Nie twórz tras poza** `app/(website)/` i `app/(app)/`
-5. **API routes** — zawsze pod `app/(app)/api/`, zawsze sprawdź sesję Supabase
-6. **Sanity** — jeden klient (`sanity/lib/client.ts`), schematy w `sanity.config.ts`
-7. **Nowe funkcje planowane** — sprawdź odpowiednią fazę w ROADMAP i zaktualizuj ją po implementacji
-8. **Dług techniczny** — nie pogarszaj znanych luk; naprawiaj je, gdy dotykasz powiązanego kodu
+1. **Przeczytaj** [`AGENTS.md`](../AGENTS.md) i tę specyfikację
+2. **Linear:** tylko projekt **Afiliantka Faceless**; baza branchy: `new-spec-development` (później `preview`)
+3. **Stosuj konwencje z** [`.cursor/rules/guidelines.mdc`](../.cursor/rules/guidelines.mdc) oraz `frontend.mdc` / `backend.mdc` / `testing.mdc`
+4. **UI:** skill [frontend-ui](../.cursor/skills/frontend-ui/SKILL.md) przy każdej zmianie TSX
+5. **Nie twórz tras poza** `app/(website)/` i `app/(app)/`
+6. **API routes** — zawsze pod `app/(app)/api/`, zawsze sprawdź sesję Supabase
+7. **Sanity** — jeden klient (`sanity/lib/client.ts`), schematy w `sanity.config.ts`
+8. **Nowe funkcje** — sprawdź fazę w ROADMAP i zaktualizuj ją po implementacji
+9. **Dług techniczny** — nie pogarszaj znanych luk; naprawiaj je, gdy dotykasz powiązanego kodu
 
 ---
 
-*Ostatnia aktualizacja specyfikacji: lipiec 2026*
+*Ostatnia aktualizacja specyfikacji: sierpień 2026*
