@@ -13,6 +13,9 @@ export const PUBLIC_SHADER_OVERLAY_COLORS = Object.freeze([
   "#f97316",
 ] as const);
 
+export const PUBLIC_SHADER_CONTAINER_CLASS_NAME =
+  "pointer-events-none fixed inset-0 z-0 overflow-hidden";
+
 export const PUBLIC_SHADER_LAYER_STYLES = Object.freeze({
   base: Object.freeze({
     className: "absolute inset-0 w-full h-full",

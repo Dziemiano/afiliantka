@@ -5,6 +5,7 @@ import { MeshGradient } from "@paper-design/shaders-react";
 import {
   getPublicShaderSpeeds,
   PUBLIC_SHADER_BASE_COLORS,
+  PUBLIC_SHADER_CONTAINER_CLASS_NAME,
   PUBLIC_SHADER_LAYER_STYLES,
   PUBLIC_SHADER_OVERLAY_COLORS,
 } from "@/components/layout/public-shader-background-config";
@@ -45,7 +46,7 @@ export function PublicShaderBackground() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+      className={PUBLIC_SHADER_CONTAINER_CLASS_NAME}
       data-reduced-motion={prefersReducedMotion}
     >
       <MeshGradient
