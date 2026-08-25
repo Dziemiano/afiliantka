@@ -3,9 +3,8 @@
 import { useSyncExternalStore } from "react";
 import { MeshGradient } from "@paper-design/shaders-react";
 import {
-  getPublicShaderSpeed,
+  getPublicShaderAnimationConfig,
   PUBLIC_SHADER_COLORS,
-  PUBLIC_SHADER_FRAME,
 } from "@/components/layout/public-shader-background-config";
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
@@ -38,6 +37,8 @@ export function PublicShaderBackground() {
     getReducedMotionSnapshot,
     getReducedMotionServerSnapshot
   );
+  const animationConfig =
+    getPublicShaderAnimationConfig(prefersReducedMotion);
 
   return (
     <div
@@ -51,8 +52,8 @@ export function PublicShaderBackground() {
         swirl={0.2}
         grainMixer={0}
         grainOverlay={0}
-        speed={getPublicShaderSpeed(prefersReducedMotion)}
-        frame={PUBLIC_SHADER_FRAME}
+        speed={animationConfig.speed}
+        frame={animationConfig.frame}
         fit="cover"
         minPixelRatio={1}
         maxPixelCount={1920 * 1080}
