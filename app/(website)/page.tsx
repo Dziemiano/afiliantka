@@ -71,7 +71,7 @@ export default function Home() {
       <Suspense
         fallback={
           <div className="py-10 text-center px-4">
-            <p className="text-slate-500 text-sm sm:text-base">
+            <p className="text-white/75 text-sm sm:text-base">
               Ładowanie ofert...
             </p>
           </div>

@@ -48,7 +48,7 @@ export async function HeroSection() {
     },
     marks: {
       strong: ({ children }: { children?: React.ReactNode }) => (
-        <strong className="font-semibold text-slate-700">{children}</strong>
+        <strong className="font-semibold text-white">{children}</strong>
       ),
       link: ({
         value,
@@ -70,22 +70,13 @@ export async function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-brand-light via-white to-teal-50 py-14 sm:py-20 lg:py-28 px-4 sm:px-6">
-      <div
-        className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-brand/10 blur-3xl"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-teal-400/10 blur-3xl"
-        aria-hidden="true"
-      />
-
+    <section className="relative overflow-hidden bg-transparent py-14 sm:py-20 lg:py-28 px-4 sm:px-6">
       <div className="relative max-w-4xl mx-auto text-center space-y-6 sm:space-y-8">
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight drop-shadow-md">
           {heroContent?.title || "Aktualne oferty bankowe z bonusem"}
         </h1>
 
-        <div className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
+        <div className="text-base sm:text-lg lg:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto drop-shadow-sm">
           {heroContent?.description ? (
             <PortableText
               value={heroContent.description}

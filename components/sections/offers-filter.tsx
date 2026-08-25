@@ -79,12 +79,12 @@ export function OffersFilter({ offers, showPageHeader = false }: OffersFilterPro
   return (
     <>
       {showPageHeader && (
-        <section className="bg-gradient-to-br from-brand-light via-white to-teal-50 py-10 sm:py-14 px-4 sm:px-6">
+        <section className="bg-transparent py-10 sm:py-14 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto text-center">
-            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-3">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 drop-shadow-sm">
               Oferty bankowe
             </h1>
-            <p className="text-slate-600 text-base sm:text-lg max-w-xl mx-auto">
+            <p className="text-white/80 text-base sm:text-lg max-w-xl mx-auto">
               Przeglądaj sprawdzone promocje bankowe — konta osobiste, firmowe i
               karty kredytowe.
             </p>
@@ -141,7 +141,7 @@ export function OffersFilter({ offers, showPageHeader = false }: OffersFilterPro
             </div>
 
             {compareMode && (
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-white/75">
                 Wybierz od 2 do {MAX_COMPARE} ofert, aby je porównać obok siebie.
               </p>
             )}
@@ -155,7 +155,7 @@ export function OffersFilter({ offers, showPageHeader = false }: OffersFilterPro
       <AllOffersTable offers={filtered} {...compareProps} />
 
       {filtered.length === 0 && (
-        <div className="text-center py-20 text-slate-500 px-4">
+        <div className="text-center py-20 text-white/75 px-4">
           <p className="text-lg">Brak ofert pasujących do kryteriów.</p>
           <button
             onClick={() => {

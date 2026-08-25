@@ -95,8 +95,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   if (!post) {
     return (
-      <div className="py-20 text-center text-slate-500">
-        Nie znaleziono wpisu.
+      <div className="px-4 py-20 text-center sm:px-6">
+        <p className="mx-auto w-fit rounded-xl bg-slate-950/80 px-5 py-4 text-sm text-white shadow-lg sm:text-base">
+          Nie znaleziono wpisu.
+        </p>
       </div>
     );
   }
@@ -118,7 +120,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   };
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen bg-transparent">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -138,7 +140,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
       )}
 
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+      <main className="max-w-3xl mx-4 my-8 rounded-2xl bg-white/90 px-4 py-8 shadow-sm sm:mx-6 sm:px-6 sm:py-10 md:mx-auto">
         <nav
           className="flex items-center gap-1.5 text-sm text-slate-400 mb-6"
           aria-label="Breadcrumb"
