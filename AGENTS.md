@@ -36,6 +36,8 @@ Always create and filter issues under this project only — never other workspac
 
 ## Multi-agent workflow
 
+**Mandatory.** Do not implement an entire Linear issue end-to-end in a single general chat as a substitute for this pipeline. The parent/orchestrator session **must** launch specialized agents via the Task tool (or equivalent subagents).
+
 ```
 Linear (Afiliantka Faceless)
         │
@@ -43,15 +45,15 @@ Linear (Afiliantka Faceless)
   Orchestrator ── picks unblocked issue(s)
         │
         ├─► frontend-dev  ─┐
-        ├─► backend-dev   ─┼─► branch + implement
-        └─► test-dev      ─┘
+        ├─► backend-dev   ─┼─► branch + implement (own branch per issue)
+        └─► test-dev      ─┘   ← required when any logic/UI behavior changes
                 │
                 ▼
-          PR opened
+          PR opened (draft OK until reviews pass)
                 │
                 ▼
           pr-reviewer + Bugbot (+ Security Review if needed)
-                │
+                │               ← required before asking human to merge
                 ▼
           fixes if required
                 │
@@ -68,9 +70,27 @@ Linear (Afiliantka Faceless)
 1. **Orchestrator** (`.cursor/agents/orchestrator.md`) — selects Linear issues, checks blockers, decides sequential vs parallel, briefs specialized agents.
 2. **frontend-dev** (`.cursor/agents/frontend-dev.md`) — UI / public site / dashboard pages / components.
 3. **backend-dev** (`.cursor/agents/backend-dev.md`) — API routes, Supabase, lib/, Drive/Blob, auth/roles.
-4. **test-dev** (`.cursor/agents/test-dev.md`) — Vitest (and e2e when present); can pair after or with a feature agent.
-5. **pr-reviewer** (`.cursor/agents/pr-reviewer.md`) — scope, SPEC, tests, security; triggers Bugbot / Security Review skills.
+4. **test-dev** (`.cursor/agents/test-dev.md`) — Vitest (and e2e when present); **required** on every non-docs issue that changes behavior; may run after or with a feature agent.
+5. **pr-reviewer** (`.cursor/agents/pr-reviewer.md`) — scope, SPEC, tests, security; **must** run after PR open; triggers Bugbot / Security Review skills.
 6. **Human** — merges PR; tells orchestrator work is unblocked for the next issue.
+
+### Pre-PR gate (hard)
+
+Before marking a PR ready for human merge:
+
+1. **test-dev** (or equivalent): tests added/updated for new or changed logic; `npm test` green
+2. **pr-reviewer** agent run on the PR
+3. **Bugbot** skill/subagent run on non-trivial PRs (UI, auth, API, data)
+4. Fix findings; re-run tests; do not ask the human to merge with known hydration/CI failures
+
+Skipping specialized agents to “ship faster” is a process failure — fix process, then code.
+
+### Testing (hard)
+
+- Every behavioral change needs corresponding Vitest coverage (pure helpers in `lib/`, parsers, guards, normalize functions). Prefer extracting testable logic from React components.
+- Pure docs / copy-only PRs may skip tests with an explicit **Tests: N/A** note in the PR body.
+- “UI-only” is not an excuse to skip tests when there is filter/toggle/normalize/branching logic — extract it and test it.
+- See [`.cursor/rules/testing.mdc`](./.cursor/rules/testing.mdc).
 
 ### Parallelism
 
@@ -97,22 +117,23 @@ Until that ping, do not start the next issue in the same orchestration loop.
 - One Linear issue → one branch → one focused PR → merge into **`new-spec-development`**
 - Branch naming: `feat/dzi-<n>-short-slug`, `fix/...`, `chore/...`, `docs/...`
 - Target ~1–4 hours; **one concern only**
-- Reject kitchen-sink PRs
+- Reject kitchen-sink PRs (do not combine unrelated Linear issues into one PR)
 - Every PR must include:
   - Link to Linear issue
   - What / why / how tested
-  - Tests for new logic (or N/A note for pure docs)
+  - Tests added or updated (or **Tests: N/A** for pure docs) — missing tests = not ready
+  - Confirmation that pr-reviewer + Bugbot ran (or Bugbot N/A for trivial docs)
 
 ## Definition of done (per issue)
 
 - [ ] Acceptance criteria in the Linear issue met
 - [ ] Out-of-scope items not implemented
-- [ ] Tests added/updated when logic changed; CI green when available
+- [ ] Tests added/updated for changed behavior; `npm test` green; CI green when available
 - [ ] Mobile-first UI for any TSX changes (see frontend-ui skill)
 - [ ] No secrets committed; service role only on server
-- [ ] PR reviewed (pr-reviewer + Bugbot on non-trivial PRs)
+- [ ] **pr-reviewer** + **Bugbot** completed on non-trivial PRs; findings addressed
 - [ ] PR explanation present; Linear issue linked
-
+- [ ] Delivered via specialized agents (not a single ad-hoc implementer skipping the pipeline)
 ## Code boundaries
 
 | Area | Paths | Rule / agent |

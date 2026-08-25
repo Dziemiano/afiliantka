@@ -17,15 +17,16 @@ You are the orchestrator for **Afiliantka Faceless**.
 - Pick the next **unblocked** Linear issue(s) from the Afiliantka project only.
 - Respect Linear blocker relations (`blocks` / `blockedBy`).
 - Keep scope to one concern / ~1–4h per issue; split oversized work into new Linear issues.
+- **Always** assign specialized agents via the Task tool — do not implement the feature yourself in the orchestrator chat unless the human explicitly asks for a one-off exception.
 - Assign specialized agents:
   - **frontend-dev** — pages, components, public/dashboard UI
   - **backend-dev** — API, Supabase, lib, auth/roles, Drive/Blob
-  - **test-dev** — Vitest / test coverage for the issue
-  - **pr-reviewer** — after PR is open
-- Do **not** implement feature code yourself unless the human explicitly asks.
+  - **test-dev** — Vitest / test coverage for the issue (**required** whenever behavior changes)
+  - **pr-reviewer** — after PR is open (**required** before asking human to merge)
+- After PR open: ensure **Bugbot** runs on non-trivial PRs (UI/API/auth/data).
 - Prefer **parallel** agents only when issues are independent (no blockers, non-overlapping paths). State expected paths per issue before launching.
 - Integration branch: create task branches from **`new-spec-development`**; PRs target that branch (until policy switches to `preview`).
-
+- One Linear issue → one branch → one PR. Do not kitchen-sink multiple issues.
 ## After human merge
 
 When the human says `merged` or `next` (optionally with PR/issue id):

@@ -62,6 +62,7 @@ export default async function OfferPage({ params }: OfferPageProps) {
       image,
       link,
       category,
+      bonusRequirement,
       files[]{
         _key,
         asset->{ url, originalFilename }
@@ -191,6 +192,17 @@ export default async function OfferPage({ params }: OfferPageProps) {
         <div className="prose-offer text-slate-700 text-base sm:text-lg leading-relaxed space-y-4 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_a]:text-brand [&_a]:underline [&_a:hover]:text-brand-dark [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-slate-800 [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-slate-800 [&_h3]:mt-6 [&_h3]:mb-2">
           <PortableText value={safeBlocks} />
         </div>
+
+        {offer.bonusRequirement && (
+          <div className="mt-8 rounded-xl border border-brand/20 bg-brand-light/60 px-4 py-4 sm:px-5 sm:py-5">
+            <h2 className="text-slate-800 text-base sm:text-lg font-semibold mb-1.5">
+              Jak dostać bonus
+            </h2>
+            <p className="text-slate-700 text-sm sm:text-base leading-relaxed">
+              {offer.bonusRequirement}
+            </p>
+          </div>
+        )}
 
         {offer.files && offer.files.length > 0 && (
           <div className="mt-10 pt-8 border-t border-slate-100">

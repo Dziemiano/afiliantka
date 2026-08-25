@@ -19,7 +19,7 @@
 
 **Język UI:** polski.
 
-**Stan projektu:** rdzeń platformy (onboarding, role, pliki, panel admina, strona publiczna z ofertami, blogiem, newsletterem, analityką, `/wspolpraca`) jest zaimplementowany (fazy 1–5). **Aktualny priorytet:** Phase 5.5 — przeprofilowanie home na oferty bankowe dla odwiedzających (bez pitchu afiliacyjnego na `/`). Potem: strony prawne, czat (Phase 6), AI (Phase 7).
+**Stan projektu:** rdzeń platformy (onboarding, role, pliki, panel admina, strona publiczna z ofertami, blogiem, newsletterem, analityką, `/wspolpraca`) jest zaimplementowany (fazy 1–5). Phase 5.5 (visitor repositioning) i Phase 5.6 (UI + Sanity: hero, carousel, `bonusRequirement`, `siteSettings`) są zrobione. **Następne:** strony prawne, czat (Phase 6), AI (Phase 7).
 
 ---
 
@@ -138,12 +138,13 @@ flowchart TB
 
 | Typ | Pola kluczowe | Użycie |
 |---|---|---|
-| `offer` | title, description, image, link, featured, category, files (PDF), requirement, slug | Oferty publiczne + onboarding |
-| `heroSection` | title, description, image | Hero na stronie głównej |
+| `offer` | title, description, image, link, featured, category, files (PDF), `bonusRequirement` (publiczne), `requirement` (onboarding), slug | Oferty publiczne + onboarding |
+| `heroSection` | title, description (`image` ukryte/deprecated) | Hero na stronie głównej — tylko tekst |
+| `siteSettings` | showBlog, showLogin, logo, instagramUrl, facebookUrl, tiktokUrl | Singleton: toggles, branding, social |
 | `blog` | title, slug, content (Portable Text), image, date, author, relatedOffers | Blog |
 | `faq` | question, answer, order | FAQ na stronie głównej |
 | `howItWorks` | title, description, icon, order | Sekcja „Jak to działa” |
-| `testimonial` | quote, author, image, order | Social proof na home |
+| `testimonial` | quote, author, image, order | Social proof (nie na home po 5.5) |
 | `cooperationPage` | korzyści, proces, FAQ współpracy, CTA | `/wspolpraca` |
 
 **SEO i wydajność:**
@@ -154,21 +155,20 @@ flowchart TB
 - ISR (`revalidate: 300`), `generateStaticParams` na slugach
 
 **Nawigacja:**
-- Header: Oferty, Blog, Współpraca, Login/Dashboard
-- Footer: linki nawigacyjne + social; polityka prywatności i regulamin nadal placeholdery (`href="#"`)
+- Header: Oferty, Blog (gdy `showBlog`), Współpraca, Login/Dashboard (gdy `showLogin`); logo z `siteSettings` lub fallback tekstowy
+- Footer: linki nawigacyjne + social tylko gdy URL w `siteSettings`; polityka prywatności i regulamin nadal placeholdery (`href="#"`)
+- Brak dokumentu `siteSettings` → `showBlog` i `showLogin` = `true`
 
 **Przepływ kliknięcia oferty (publiczny):**
-1. Karta oferty → `/oferta/[slug]`
+1. Karta oferty → `/oferta/[slug]` (m.in. sekcja „Jak dostać bonus” z `bonusRequirement`)
 2. „Przejdź do oferty” → `/go/[slug]` (tracking) → zewnętrzny `offer.link`
 
-### 4.2 Docelowy układ home (Phase 5.5 — w toku)
-
-Priorytet przed Phase 6/7. Linear: DZI-48 (docs), DZI-49 (layout), DZI-50 (copy).
+### 4.2 Układ home (Phase 5.5 + 5.6)
 
 **Target `/`:**
-Header → powitanie/hero (oferty bankowe + bonus) → Jak to działa → tylko polecane oferty → CTA „Zobacz wszystkie oferty” → `/oferty` → FAQ → Footer
+Header → hero (tytuł + opis, bez CTA/obrazka) → Jak to działa → polecane oferty (shadcn Carousel) → CTA „Zobacz wszystkie oferty” → `/oferty` → FAQ → Footer
 
-Usunąć z home: pełną listę / filtr / compare, testimonials, newsletter (newsletter zostaje na blogu). Messaging afiliacyjny tylko na `/wspolpraca`.
+Usunięte z home: pełna lista / filtr / compare, testimonials, newsletter (newsletter zostaje na blogu). Messaging afiliacyjny tylko na `/wspolpraca`.
 
 ### 4.3 Ukończone wcześniej — fazy publiczne (A–D / 4.5–4.8)
 
@@ -235,7 +235,7 @@ stateDiagram-v2
 #### Kroki szczegółowe
 
 1. **PDF** — użytkownik potwierdza przeczytanie materiału z Google Drive (sekcja `onboard`)
-2. **Wybór ofert** — dokładnie 4 oferty z Sanity; każda ma pole `requirement` (tekst wymagania)
+2. **Wybór ofert** — dokładnie 4 oferty z Sanity; każda ma pole `requirement` (tekst wymagania onboardingu). Publiczne UI używa osobnego pola `bonusRequirement`.
 3. **Konta i wymagania** — per oferta: checkbox „konto otwarte” + „wymaganie spełnione”
 4. **Powiadomienie admina** — po otwarciu wszystkich 4 kont (`accounts_opened`)
 5. **Weryfikacja kont** — admin klika „Zweryfikuj konta” → rola `accounts_verified`, odblokowanie plików sekcji `onboard-verified`
@@ -405,8 +405,9 @@ flowchart TD
 
 | Typ | Status | Pola kluczowe |
 |---|---|---|
-| `offer` | Zaimplementowany | title, description (Portable Text), image, link, featured, category, files (PDF), requirement, slug |
-| `heroSection` | Zaimplementowany | title, description, image |
+| `offer` | Zaimplementowany | title, description (Portable Text), image, link, featured, category, files (PDF), `bonusRequirement` (publiczne), `requirement` (onboarding), slug |
+| `heroSection` | Zaimplementowany | title, description (`image` ukryte/deprecated) |
+| `siteSettings` | Zaimplementowany | singleton: showBlog, showLogin, logo, instagramUrl, facebookUrl, tiktokUrl |
 | `blog` | Zaimplementowany | title, slug, content (Portable Text), image, date, author, relatedOffers |
 | `faq` | Zaimplementowany | question, answer, order |
 | `howItWorks` | Zaimplementowany | title, description, icon, order |
@@ -506,10 +507,10 @@ Agent kodujący powinien uwzględniać te punkty przy każdej pracy:
 | 5 | Tabela `invitations` niedowykorzystana | Token-based invite flow słaby | Zintegrować lub usunąć |
 | 6 | `NEXT_PUBLIC_SITE_URL` fallback `afiliantka.pl` | Niezgodność z produkcyjną domeną | Zmienić na `afiliantkafaceless.pl` |
 | 7 | Footer: linki prawne `#` | Brak compliance | Dodać Politykę i Regulamin |
-| 8 | Social footer `#` | Martwe linki | Podpiąć prawdziwe URL |
+| 8 | Social footer bez URL w CMS | Brak ikon do czasu uzupełnienia `siteSettings` | Uzupełnić URL w Studio |
 | 9 | README może być nieaktualny | Mylące dla nowych deweloperów | Zaktualizować przy okazji |
-| 10 | Phase 5.5 home layout / copy | Home nadal ma full offers + messaging partnerski | DZI-49, DZI-50 |
-| 11 | Schemat `offer` bez bonus/bank/expiry | Słabsze dane porównawcze | Rozszerzyć Sanity gdy potrzeba |
+| 10 | ~~Phase 5.5 home layout / copy~~ | ~~Done~~ | DZI-49, DZI-50 |
+| 11 | Schemat `offer` bez bonus/bank/expiry (poza `bonusRequirement`) | Słabsze dane porównawcze | Rozszerzyć Sanity gdy potrzeba |
 
 ---
 
@@ -527,7 +528,8 @@ Pełna lista zadań technicznych: [`ROADMAP.md`](../ROADMAP.md). Workflow agent�
 | 4.8 | Analityka publiczna, tracking kliknięć | ✅ Ukończone |
 | 4.9 | Powiadomienia, wersjonowanie treści, a11y basics | ✅ Ukończone |
 | 5 | Email templates, rate limiting, testy, CI/CD, monitoring | ✅ Ukończone |
-| 5.5 | Public visitor repositioning (home offers-first) | 🔲 **Priorytet** (DZI-48–50) |
+| 5.5 | Public visitor repositioning (home offers-first) | ✅ Ukończone (DZI-48–50) |
+| 5.6 | UI + Sanity (hero, carousel, bonusRequirement, siteSettings) | ✅ Ukończone (DZI-51–53) |
 | 6 | Czat społecznościowy między użytkownikami | 🔲 Planowane |
 | 7 | Narzędzia AI (treści, profile social media) | 🔲 Planowane (później) |
 

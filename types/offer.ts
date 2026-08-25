@@ -11,6 +11,9 @@ export interface Offer {
   link: string;
   featured: boolean;
   category?: "personal" | "business" | "credit-cards";
+  /** Visitor-facing: what to do to get the bonus (public UI). */
+  bonusRequirement?: string;
+  /** Collaborator onboarding requirement (dashboard/API). */
   requirement?: string;
   files?: Array<{
     asset: {
@@ -42,7 +45,7 @@ export interface HeroContent {
   _id: string;
   title: string;
   description: PortableTextBlock[];
-  image: {
+  image?: {
     asset: {
       _ref: string;
       _type: string;

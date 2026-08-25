@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/lib/sanity-image";
 import Image from "next/image";
@@ -6,17 +7,13 @@ import Link from "next/link";
 import { Clock } from "lucide-react";
 import { NewsletterSignup } from "@/components/sections/newsletter-signup";
 import { excerptFromContent, readingTimeFromContent } from "@/components/blog/blog-content";
+import { getSiteSettings } from "@/lib/site-settings";
+import { blogIndexMetadata } from "@/lib/blog-visibility";
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description:
-    "Aktualności, porady i artykuły o promocjach bankowych oraz zakładaniu kont.",
-  openGraph: {
-    title: "Blog | Afiliantka Faceless",
-    description:
-      "Aktualności, porady i artykuły o promocjach bankowych.",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return blogIndexMetadata(settings.showBlog);
+}
 
 interface BlogPost {
   _id: string;
@@ -41,6 +38,9 @@ async function getBlogPosts(): Promise<BlogPost[]> {
 }
 
 export default async function BlogPage() {
+  const settings = await getSiteSettings();
+  if (!settings.showBlog) notFound();
+
   const posts = await getBlogPosts();
 
   if (posts.length === 0) {
