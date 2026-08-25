@@ -1,0 +1,17 @@
+---
+description: Frontend / UI conventions for Afiliantka public site and app dashboard
+globs: app/(website)/**,app/(app)/**/page.tsx,app/(app)/**/layout.tsx,components/**
+alwaysApply: false
+---
+
+# Frontend
+
+- Prefer Server Components; `"use client"` only for browser APIs or interactivity.
+- Mobile-first mandatory — follow `.cursor/skills/frontend-ui/SKILL.md` and guidelines UI section.
+- Polish user-facing copy only.
+- Public routes live in `app/(website)/`; authenticated UI in `app/(app)/` (dashboard, admin, login).
+- Reuse `components/ui/` (shadcn); layout in `components/layout/`; sections in `components/sections/`.
+- Do not invent routes outside `(website)` / `(app)` groups.
+- Keep screens thin: fetch via existing server helpers/API; do not embed Drive/Blob/auth business logic in components.
+- Affiliate narrative stays on `/wspolpraca` (and existing offer disclosure); visitor-facing home/offers use bank-offer language.
+- Empty and loading states for async lists; touch targets ≥ 44px for interactive controls.

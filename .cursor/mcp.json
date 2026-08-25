@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "url": "https://mcp.supabase.com/mcp"
+    },
+    "sanity": {
+      "url": "https://mcp.sanity.io"
+    },
+    "vercel": {
+      "url": "https://mcp.vercel.com"
+    },
+    "linear": {
+      "url": "https://mcp.linear.app/mcp"
+    }
+  }
+}

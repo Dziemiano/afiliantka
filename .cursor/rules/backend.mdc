@@ -1,0 +1,19 @@
+---
+description: Backend API, Supabase, Sanity client, Drive/Blob conventions for Afiliantka
+globs: app/(app)/api/**,lib/**,supabase/**,middleware.ts,sanity.config.ts,sanity/**
+alwaysApply: false
+---
+
+# Backend
+
+- All API routes under `app/(app)/api/`.
+- Every route: `const { data: { session } } = await supabase.auth.getSession()`; return `{ message: "..." }` on errors.
+- Admin-only: also `isCurrentUserAdmin()` from `lib/roles.ts`. Moderators: use existing `isAdminOrModerator()` helpers where applicable.
+- Domain logic in `lib/`; routes stay thin.
+- `createClient()` for user scope; `createAdminClient()` for service role — never expose service role to the client.
+- Single Sanity client: `@/sanity/lib/client` — no duplicate clients. Schemas in `sanity.config.ts`.
+- Drive: `lib/google-drive.ts`; validate downloads against `drive_sources`; default mimeType to `application/octet-stream` when missing.
+- Blob: `/api/blobs`, `/api/blobs/list` — session-gated; prefer server-side filtering when touching list routes.
+- Migrations: `supabase/migrations/` — small, clear intent per PR.
+- Rate limiting / monitoring: reuse `lib/rate-limit.ts`, `lib/monitoring.ts` where endpoints need protection.
+- No `console.log`; `console.error` only in catch blocks for real errors. No `any`.

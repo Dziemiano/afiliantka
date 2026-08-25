@@ -5,14 +5,22 @@ alwaysApply: true
 
 # Afiliantka Project Guidelines
 
+## Agent workflow
+
+Multi-agent delivery (orchestrator → frontend/backend/test → PR review → human merge) is defined in [`AGENTS.md`](../../AGENTS.md) and [`.cursor/agents/`](../agents/). Path-scoped rules: `frontend.mdc`, `backend.mdc`, `testing.mdc`.
+
+- Linear project: **Afiliantka Faceless** only (see `AGENTS.md`)
+- Integration branch **now:** `new-spec-development` (task branch + PR target); later switches to `preview`
+- After human merge, orchestrator continues only on explicit `merged` / `next` ping
+
 ## Product Documentation
 
-Pełna specyfikacja produktu (wizja, aktualne i planowane funkcje, przepływy biznesowe, model danych): [`docs/PROJECT_SPEC.md`](../../docs/PROJECT_SPEC.md). Przeczytaj ją przed implementacją nowych funkcji biznesowych.
+Pełna specyfikacja produktu (wizja, aktualne i planowane funkcje, przepływy biznesowe, model danych): [`docs/PROJECT_SPEC.md`](../../docs/PROJECT_SPEC.md). Roadmapa: [`ROADMAP.md`](../../ROADMAP.md). Przeczytaj je przed implementacją nowych funkcji biznesowych.
 
 ## Architecture
 
-This is a dual-purpose Next.js 15 app (App Router) with two hosts:
-- **Public website** (`WEB_HOST`) — Polish-language affiliate offers landing page, route group `app/(website)/`
+This is a dual-purpose Next.js app (App Router) with two hosts:
+- **Public website** (`WEB_HOST`) — Polish-language bank offers landing (visitor-facing); affiliate narrative on `/wspolpraca`; route group `app/(website)/`
 - **App platform** (`APP_HOST`) — authenticated dashboard/admin, route group `app/(app)/`
 
 Routing between hosts is handled by subdomain-based middleware in `middleware.ts`.
@@ -48,7 +56,7 @@ Routing between hosts is handled by subdomain-based middleware in `middleware.ts
 
 ### Sanity CMS
 - Single client: `import { client } from "@/sanity/lib/client"` — do NOT create duplicate clients
-- Schemas: `offer`, `heroSection`, `news` (defined in `sanity.config.ts`)
+- Schemas: `offer`, `heroSection`, `blog`, `faq`, `howItWorks`, `testimonial`, `cooperationPage` (defined in `sanity.config.ts`)
 - Images: `urlFor()` from `lib/sanity-image.ts`
 - Files: `getFileUrl()` from `lib/sanity-file.ts`
 - Portable Text blocks must be filtered before rendering: `blocks.filter(b => b && b._type)`
