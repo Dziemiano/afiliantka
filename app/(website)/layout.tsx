@@ -13,7 +13,7 @@ export default async function WebsiteLayout({
   const settings = await getSiteSettings();
 
   return (
-    <div className="relative isolate min-h-screen overflow-x-clip bg-black">
+    <div className="relative isolate min-h-screen overflow-x-clip">
       <PublicShaderBackground />
       <div className="relative z-10 flex min-h-screen flex-col">
         <SkipLink />
@@ -26,7 +26,7 @@ export default async function WebsiteLayout({
         <div
           id="main-content"
           tabIndex={-1}
-          className="flex-1 bg-white/75 outline-none [&>div]:!bg-white/75"
+          className="flex-1 outline-none"
         >
           {children}
         </div>

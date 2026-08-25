@@ -111,8 +111,8 @@ export function NewsletterSignup({
   }
 
   return (
-    <section className="py-14 sm:py-16 px-4 sm:px-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
-      <div className="max-w-2xl mx-auto text-center">
+    <section className="bg-transparent py-14 sm:py-16 px-4 sm:px-6 text-white">
+      <div className="max-w-2xl mx-auto rounded-2xl bg-slate-900/90 px-4 py-10 text-center sm:px-8">
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-brand/20 text-brand mb-4">
           <Mail className="h-6 w-6" aria-hidden="true" />
         </div>

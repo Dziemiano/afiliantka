@@ -49,11 +49,11 @@ async function OffersContent() {
 
 export default function OfertyPage() {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen bg-transparent">
       <Suspense
         fallback={
           <div className="py-16 text-center px-4">
-            <p className="text-slate-500">Ładowanie ofert...</p>
+            <p className="text-white/75">Ładowanie ofert...</p>
           </div>
         }
       >

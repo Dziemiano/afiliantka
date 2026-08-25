@@ -130,14 +130,14 @@ export default async function WspolpracaPage() {
   const inviteEmail = cms?.inviteEmail || DEFAULT_INVITE_EMAIL;
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen bg-transparent">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-brand-light via-white to-teal-50 py-12 sm:py-16 lg:py-20 px-4 sm:px-6">
+      <section className="bg-transparent py-12 sm:py-16 lg:py-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 sm:mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight drop-shadow-sm">
             {heroTitle}
           </h1>
-          <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10 max-w-2xl mx-auto">
+          <p className="text-white/80 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10 max-w-2xl mx-auto">
             {heroSubtitle}
           </p>
           <CooperationCta inviteEmail={inviteEmail} />
@@ -147,10 +147,10 @@ export default async function WspolpracaPage() {
       {/* Benefits */}
       <section className="py-14 sm:py-20 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-4 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 text-center drop-shadow-sm">
             Dlaczego warto dołączyć?
           </h2>
-          <p className="text-slate-500 text-center mb-10 sm:mb-12 max-w-xl mx-auto">
+          <p className="text-white/75 text-center mb-10 sm:mb-12 max-w-xl mx-auto">
             Korzyści współpracy w programie Afiliantka Faceless
           </p>
 
@@ -178,12 +178,12 @@ export default async function WspolpracaPage() {
       </section>
 
       {/* Process */}
-      <section className="py-14 sm:py-20 px-4 sm:px-6 bg-slate-50">
+      <section className="bg-transparent py-14 sm:py-20 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-4 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 text-center drop-shadow-sm">
             Jak dołączyć?
           </h2>
-          <p className="text-slate-500 text-center mb-10 sm:mb-12 max-w-xl mx-auto">
+          <p className="text-white/75 text-center mb-10 sm:mb-12 max-w-xl mx-auto">
             Proces dołączenia do programu współpracy
           </p>
 
@@ -222,10 +222,10 @@ export default async function WspolpracaPage() {
       {/* FAQ */}
       <section className="py-14 sm:py-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-4 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 text-center drop-shadow-sm">
             Pytania o współpracę
           </h2>
-          <p className="text-slate-500 text-center mb-10 max-w-xl mx-auto">
+          <p className="text-white/75 text-center mb-10 max-w-xl mx-auto">
             Najczęściej zadawane pytania o program współpracy
           </p>
 
@@ -253,12 +253,12 @@ export default async function WspolpracaPage() {
       </section>
 
       {/* Bottom CTA */}
-      <section className="py-14 sm:py-16 px-4 sm:px-6 bg-gradient-to-br from-brand-light to-teal-50">
+      <section className="bg-transparent py-14 sm:py-16 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 drop-shadow-sm">
             Gotowy, żeby dołączyć?
           </h2>
-          <p className="text-slate-600 mb-8">
+          <p className="text-white/80 mb-8">
             Zaloguj się, jeśli masz już zaproszenie, lub poproś o dostęp do
             programu.
           </p>

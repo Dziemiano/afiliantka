@@ -23,7 +23,7 @@ export function AllOffersTable({
   return (
     <section className="py-8 sm:py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-slate-800 text-xl sm:text-2xl font-bold mb-6">
+        <h2 className="text-white text-xl sm:text-2xl font-bold mb-6 drop-shadow-sm">
           Wszystkie oferty
         </h2>
 

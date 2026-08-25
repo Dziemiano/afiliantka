@@ -22,12 +22,12 @@ export async function HowItWorksSection() {
   if (steps.length === 0) return null;
 
   return (
-    <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white">
+    <section className="bg-transparent py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-slate-900 text-2xl sm:text-3xl font-bold mb-4 text-center">
+        <h2 className="text-white text-2xl sm:text-3xl font-bold mb-4 text-center drop-shadow-sm">
           Jak to działa?
         </h2>
-        <p className="text-slate-500 text-center mb-12 max-w-2xl mx-auto">
+        <p className="text-white/75 text-center mb-12 max-w-2xl mx-auto">
           Zacznij zarabiać w kilku prostych krokach
         </p>
 

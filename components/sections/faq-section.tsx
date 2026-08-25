@@ -21,12 +21,12 @@ export async function FaqSection() {
   if (items.length === 0) return null;
 
   return (
-    <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+    <section className="bg-transparent py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <h2 className="text-slate-900 text-2xl sm:text-3xl font-bold mb-4 text-center">
+        <h2 className="text-white text-2xl sm:text-3xl font-bold mb-4 text-center drop-shadow-sm">
           Często zadawane pytania
         </h2>
-        <p className="text-slate-500 text-center mb-10 max-w-xl mx-auto">
+        <p className="text-white/75 text-center mb-10 max-w-xl mx-auto">
           Znajdź odpowiedzi na najczęściej zadawane pytania
         </p>
 

@@ -1,4 +1,4 @@
-export const PUBLIC_SHADER_COLORS = Object.freeze([
+export const PUBLIC_SHADER_BASE_COLORS = Object.freeze([
   "#000000",
   "#06b6d4",
   "#0891b2",
@@ -6,20 +6,35 @@ export const PUBLIC_SHADER_COLORS = Object.freeze([
   "#f97316",
 ] as const);
 
-export const PUBLIC_SHADER_FRAME = 3200;
-export const PUBLIC_SHADER_SPEED = 0.18;
+export const PUBLIC_SHADER_OVERLAY_COLORS = Object.freeze([
+  "#000000",
+  "#ffffff",
+  "#06b6d4",
+  "#f97316",
+] as const);
 
-const PUBLIC_SHADER_ANIMATED_CONFIG = Object.freeze({
-  frame: PUBLIC_SHADER_FRAME,
-  speed: PUBLIC_SHADER_SPEED,
-});
-const PUBLIC_SHADER_STATIC_CONFIG = Object.freeze({
-  frame: PUBLIC_SHADER_FRAME,
-  speed: 0,
+export const PUBLIC_SHADER_LAYER_STYLES = Object.freeze({
+  base: Object.freeze({
+    className: "absolute inset-0 w-full h-full",
+    backgroundColor: "#000000",
+  }),
+  overlay: Object.freeze({
+    className: "absolute inset-0 w-full h-full opacity-60",
+    backgroundColor: "transparent",
+  }),
 });
 
-export function getPublicShaderAnimationConfig(prefersReducedMotion: boolean) {
+const PUBLIC_SHADER_ANIMATED_SPEEDS = Object.freeze({
+  base: 0.3,
+  overlay: 0.2,
+});
+const PUBLIC_SHADER_STATIC_SPEEDS = Object.freeze({
+  base: 0,
+  overlay: 0,
+});
+
+export function getPublicShaderSpeeds(prefersReducedMotion: boolean) {
   return prefersReducedMotion
-    ? PUBLIC_SHADER_STATIC_CONFIG
-    : PUBLIC_SHADER_ANIMATED_CONFIG;
+    ? PUBLIC_SHADER_STATIC_SPEEDS
+    : PUBLIC_SHADER_ANIMATED_SPEEDS;
 }

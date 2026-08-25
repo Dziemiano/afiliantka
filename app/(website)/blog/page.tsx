@@ -46,10 +46,10 @@ export default async function BlogPage() {
   if (posts.length === 0) {
     return (
       <div className="max-w-5xl mx-auto py-16 px-4 sm:px-6">
-        <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-8">
+        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-8 drop-shadow-sm">
           Blog
         </h1>
-        <p className="text-slate-500">Brak wpisów na blogu.</p>
+        <p className="text-white/75">Brak wpisów na blogu.</p>
       </div>
     );
   }
@@ -57,13 +57,13 @@ export default async function BlogPage() {
   const [featured, ...rest] = posts;
 
   return (
-    <div className="bg-white min-h-screen">
-      <section className="bg-gradient-to-br from-brand-light via-white to-teal-50 py-10 sm:py-14 px-4 sm:px-6">
+    <div className="min-h-screen bg-transparent">
+      <section className="bg-transparent py-10 sm:py-14 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-3">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 drop-shadow-sm">
             Blog
           </h1>
-          <p className="text-slate-600 text-base sm:text-lg max-w-xl mx-auto">
+          <p className="text-white/80 text-base sm:text-lg max-w-xl mx-auto">
             Aktualności, porady i artykuły o promocjach bankowych
           </p>
         </div>
@@ -71,7 +71,7 @@ export default async function BlogPage() {
 
       <div className="max-w-5xl mx-auto py-10 sm:py-14 px-4 sm:px-6">
         <section className="mb-14">
-          <h2 className="text-sm font-semibold text-brand uppercase tracking-wider mb-4">
+          <h2 className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-4">
             Wyróżniony wpis
           </h2>
           <Link
@@ -115,7 +115,7 @@ export default async function BlogPage() {
 
         {rest.length > 0 && (
           <section>
-            <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-6">
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-6 drop-shadow-sm">
               Pozostałe wpisy
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

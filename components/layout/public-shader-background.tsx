@@ -3,17 +3,20 @@
 import { useSyncExternalStore } from "react";
 import { MeshGradient } from "@paper-design/shaders-react";
 import {
-  getPublicShaderAnimationConfig,
-  PUBLIC_SHADER_COLORS,
+  getPublicShaderSpeeds,
+  PUBLIC_SHADER_BASE_COLORS,
+  PUBLIC_SHADER_LAYER_STYLES,
+  PUBLIC_SHADER_OVERLAY_COLORS,
 } from "@/components/layout/public-shader-background-config";
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-const SHADER_COLORS: string[] = [...PUBLIC_SHADER_COLORS];
-const SHADER_STYLE = { width: "100%", height: "100%" } as const;
-const WEBGL_CONTEXT_ATTRIBUTES: WebGLContextAttributes = {
-  alpha: false,
-  antialias: false,
-  powerPreference: "low-power",
+const BASE_COLORS: string[] = [...PUBLIC_SHADER_BASE_COLORS];
+const OVERLAY_COLORS: string[] = [...PUBLIC_SHADER_OVERLAY_COLORS];
+const BASE_STYLE = {
+  backgroundColor: PUBLIC_SHADER_LAYER_STYLES.base.backgroundColor,
+};
+const OVERLAY_STYLE = {
+  backgroundColor: PUBLIC_SHADER_LAYER_STYLES.overlay.backgroundColor,
 };
 
 function subscribeToReducedMotion(onStoreChange: () => void): () => void {
@@ -37,30 +40,26 @@ export function PublicShaderBackground() {
     getReducedMotionSnapshot,
     getReducedMotionServerSnapshot
   );
-  const animationConfig =
-    getPublicShaderAnimationConfig(prefersReducedMotion);
+  const speeds = getPublicShaderSpeeds(prefersReducedMotion);
 
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[linear-gradient(135deg,#000000_0%,#164e63_30%,#0891b2_55%,#06b6d4_75%,#f97316_100%)]"
+      className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
       data-reduced-motion={prefersReducedMotion}
     >
       <MeshGradient
-        colors={SHADER_COLORS}
-        distortion={0.7}
-        swirl={0.2}
-        grainMixer={0}
-        grainOverlay={0}
-        speed={animationConfig.speed}
-        frame={animationConfig.frame}
-        fit="cover"
-        minPixelRatio={1}
-        maxPixelCount={1920 * 1080}
-        webGlContextAttributes={WEBGL_CONTEXT_ATTRIBUTES}
-        style={SHADER_STYLE}
+        className={PUBLIC_SHADER_LAYER_STYLES.base.className}
+        colors={BASE_COLORS}
+        speed={speeds.base}
+        style={BASE_STYLE}
       />
-      <div className="absolute inset-0 bg-white/65" />
+      <MeshGradient
+        className={PUBLIC_SHADER_LAYER_STYLES.overlay.className}
+        colors={OVERLAY_COLORS}
+        speed={speeds.overlay}
+        style={OVERLAY_STYLE}
+      />
     </div>
   );
 }
