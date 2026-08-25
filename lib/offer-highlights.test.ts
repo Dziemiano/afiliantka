@@ -126,10 +126,7 @@ describe("getOfferHighlights", () => {
       ],
     });
 
-    expect(highlights).toEqual([
-      "Do 700 zł premii dla nowych klientów",
-      "Na podstawie wniosku powinno zostać założone konto.",
-    ]);
+    expect(highlights).toEqual(["Do 700 zł premii dla nowych klientów"]);
   });
 
   it("returns an empty list when there is no description or bonus", () => {
@@ -190,6 +187,46 @@ describe("getOfferHighlights", () => {
         ],
       })
     ).toEqual([]);
+  });
+
+  it("returns an empty list for affiliate-ops paragraphs without a bonus", () => {
+    expect(
+      getOfferHighlights({
+        description: [
+          block("Nie używaj trybu incognito ani przeglądarki prywatnej."),
+          block("Warunki:"),
+        ],
+      })
+    ).toEqual([]);
+  });
+
+  it("returns an empty list for affiliate-ops list items without a bonus", () => {
+    expect(
+      getOfferHighlights({
+        bonusRequirement: "",
+        description: [
+          block("Nie używaj trybu incognito", "bullet"),
+          block("Używaj przeglądarki Firefox", "bullet"),
+          block("Nie korzystaj z programów poleceń / referral", "bullet"),
+          block("Warunki:", "bullet"),
+          block("Załóż konto przez IKO i zrób selfie", "bullet"),
+        ],
+      })
+    ).toEqual([]);
+  });
+
+  it("keeps only visitor-benefit lines when mixed with affiliate-ops copy", () => {
+    expect(
+      getOfferHighlights({
+        description: [
+          block("Nie używaj trybu incognito", "bullet"),
+          block("Używaj przeglądarki Firefox", "bullet"),
+          block("Do 700 zł premii", "bullet"),
+          block("0 zł za przelewy BLIK", "bullet"),
+          block("Załóż konto przez IKO i zrób selfie", "bullet"),
+        ],
+      })
+    ).toEqual(["Do 700 zł premii", "0 zł za przelewy BLIK"]);
   });
 
   it("keeps paragraph highlights instead of replacing them with bonusRequirement", () => {

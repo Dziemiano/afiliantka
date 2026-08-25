@@ -100,7 +100,7 @@ export function getOfferHighlights(
   const listItems = blocks
     .filter(isListBlock)
     .map(blockText)
-    .filter(isUsableHighlight)
+    .filter((text) => isUsableHighlight(text) && looksLikeHighlight(text))
     .map(truncateHighlight);
 
   const paragraphHighlights = blocks
