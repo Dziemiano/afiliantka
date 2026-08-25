@@ -1,5 +1,6 @@
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
+import density from "@/components/sections/homepage-density.module.css";
 
 interface PortableTextBlock {
   _type: string;
@@ -70,13 +71,22 @@ export async function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-transparent py-14 sm:py-20 lg:py-28 px-4 sm:px-6">
-      <div className="relative max-w-4xl mx-auto text-center space-y-6 sm:space-y-8">
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight drop-shadow-md">
+    <section
+      data-home-section="hero"
+      className={`relative overflow-hidden bg-transparent py-14 sm:py-20 lg:py-28 px-4 sm:px-6 ${density.hero}`}
+    >
+      <div
+        className={`relative max-w-4xl mx-auto text-center flex flex-col items-center gap-6 sm:gap-8 ${density.heroContent}`}
+      >
+        <h1
+          className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight drop-shadow-md ${density.heroTitle}`}
+        >
           {heroContent?.title || "Aktualne oferty bankowe z bonusem"}
         </h1>
 
-        <div className="text-base sm:text-lg lg:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto drop-shadow-sm">
+        <div
+          className={`text-base sm:text-lg lg:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto drop-shadow-sm ${density.heroDescription}`}
+        >
           {heroContent?.description ? (
             <PortableText
               value={heroContent.description}

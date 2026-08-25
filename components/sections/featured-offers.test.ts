@@ -16,7 +16,9 @@ function classTokens(pattern: RegExp): string[] {
 
 describe("FeaturedOffers layout contract", () => {
   it("shares the all-offers outer width and gutters without narrowing the carousel", () => {
-    const section = classTokens(/<section className="([^"]+)"/);
+    const section = classTokens(
+      /className=\{`([^`]*)\$\{density\.featured\}`\}/
+    );
     const outerContainer = classTokens(
       /<div className="([^"]*\bmax-w-6xl\b[^"]*)"/
     );
@@ -36,7 +38,7 @@ describe("FeaturedOffers layout contract", () => {
 
   it("keeps responsive header controls in flow with 44px touch targets", () => {
     const header = classTokens(
-      /<div className="([^"]*\bsm:justify-between\b[^"]*)"/
+      /className=\{`([^`]*\bsm:justify-between\b[^`]*)\$\{density\.featuredHeader\}`\}/
     );
     const previous = classTokens(
       /aria-label="Poprzednie oferty"\s+className="([^"]+)"/
@@ -72,5 +74,10 @@ describe("FeaturedOffers layout contract", () => {
     expect(source.indexOf('aria-label="Poprzednie oferty"')).toBeLessThan(
       source.indexOf("<CarouselContent")
     );
+  });
+
+  it("exposes stable acceptance selectors and the homepage card presentation", () => {
+    expect(source).toContain('data-home-section="featured-offers"');
+    expect(source).toContain('presentation="homepage"');
   });
 });
