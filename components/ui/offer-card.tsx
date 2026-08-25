@@ -11,6 +11,7 @@ import {
   emphasizeOfferAmounts,
   getOfferHighlights,
 } from "@/lib/offer-highlights";
+import density from "@/components/sections/homepage-density.module.css";
 
 interface OfferCardProps {
   offer: Offer;
@@ -19,6 +20,7 @@ interface OfferCardProps {
   isCompareSelected?: boolean;
   onCompareToggle?: (offerId: string) => void;
   compareDisabled?: boolean;
+  presentation?: "default" | "homepage";
   variant?: "glass" | "solid";
 }
 
@@ -47,10 +49,12 @@ export function OfferCard({
   isCompareSelected = false,
   onCompareToggle,
   compareDisabled = false,
+  presentation = "default",
   variant = "solid",
 }: OfferCardProps) {
+  const isHomepagePresentation = presentation === "homepage";
   const isGlass = variant === "glass";
-  const highlights = getOfferHighlights(offer, 4);
+  const highlights = getOfferHighlights(offer, isHomepagePresentation ? 3 : 4);
 
   return (
     <div className={cn("relative h-full", className)}>
@@ -99,7 +103,12 @@ export function OfferCard({
             isCompareSelected && "ring-2 ring-brand border-brand"
           )}
         >
-          <div className="flex flex-1 flex-col gap-3 p-4 sm:p-5">
+          <div
+            className={cn(
+              "flex flex-1 flex-col gap-3 p-4 sm:p-5",
+              isHomepagePresentation && density.offerBody
+            )}
+          >
             <div
               className={cn(
                 "flex flex-wrap gap-1.5",
@@ -127,7 +136,12 @@ export function OfferCard({
               )}
             </div>
 
-            <div className="relative mx-auto h-16 w-full max-w-[11rem] sm:h-20">
+            <div
+              className={cn(
+                "relative mx-auto h-16 w-full max-w-[11rem] sm:h-20",
+                isHomepagePresentation && density.offerMedia
+              )}
+            >
               <Image
                 src={urlFor(offer.image).width(480).fit("max").url()}
                 alt={offer.title}
@@ -138,7 +152,12 @@ export function OfferCard({
               />
             </div>
 
-            <h3 className="text-center text-base sm:text-lg font-bold text-slate-900 leading-snug group-hover:text-brand transition-colors">
+            <h3
+              className={cn(
+                "text-center text-base sm:text-lg font-bold text-slate-900 leading-snug group-hover:text-brand transition-colors",
+                isHomepagePresentation && density.offerTitle
+              )}
+            >
               {offer.title}
             </h3>
 

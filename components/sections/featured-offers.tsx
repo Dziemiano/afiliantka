@@ -13,6 +13,7 @@ import {
   getFeaturedOffers,
   shouldShowFeaturedCarouselControls,
 } from "@/lib/featured-offers";
+import density from "@/components/sections/homepage-density.module.css";
 
 interface FeaturedOffersProps {
   offers: Offer[];
@@ -48,7 +49,10 @@ export function FeaturedOffers({
   );
 
   return (
-    <section className="py-4 px-4 sm:px-6 lg:px-8">
+    <section
+      data-home-section="featured-offers"
+      className={`py-4 px-4 sm:px-6 lg:px-8 ${density.featured}`}
+    >
       <div className="max-w-6xl mx-auto">
         <Carousel
           opts={{
@@ -57,7 +61,9 @@ export function FeaturedOffers({
           }}
           className="w-full"
         >
-          <div className="mb-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div
+            className={`mb-6 lg:mb-3 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between ${density.featuredHeader}`}
+          >
             <h2 className="text-white text-xl font-bold drop-shadow-sm sm:text-2xl">
               Polecane oferty
             </h2>
@@ -84,6 +90,7 @@ export function FeaturedOffers({
               >
                 <CompareOfferCard
                   {...cardProps(offer)}
+                  presentation="homepage"
                   className="w-full max-w-sm mx-auto sm:max-w-none"
                 />
               </CarouselItem>
