@@ -24,6 +24,11 @@ interface BlogPostPageProps {
 export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  if (!settings.showBlog) {
+    return { title: "Nie znaleziono", robots: { index: false, follow: false } };
+  }
+
   const { slug } = await params;
   const post = await client.fetch(
     `*[_type == "blog" && slug.current == $slug][0]{ title, content, image }`,
@@ -52,6 +57,9 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
+  const settings = await getSiteSettings();
+  if (!settings.showBlog) return [];
+
   const slugs = await client.fetch<Array<{ slug: string }>>(
     `*[_type == "blog" && defined(slug.current)]{ "slug": slug.current }`
   );
