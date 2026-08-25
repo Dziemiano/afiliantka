@@ -82,7 +82,7 @@ export function OffersFilter({ offers, showPageHeader = false }: OffersFilterPro
         <section className="bg-gradient-to-br from-brand-light via-white to-teal-50 py-10 sm:py-14 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto text-center">
             <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-3">
-              Oferty partnerskie
+              Oferty bankowe
             </h1>
             <p className="text-slate-600 text-base sm:text-lg max-w-xl mx-auto">
               Przeglądaj sprawdzone promocje bankowe — konta osobiste, firmowe i

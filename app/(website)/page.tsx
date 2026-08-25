@@ -10,9 +10,9 @@ import { client } from "@/sanity/lib/client";
 import type { Offer } from "@/types/offer";
 
 export const metadata: Metadata = {
-  title: "Afiliantka Faceless - Sprawdzone Oferty Partnerskie",
+  title: "Afiliantka Faceless — Aktualne oferty bankowe",
   description:
-    "Odkryj starannie wyselekcjonowane oferty partnerskie z wysokimi współczynnikami konwersji. Profesjonalne rozwiązania dla Twojego biznesu online.",
+    "Sprawdź aktualne promocje kont i kart. Porównaj oferty i skorzystaj z bonusów za założenie konta.",
 };
 
 async function getFeaturedOffers(): Promise<Offer[]> {

@@ -43,8 +43,8 @@ export function Footer() {
               Afiliantka<span className="text-brand font-normal ml-1">Faceless</span>
             </Link>
             <p className="mt-3 text-sm text-slate-400 leading-relaxed max-w-xs">
-              Sprawdzone oferty partnerskie z wysokimi współczynnikami konwersji.
-              Profesjonalne rozwiązania dla Twojego biznesu online.
+              Aktualne promocje bankowe — konta i karty z bonusem za założenie.
+              Wybierz ofertę dopasowaną do siebie.
             </p>
           </div>
 

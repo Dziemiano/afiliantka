@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 import { withRateLimit } from "@/lib/api-rate-limit";
+import { getAppOrigin } from "@/lib/hosts";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/**
+ * Rate-limit + validate only. OTP must be started in the browser so the PKCE
+ * code_verifier cookie is stored on the same host that later runs /auth/callback.
+ */
 export async function POST(request: Request) {
   const limited = withRateLimit(request, {
     keyPrefix: "auth:magic-link",
@@ -24,7 +28,11 @@ export async function POST(request: Request) {
   }
 
   const email = body.email?.trim().toLowerCase();
-  const appOrigin = process.env.NEXT_PUBLIC_APP_ORIGIN;
+  const requestUrl = new URL(request.url);
+  const appOrigin = getAppOrigin(
+    requestUrl.protocol,
+    requestUrl.port || undefined
+  );
 
   if (!email || !EMAIL_REGEX.test(email)) {
     return NextResponse.json(
@@ -35,30 +43,15 @@ export async function POST(request: Request) {
 
   if (!appOrigin) {
     return NextResponse.json(
-      { message: "Brak NEXT_PUBLIC_APP_ORIGIN w konfiguracji." },
+      {
+        message:
+          "Brak APP_ORIGIN / NEXT_PUBLIC_APP_ORIGIN w konfiguracji.",
+      },
       { status: 500 }
     );
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      emailRedirectTo: `${appOrigin}/auth/callback`,
-    },
-  });
-
-  if (error) {
-    return NextResponse.json(
-      {
-        message:
-          "Nie udało się wysłać linku logowania. Sprawdź adres email lub skontaktuj się z administratorem.",
-      },
-      { status: 400 }
-    );
-  }
-
   return NextResponse.json({
-    message: "Sprawdź skrzynkę email — wysłaliśmy link do logowania.",
+    emailRedirectTo: `${appOrigin}/auth/callback`,
   });
 }

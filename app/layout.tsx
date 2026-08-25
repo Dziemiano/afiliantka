@@ -10,16 +10,16 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://afiliantka.pl";
 
 export const metadata: Metadata = {
   title: {
-    default: "Afiliantka Faceless - Sprawdzone Oferty Partnerskie",
+    default: "Afiliantka Faceless — Aktualne oferty bankowe",
     template: "%s | Afiliantka Faceless",
   },
   description:
-    "Odkryj starannie wyselekcjonowane oferty partnerskie z wysokimi współczynnikami konwersji. Profesjonalne rozwiązania dla Twojego biznesu online.",
+    "Sprawdź aktualne promocje kont i kart. Porównaj oferty i skorzystaj z bonusów za założenie konta.",
   metadataBase: new URL(siteUrl),
   openGraph: {
-    title: "Afiliantka Faceless - Sprawdzone Oferty Partnerskie",
+    title: "Afiliantka Faceless — Aktualne oferty bankowe",
     description:
-      "Odkryj starannie wyselekcjonowane oferty partnerskie z wysokimi współczynnikami konwersji.",
+      "Sprawdź aktualne promocje kont i kart z bonusem za założenie.",
     siteName: "Afiliantka Faceless",
     type: "website",
     locale: "pl_PL",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Afiliantka Faceless",
     description:
-      "Odkryj starannie wyselekcjonowane oferty partnerskie z wysokimi współczynnikami konwersji.",
+      "Sprawdź aktualne promocje kont i kart z bonusem za założenie.",
   },
 };
 
@@ -44,7 +44,7 @@ export default function RootLayout({
     name: "Afiliantka Faceless",
     url: siteUrl,
     description:
-      "Profesjonalne rozwiązania dla Twojego biznesu online. Sprawdzone oferty partnerskie.",
+      "Aktualne promocje bankowe — konta i karty z bonusem za założenie.",
   };
 
   return (

@@ -102,7 +102,7 @@ export async function HeroSection() {
         )}
 
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
-          {heroContent?.title || "Ekskluzywne oferty partnerskie"}
+          {heroContent?.title || "Aktualne oferty bankowe z bonusem"}
         </h1>
 
         <div className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
@@ -112,7 +112,7 @@ export async function HeroSection() {
               components={components}
             />
           ) : (
-            "Odkryj starannie wyselekcjonowane oferty partnerskie z wysokimi współczynnikami konwersji."
+            "Porównaj promocje kont osobistych, firmowych i kart kredytowych. Spełnij warunki i odbierz korzyści za założenie konta."
           )}
         </div>
 

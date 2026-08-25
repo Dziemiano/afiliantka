@@ -1,6 +1,6 @@
 # Szablony email Supabase Auth
 
-Magic linki logowania i zaproszenia użytkowników wysyła **Supabase Auth** — nie Resend. Resend (Faza 4.9) służy wyłącznie opcjonalnym powiadomieniom biznesowym (np. onboarding, nowa treść).
+Magic linki logowania i zaproszenia użytkowników wysyła **Supabase Auth** — nie Resend.
 
 ## Pliki w repozytorium
 
@@ -9,15 +9,30 @@ Magic linki logowania i zaproszenia użytkowników wysyła **Supabase Auth** —
 | `supabase/email-templates/magic-link.html` | Authentication → Email Templates → **Magic Link** |
 | `supabase/email-templates/invite.html` | Authentication → Email Templates → **Invite user** |
 
+## Lokalne logowanie (ważne)
+
+Domyślny `{{ .ConfirmationURL }}` używa **PKCE** (`?code=` + `code_verifier` w cookies). Przy `app.localhost` vs `127.0.0.1` cookies się rozjeżdżają → błąd:
+
+`code challenge does not match previously saved code verifier`
+
+Szablon magic-link w repo używa więc:
+
+```html
+{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=email
+```
+
+`.RedirectTo` to `emailRedirectTo` z aplikacji (`http://app.localhost:3002/auth/callback`). Callback woła `verifyOtp` — **bez PKCE**.
+
 ## Konfiguracja w Supabase
 
-1. Otwórz [Supabase Dashboard](https://supabase.com/dashboard) → projekt → **Authentication** → **Email Templates**.
-2. Wybierz szablon (Magic Link lub Invite user).
-3. Wklej zawartość odpowiedniego pliku HTML z tego repozytorium.
-4. Upewnij się, że w szablonie pozostaje zmienna `{{ .ConfirmationURL }}` — Supabase podstawia nią link potwierdzający.
-5. W **Authentication → URL Configuration** ustaw:
-   - **Site URL**: publiczny adres strony (np. `https://afiliantkafaceless.pl`)
-   - **Redirect URLs**: dozwolone adresy callback, m.in. `{NEXT_PUBLIC_APP_ORIGIN}/auth/callback`
+1. **Authentication → Email Templates → Magic Link** — wklej `supabase/email-templates/magic-link.html` (z `token_hash`, nie `ConfirmationURL`).
+2. **Authentication → URL Configuration**:
+   - **Redirect URLs** (wymagane):
+     - `http://app.localhost:3002/auth/callback`
+     - `http://127.0.0.1:3002/auth/callback` (opcjonalnie)
+     - produkcyjny callback
+   - Na czas local **Site URL** możesz ustawić na `http://app.localhost:3002` (albo zostawić prod — ważne są Redirect URLs + szablon z `RedirectTo`).
+3. Po zmianie szablonu wyślij **nowy** magic link ze strony `http://app.localhost:3002/login`.
 
 ## Temat wiadomości (sugerowany)
 
@@ -26,6 +41,5 @@ Magic linki logowania i zaproszenia użytkowników wysyła **Supabase Auth** —
 
 ## Uwagi
 
-- Szablony używają inline CSS dla lepszej kompatybilności z klientami poczty.
-- Kolorystyka (`#0d9488`) odpowiada brandowi aplikacji.
-- Po zmianie szablonu wyślij testowy magic link z `/login`, aby zweryfikować renderowanie.
+- Stare maile z `ConfirmationURL` / `?code=` mogą nadal padać na PKCE — użyj nowego linku po aktualizacji szablonu.
+- Invite może zostać na `{{ .ConfirmationURL }}` albo analogicznie: `{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=invite`.

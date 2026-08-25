@@ -120,10 +120,11 @@ Priorytet biznesowy -- strona informująca o modelu współpracy faceless i kier
 
 Strona publiczna jako katalog ofert bankowych dla odwiedzających (bonus za założenie), nie jako pitch afiliacyjny. Afiliacja tylko na `/wspolpraca`. Przed Phase 6/7.
 
+- [x] **Homepage copy** -- visitor-facing bank offers (bonus za założenie), nie messaging afiliacyjny / partnerski
 - [x] **Home layout** -- hero → how it works → featured only → CTA `/oferty` → FAQ
 - [x] **Remove all-offers from `/`** -- filtr, compare i pełna lista tylko na `/oferty`
 - [x] **Affiliate narrative** -- tylko `/wspolpraca` (+ istniejące disclosure na `/oferta/[slug]`)
-- [ ] **Public copy rebrand** -- metadata, hero fallbacks, footer blurb
+- [x] **Public copy rebrand** -- metadata, hero fallbacks, footer blurb
 - [x] **Docs sync** -- `PROJECT_SPEC.md` aligned with code (phases 4.5–5 done) + document Phase 5.5
 
 Linear: DZI-48 (docs), DZI-49 (layout), DZI-50 (copy). Order: 5.5 → 6 → 7.
