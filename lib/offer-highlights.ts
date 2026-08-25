@@ -1,5 +1,3 @@
-import { portableTextToPlainText } from "@/lib/portable-text";
-
 const DEFAULT_MAX_ITEMS = 4;
 const MAX_ITEM_LENGTH = 140;
 const AMOUNT_PATTERN = /(\d[\d\s]*(?:,\d+)?\s*(?:zł|%))/gi;
@@ -59,14 +57,6 @@ function looksLikeHighlight(text: string): boolean {
   return text.length <= 160 && HIGHLIGHT_SIGNAL.test(text);
 }
 
-function splitParagraphs(text: string): string[] {
-  return text
-    .split(/\n+/)
-    .flatMap((paragraph) => paragraph.split(/(?<=[.!?])\s+/))
-    .map((part) => part.trim())
-    .filter(Boolean);
-}
-
 function alreadyListed(items: string[], candidate: string): boolean {
   const needle = candidate.toLowerCase();
   return items.some((item) => {
@@ -119,29 +109,12 @@ export function getOfferHighlights(
     .filter((text) => looksLikeHighlight(text) && isUsableHighlight(text))
     .map(truncateHighlight);
 
-  const fallbackParagraphs = splitParagraphs(
-    portableTextToPlainText(offer.description)
-  )
-    .map(cleanHighlightText)
-    .filter(isUsableHighlight)
-    .map(truncateHighlight);
-
   const items =
-    listItems.length > 0
-      ? [...listItems]
-      : paragraphHighlights.length > 0
-        ? [...paragraphHighlights]
-        : fallbackParagraphs;
+    listItems.length > 0 ? [...listItems] : [...paragraphHighlights];
 
   const requirement = offer.bonusRequirement?.trim();
-  const hasStructuredHighlights =
-    listItems.length > 0 || paragraphHighlights.length > 0;
-  if (
-    requirement &&
-    !hasStructuredHighlights &&
-    !alreadyListed(items, requirement)
-  ) {
-    items.unshift(truncateHighlight(requirement));
+  if (requirement && items.length === 0) {
+    items.push(truncateHighlight(requirement));
   }
 
   const unique: string[] = [];

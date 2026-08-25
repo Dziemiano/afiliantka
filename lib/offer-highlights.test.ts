@@ -167,16 +167,29 @@ describe("getOfferHighlights", () => {
     ).toEqual([]);
   });
 
-  it("prepends bonusRequirement onto unstructured description fallbacks", () => {
-    const fallback =
-      "Oferta jest skierowana do nowych klientów indywidualnych, którzy chcą otworzyć konto i korzystać z bankowości internetowej na co dzień.";
+  it("uses bonusRequirement when description has only unstructured copy", () => {
     const highlights = getOfferHighlights({
       bonusRequirement: "Załóż konto i wpłać 1000 zł w 30 dni",
-      description: [block(fallback)],
+      description: [
+        block(
+          "Oferta jest skierowana do nowych klientów indywidualnych, którzy chcą otworzyć konto i korzystać z bankowości internetowej na co dzień."
+        ),
+      ],
     });
 
-    expect(highlights[0]).toBe("Załóż konto i wpłać 1000 zł w 30 dni");
-    expect(highlights).toContain(fallback);
+    expect(highlights).toEqual(["Załóż konto i wpłać 1000 zł w 30 dni"]);
+  });
+
+  it("returns an empty list for unstructured paragraphs without a bonus", () => {
+    expect(
+      getOfferHighlights({
+        description: [
+          block(
+            "Oferta jest skierowana do nowych klientów indywidualnych, którzy chcą otworzyć konto i korzystać z bankowości internetowej na co dzień."
+          ),
+        ],
+      })
+    ).toEqual([]);
   });
 
   it("keeps paragraph highlights instead of replacing them with bonusRequirement", () => {
