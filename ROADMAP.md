@@ -127,7 +127,19 @@ Strona publiczna jako katalog ofert bankowych dla odwiedzających (bonus za zał
 - [x] **Public copy rebrand** -- metadata, hero fallbacks, footer blurb
 - [x] **Docs sync** -- `PROJECT_SPEC.md` aligned with code (phases 4.5–5 done) + document Phase 5.5
 
-Linear: DZI-48 (docs), DZI-49 (layout), DZI-50 (copy). Order: 5.5 → 6 → 7.
+Linear: DZI-48 (docs), DZI-49 (layout), DZI-50 (copy).
+
+### Phase 5.6: UI + Sanity (home, oferty, toggles, branding)
+
+- [x] **Hero simplify** -- tytuł + opis only (bez obrazka i CTA „Zobacz oferty”); pole `image` w Studio ukryte
+- [x] **Featured carousel** -- shadcn `Carousel` w `FeaturedOffers` (mobile-first, touch ≥44px)
+- [x] **Offer `bonusRequirement`** -- publiczne wymaganie bonusu; `requirement` bez zmian dla onboardingu
+- [x] **`siteSettings` singleton** -- `showBlog`, `showLogin`, logo, social URLs (`lib/site-settings.ts`)
+- [x] **Header/Footer** -- logo z Sanity (fallback tekst), Blog/Login toggles, social tylko przy URL
+- [x] **Blog gate** -- `/blog`, `/blog/[slug]` → `notFound()` gdy `showBlog === false`
+- [x] **Docs** -- ROADMAP + PROJECT_SPEC
+
+Linear: DZI-51 (hero+carousel), DZI-52 (bonusRequirement), DZI-53 (siteSettings). Order: 5.6 → 6 → 7.
 
 ### Phase 6: Czat społecznościowy
 

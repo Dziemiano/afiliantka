@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/lib/sanity-image";
 import Image from "next/image";
@@ -11,6 +12,7 @@ import {
 } from "@/components/blog/blog-content";
 import { RelatedOffers } from "@/components/sections/related-offers";
 import type { Offer } from "@/types/offer";
+import { getSiteSettings } from "@/lib/site-settings";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://afiliantkafaceless.pl";
@@ -57,6 +59,9 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const settings = await getSiteSettings();
+  if (!settings.showBlog) notFound();
+
   const { slug } = await params;
   const post = await client.fetch(
     `*[_type == "blog" && slug.current == $slug][0]{

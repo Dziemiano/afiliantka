@@ -11,7 +11,29 @@ export default defineConfig({
   title: "Offers Landing CMS",
   projectId,
   dataset,
-  plugins: [structureTool(), visionTool()],
+  plugins: [
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title("Treści")
+          .items([
+            S.listItem()
+              .title("Ustawienia strony")
+              .id("siteSettings")
+              .child(
+                S.document()
+                  .schemaType("siteSettings")
+                  .documentId("siteSettings")
+                  .title("Ustawienia strony")
+              ),
+            S.divider(),
+            ...S.documentTypeListItems().filter(
+              (item) => item.getId() !== "siteSettings"
+            ),
+          ]),
+    }),
+    visionTool(),
+  ],
   schema: {
     types: [
       {
@@ -82,11 +104,18 @@ export default defineConfig({
             validation: (Rule) => Rule.optional(),
           },
           {
-            name: "requirement",
-            title: "Onboarding Requirement",
+            name: "bonusRequirement",
+            title: "Wymaganie bonusu (publiczne)",
             type: "string",
             description:
-              "What the user must do for this offer during onboarding (e.g. 'Założyć konto i dokonać pierwszej transakcji')",
+              "Co musi zrobić odwiedzający, żeby dostać bonus (np. 'Załóż konto i wpłać 1000 zł w 30 dni')",
+          },
+          {
+            name: "requirement",
+            title: "Wymaganie onboardingu",
+            type: "string",
+            description:
+              "Wymaganie dla współpracownika podczas onboardingu (np. 'Założyć konto i dokonać pierwszej transakcji')",
           },
           {
             name: "slug",
@@ -143,12 +172,69 @@ export default defineConfig({
           },
           {
             name: "image",
-            title: "Hero Background Image",
+            title: "Hero Background Image (deprecated)",
             type: "image",
             options: { hotspot: true },
-            validation: (Rule) => Rule.required(),
+            hidden: true,
+            description:
+              "Nieużywane — hero wyświetla tylko tytuł i opis. Pole zachowane dla istniejących danych.",
           },
         ],
+      },
+      {
+        name: "siteSettings",
+        title: "Ustawienia strony",
+        type: "document",
+        fields: [
+          {
+            name: "logo",
+            title: "Logo (header)",
+            type: "image",
+            options: { hotspot: true },
+            description: "Wordmark Afiliantka Faceless — gdy brak, wyświetlany jest tekst",
+          },
+          {
+            name: "showBlog",
+            title: "Pokaż Blog",
+            type: "boolean",
+            description: "Link Blog w nawigacji oraz dostępność tras /blog",
+            initialValue: true,
+          },
+          {
+            name: "showLogin",
+            title: "Pokaż Zaloguj się",
+            type: "boolean",
+            description:
+              "CTA Zaloguj / Dashboard w publicznym headerze (bezpośredni URL /login nadal działa)",
+            initialValue: true,
+          },
+          {
+            name: "instagramUrl",
+            title: "Instagram URL",
+            type: "url",
+            validation: (Rule) =>
+              Rule.uri({ scheme: ["http", "https"] }).optional(),
+          },
+          {
+            name: "facebookUrl",
+            title: "Facebook URL",
+            type: "url",
+            validation: (Rule) =>
+              Rule.uri({ scheme: ["http", "https"] }).optional(),
+          },
+          {
+            name: "tiktokUrl",
+            title: "TikTok URL",
+            type: "url",
+            validation: (Rule) =>
+              Rule.uri({ scheme: ["http", "https"] }).optional(),
+          },
+        ],
+        preview: {
+          prepare() {
+            return { title: "Ustawienia strony" };
+          },
+        },
       },
       {
         name: "blog",

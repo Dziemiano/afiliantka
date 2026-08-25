@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/lib/sanity-image";
 import Image from "next/image";
@@ -6,6 +7,7 @@ import Link from "next/link";
 import { Clock } from "lucide-react";
 import { NewsletterSignup } from "@/components/sections/newsletter-signup";
 import { excerptFromContent, readingTimeFromContent } from "@/components/blog/blog-content";
+import { getSiteSettings } from "@/lib/site-settings";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -41,6 +43,9 @@ async function getBlogPosts(): Promise<BlogPost[]> {
 }
 
 export default async function BlogPage() {
+  const settings = await getSiteSettings();
+  if (!settings.showBlog) notFound();
+
   const posts = await getBlogPosts();
 
   if (posts.length === 0) {

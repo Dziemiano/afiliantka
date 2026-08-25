@@ -1,9 +1,5 @@
 import { client } from "@/sanity/lib/client";
-import { urlFor } from "@/lib/sanity-image";
 import { PortableText } from "@portabletext/react";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight } from "lucide-react";
 
 interface PortableTextBlock {
   _type: string;
@@ -26,22 +22,19 @@ interface HeroContent {
   _id: string;
   title: string;
   description: PortableTextBlock[];
-  image: {
-    asset: {
-      _ref: string;
-      _type: string;
-    };
-  };
 }
 
 async function getHeroContent(): Promise<HeroContent | null> {
   const query = `*[_type == "heroSection"][0] {
     _id,
     title,
-    description,
-    image
+    description
   }`;
-  return await client.fetch(query, {}, { next: { revalidate: 600, tags: ["heroSection"] } });
+  return await client.fetch(
+    query,
+    {},
+    { next: { revalidate: 600, tags: ["heroSection"] } }
+  );
 }
 
 export async function HeroSection() {
@@ -88,19 +81,6 @@ export async function HeroSection() {
       />
 
       <div className="relative max-w-4xl mx-auto text-center space-y-6 sm:space-y-8">
-        {heroContent?.image && (
-          <div className="relative h-14 sm:h-16 lg:h-20 w-full mx-auto max-w-md">
-            <Image
-              src={urlFor(heroContent.image).width(960).height(240).url()}
-              alt="Afiliantka Faceless"
-              fill
-              className="object-contain"
-              sizes="(max-width: 768px) 80vw, 400px"
-              priority
-            />
-          </div>
-        )}
-
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
           {heroContent?.title || "Aktualne oferty bankowe z bonusem"}
         </h1>
@@ -114,16 +94,6 @@ export async function HeroSection() {
           ) : (
             "Porównaj promocje kont osobistych, firmowych i kart kredytowych. Spełnij warunki i odbierz korzyści za założenie konta."
           )}
-        </div>
-
-        <div className="pt-2">
-          <Link
-            href="/oferty"
-            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 min-h-[44px] text-base font-semibold text-white bg-cta hover:bg-cta-hover rounded-xl shadow-lg shadow-cta/25 transition-all duration-200 hover:shadow-xl hover:shadow-cta/30 hover:-translate-y-0.5"
-          >
-            Zobacz oferty
-            <ArrowRight className="h-5 w-5" aria-hidden="true" />
-          </Link>
         </div>
       </div>
     </section>
