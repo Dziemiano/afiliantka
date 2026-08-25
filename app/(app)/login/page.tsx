@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -35,19 +36,42 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
+      // Rate limit + canonical redirect URL (server). OTP runs in the browser
+      // so PKCE code_verifier is stored on this host (app.localhost).
       const res = await fetch(magicLinkUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
+        credentials: "include",
       });
-      const data = (await res.json()) as { message?: string };
+      const data = (await res.json()) as {
+        message?: string;
+        emailRedirectTo?: string;
+      };
 
       if (!res.ok) {
         setError(data.message || "Nie udało się wysłać linku logowania.");
         return;
       }
 
-      setMessage(data.message || "Sprawdź skrzynkę email — wysłaliśmy link do logowania.");
+      const emailRedirectTo =
+        data.emailRedirectTo ||
+        `${process.env.NEXT_PUBLIC_APP_ORIGIN}/auth/callback`;
+
+      const supabase = createClient();
+      const { error: otpError } = await supabase.auth.signInWithOtp({
+        email: email.trim().toLowerCase(),
+        options: { emailRedirectTo },
+      });
+
+      if (otpError) {
+        setError(
+          "Nie udało się wysłać linku logowania. Sprawdź adres email lub spróbuj ponownie."
+        );
+        return;
+      }
+
+      setMessage("Sprawdź skrzynkę email — wysłaliśmy link do logowania.");
     } catch {
       setError("Wystąpił błąd połączenia. Spróbuj ponownie.");
     } finally {

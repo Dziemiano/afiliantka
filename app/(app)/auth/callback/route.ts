@@ -1,21 +1,28 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import type { EmailOtpType } from "@supabase/supabase-js";
+import { getAppOrigin, isSafeAppPath } from "@/lib/hosts";
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams, origin, port, protocol } = new URL(request.url);
   const code = searchParams.get("code");
+  const tokenHash = searchParams.get("token_hash");
+  const type = searchParams.get("type") as EmailOtpType | null;
   const invitationToken = searchParams.get("invitation_token");
-  const next = searchParams.get("next") ?? "/dashboard";
+  const nextParam = searchParams.get("next") ?? "/dashboard";
+  const next = isSafeAppPath(nextParam) ? nextParam : "/dashboard";
 
-  if (!code) {
+  const appOrigin = getAppOrigin(protocol, port || undefined) || origin;
+
+  if (!code && !(tokenHash && type)) {
     return NextResponse.redirect(
-      `${origin}/auth/auth-code-error?error=No code provided`
+      `${appOrigin}/auth/auth-code-error?error=No%20auth%20token%20provided`
     );
   }
 
   const cookieStore = await cookies();
-  const response = NextResponse.redirect(`${origin}${next}`); // Create response early
+  const response = NextResponse.redirect(`${appOrigin}${next}`);
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -33,11 +40,14 @@ export async function GET(request: Request) {
     }
   );
 
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  // Prefer token_hash (no PKCE). Falls back to ?code= for default Supabase links.
+  const { error } = tokenHash && type
+    ? await supabase.auth.verifyOtp({ type, token_hash: tokenHash })
+    : await supabase.auth.exchangeCodeForSession(code!);
 
   if (error) {
     return NextResponse.redirect(
-      `${origin}/auth/auth-code-error?error=${error.message}`
+      `${appOrigin}/auth/auth-code-error?error=${encodeURIComponent(error.message)}`
     );
   }
 
@@ -51,11 +61,10 @@ export async function GET(request: Request) {
     if (invitationError || !invitation || invitation.used_at) {
       await supabase.auth.signOut();
       return NextResponse.redirect(
-        `${origin}/auth/auth-code-error?error=Invalid or used invitation`
+        `${appOrigin}/auth/auth-code-error?error=Invalid%20or%20used%20invitation`
       );
     }
 
-    // Mark invitation as used
     await supabase
       .from("invitations")
       .update({ used_at: new Date().toISOString() })
