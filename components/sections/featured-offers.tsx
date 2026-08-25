@@ -9,6 +9,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import {
+  getFeaturedOffers,
+  shouldShowFeaturedCarouselControls,
+} from "@/lib/featured-offers";
 
 interface FeaturedOffersProps {
   offers: Offer[];
@@ -25,7 +29,7 @@ export function FeaturedOffers({
   onCompareToggle,
   maxCompare = 3,
 }: FeaturedOffersProps) {
-  const featuredOffers = offers.filter((offer) => offer.featured);
+  const featuredOffers = getFeaturedOffers(offers);
 
   if (featuredOffers.length === 0) return null;
 
@@ -39,7 +43,9 @@ export function FeaturedOffers({
       !selectedCompareIds.includes(offer._id),
   });
 
-  const showControls = featuredOffers.length > 1;
+  const showControls = shouldShowFeaturedCarouselControls(
+    featuredOffers.length
+  );
 
   return (
     <section className="py-4 px-4 sm:px-6 lg:px-8">

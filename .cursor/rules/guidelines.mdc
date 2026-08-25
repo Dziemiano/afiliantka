@@ -7,12 +7,22 @@ alwaysApply: true
 
 ## Agent workflow
 
-Multi-agent delivery (orchestrator → frontend/backend/test → PR review → human merge) is defined in [`AGENTS.md`](../../AGENTS.md) and [`.cursor/agents/`](../agents/). Path-scoped rules: `frontend.mdc`, `backend.mdc`, `testing.mdc`.
+Multi-agent delivery is **mandatory** — see [`AGENTS.md`](../../AGENTS.md) and [`.cursor/agents/`](../agents/).
 
+Orchestrator → **frontend-dev / backend-dev / test-dev** (Task subagents) → PR → **pr-reviewer + Bugbot** → human merge → `merged`/`next` ping.
+
+- Do **not** open a “ready” PR without tests for changed behavior and without running pr-reviewer + Bugbot (non-trivial PRs).
+- Path-scoped rules: `frontend.mdc`, `backend.mdc`, `testing.mdc`.
 - Linear project: **Afiliantka Faceless** only (see `AGENTS.md`)
 - Integration branch **now:** `new-spec-development` (task branch + PR target); later switches to `preview`
 - After human merge, orchestrator continues only on explicit `merged` / `next` ping
 
+### Testing (always)
+
+- Every PR that changes behavior must add or update Vitest tests covering that behavior.
+- Extract pure logic from components into `lib/` (or colocated helpers) so it is unit-testable without a browser.
+- Docs/copy-only: explicit `Tests: N/A` in the PR body.
+- Details: [`.cursor/rules/testing.mdc`](./testing.mdc)
 ## Product Documentation
 
 Pełna specyfikacja produktu (wizja, aktualne i planowane funkcje, przepływy biznesowe, model danych): [`docs/PROJECT_SPEC.md`](../../docs/PROJECT_SPEC.md). Roadmapa: [`ROADMAP.md`](../../ROADMAP.md). Przeczytaj je przed implementacją nowych funkcji biznesowych.

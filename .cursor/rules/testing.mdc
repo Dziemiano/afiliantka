@@ -1,13 +1,28 @@
 ---
 description: Testing expectations for Vitest (and e2e when added)
 globs: "**/*.{test,spec}.{ts,tsx}",vitest.config.*,playwright.config.*,e2e/**
-alwaysApply: false
+alwaysApply: true
 ---
 
 # Testing
 
-- Unit-test pure logic in `lib/` (e.g. roles helpers, rate-limit, parsers). Existing examples: `lib/role-utils.test.ts`, `lib/rate-limit.test.ts`.
+## Hard rules (every non-docs PR)
+
+- **Every behavioral change must ship with tests** — add or update Vitest coverage in the same PR.
+- Missing tests = PR not ready for merge (see `AGENTS.md` Definition of Done).
+- Pure docs / copy-only PRs: write **Tests: N/A** in the PR body; otherwise tests are required.
+- Prefer extracting pure helpers into `lib/` (normalize, filter, guards, parsers) over untested branching inside React components.
+- Feature agents must leave hooks for **test-dev**; orchestrator must schedule test-dev before treating the issue as done.
+
+## What to test
+
+- Unit-test pure logic in `lib/` (roles, rate-limit, hosts, site-settings normalize, featured-offer filters, etc.).
+- Existing examples: `lib/role-utils.test.ts`, `lib/rate-limit.test.ts`, `lib/hosts.test.ts`.
 - Prefer fixtures over live Sanity / Drive / Supabase network in unit tests.
-- Every feature PR that adds logic must add or update tests. Docs-only / pure copy PRs may skip with an explicit N/A note.
 - Keep suites fast and deterministic; do not call production CMS or banks in CI.
 - When Playwright/e2e appears: smoke public home + one auth-gated happy path; keep e2e narrow.
+
+## Commands
+
+- `npm test` must pass locally before opening or updating a PR.
+- CI runs the same suite — treat red CI as a blocker.

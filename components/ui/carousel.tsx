@@ -28,6 +28,8 @@ type CarouselContextProps = {
   scrollNext: () => void
   canScrollPrev: boolean
   canScrollNext: boolean
+  /** False until Embla has run on the client — avoids SSR/client disabled mismatch. */
+  controlsReady: boolean
 } & CarouselProps
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
@@ -60,6 +62,7 @@ function Carousel({
   )
   const [canScrollPrev, setCanScrollPrev] = React.useState(false)
   const [canScrollNext, setCanScrollNext] = React.useState(false)
+  const [controlsReady, setControlsReady] = React.useState(false)
 
   const onSelect = React.useCallback((api: CarouselApi) => {
     if (!api) return
@@ -96,6 +99,7 @@ function Carousel({
   React.useEffect(() => {
     if (!api) return
     onSelect(api)
+    setControlsReady(true)
     api.on("reInit", onSelect)
     api.on("select", onSelect)
 
@@ -116,6 +120,7 @@ function Carousel({
         scrollNext,
         canScrollPrev,
         canScrollNext,
+        controlsReady,
       }}
     >
       <div
@@ -177,7 +182,8 @@ function CarouselPrevious({
   size = "icon",
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { orientation, scrollPrev, canScrollPrev } = useCarousel()
+  const { orientation, scrollPrev, canScrollPrev, controlsReady } =
+    useCarousel()
 
   return (
     <Button
@@ -191,9 +197,9 @@ function CarouselPrevious({
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
-      disabled={!canScrollPrev}
-      onClick={scrollPrev}
       {...props}
+      disabled={controlsReady ? !canScrollPrev : false}
+      onClick={scrollPrev}
     >
       <ArrowLeft />
       <span className="sr-only">Previous slide</span>
@@ -207,7 +213,8 @@ function CarouselNext({
   size = "icon",
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { orientation, scrollNext, canScrollNext } = useCarousel()
+  const { orientation, scrollNext, canScrollNext, controlsReady } =
+    useCarousel()
 
   return (
     <Button
@@ -221,9 +228,9 @@ function CarouselNext({
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
-      disabled={!canScrollNext}
-      onClick={scrollNext}
       {...props}
+      disabled={controlsReady ? !canScrollNext : false}
+      onClick={scrollNext}
     >
       <ArrowRight />
       <span className="sr-only">Next slide</span>

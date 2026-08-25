@@ -1,32 +1,18 @@
 import { client } from "@/sanity/lib/client";
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import {
+  normalizeSiteSettings,
+  type SiteSettings,
+  type SiteSettingsDoc,
+} from "@/lib/site-settings-normalize";
 
-export interface SiteSettings {
-  showBlog: boolean;
-  showLogin: boolean;
-  logo: SanityImageSource | null;
-  instagramUrl: string | null;
-  facebookUrl: string | null;
-  tiktokUrl: string | null;
-}
-
-const DEFAULT_SETTINGS: SiteSettings = {
-  showBlog: true,
-  showLogin: true,
-  logo: null,
-  instagramUrl: null,
-  facebookUrl: null,
-  tiktokUrl: null,
-};
-
-type SiteSettingsDoc = {
-  showBlog?: boolean | null;
-  showLogin?: boolean | null;
-  logo?: SanityImageSource | null;
-  instagramUrl?: string | null;
-  facebookUrl?: string | null;
-  tiktokUrl?: string | null;
-};
+export type {
+  SiteSettings,
+  SiteSettingsDoc,
+} from "@/lib/site-settings-normalize";
+export {
+  DEFAULT_SITE_SETTINGS,
+  normalizeSiteSettings,
+} from "@/lib/site-settings-normalize";
 
 export async function getSiteSettings(): Promise<SiteSettings> {
   const doc = await client.fetch<SiteSettingsDoc | null>(
@@ -42,14 +28,5 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     { next: { revalidate: 300, tags: ["siteSettings"] } }
   );
 
-  if (!doc) return DEFAULT_SETTINGS;
-
-  return {
-    showBlog: doc.showBlog ?? true,
-    showLogin: doc.showLogin ?? true,
-    logo: doc.logo ?? null,
-    instagramUrl: doc.instagramUrl?.trim() || null,
-    facebookUrl: doc.facebookUrl?.trim() || null,
-    tiktokUrl: doc.tiktokUrl?.trim() || null,
-  };
+  return normalizeSiteSettings(doc);
 }
