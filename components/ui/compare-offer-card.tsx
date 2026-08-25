@@ -10,6 +10,7 @@ interface CompareOfferCardProps {
   onCompareToggle: (offerId: string) => void;
   compareDisabled: boolean;
   className?: string;
+  presentation?: "default" | "homepage";
 }
 
 export function CompareOfferCard({
@@ -19,11 +20,13 @@ export function CompareOfferCard({
   onCompareToggle,
   compareDisabled,
   className,
+  presentation = "default",
 }: CompareOfferCardProps) {
   return (
     <OfferCard
       offer={offer}
       className={className}
+      presentation={presentation}
       compareMode={compareMode}
       isCompareSelected={isCompareSelected}
       onCompareToggle={onCompareToggle}

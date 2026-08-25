@@ -10,6 +10,7 @@ import { User } from "@supabase/supabase-js";
 import { Menu, X } from "lucide-react";
 import { urlFor } from "@/lib/sanity-image";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import density from "@/components/sections/homepage-density.module.css";
 
 interface HeaderProps {
   showBlog?: boolean;
@@ -94,8 +95,13 @@ export function Header({
   const isActive = (href: string) => pathname === href;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/80 backdrop-blur-lg">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between">
+    <header
+      data-home-header
+      className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/80 backdrop-blur-lg"
+    >
+      <div
+        className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-1 flex items-center justify-between ${density.headerInner}`}
+      >
         <Link href="/" className="flex items-center gap-1.5 min-h-[44px]">
           {logoUrl ? (
             <Image

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { ArrowRight, Scale } from "lucide-react";
 import { CATEGORY_LABELS, CATEGORY_STYLES } from "@/lib/offer-categories";
+import density from "@/components/sections/homepage-density.module.css";
 
 interface OfferCardProps {
   offer: Offer;
@@ -15,6 +16,7 @@ interface OfferCardProps {
   isCompareSelected?: boolean;
   onCompareToggle?: (offerId: string) => void;
   compareDisabled?: boolean;
+  presentation?: "default" | "homepage";
 }
 
 export function OfferCard({
@@ -24,7 +26,10 @@ export function OfferCard({
   isCompareSelected = false,
   onCompareToggle,
   compareDisabled = false,
+  presentation = "default",
 }: OfferCardProps) {
+  const isHomepagePresentation = presentation === "homepage";
+
   return (
     <div className={cn("relative h-full", className)}>
       {compareMode && onCompareToggle && (
@@ -67,7 +72,12 @@ export function OfferCard({
             isCompareSelected && "ring-2 ring-brand border-brand"
           )}
         >
-          <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
+          <div
+            className={cn(
+              "relative aspect-[16/10] w-full overflow-hidden bg-slate-100",
+              isHomepagePresentation && density.offerMedia
+            )}
+          >
             <Image
               src={urlFor(offer.image).width(640).height(400).url()}
               alt={offer.title}
@@ -97,8 +107,18 @@ export function OfferCard({
             </div>
           </div>
 
-          <div className="p-4 sm:p-5 flex flex-col flex-1 gap-3">
-            <h3 className="text-base sm:text-lg font-semibold text-slate-800 line-clamp-2 leading-snug group-hover:text-brand transition-colors">
+          <div
+            className={cn(
+              "p-4 sm:p-5 flex flex-col flex-1 gap-3",
+              isHomepagePresentation && density.offerBody
+            )}
+          >
+            <h3
+              className={cn(
+                "text-base sm:text-lg font-semibold text-slate-800 line-clamp-2 leading-snug group-hover:text-brand transition-colors",
+                isHomepagePresentation && density.offerTitle
+              )}
+            >
               {offer.title}
             </h3>
 
