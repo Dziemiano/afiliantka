@@ -74,8 +74,10 @@ export default async function OfferPage({ params }: OfferPageProps) {
 
   if (!offer) {
     return (
-      <div className="py-20 text-center text-slate-500">
-        Nie znaleziono oferty.
+      <div className="px-4 py-20 text-center sm:px-6">
+        <p className="mx-auto w-fit rounded-xl bg-slate-950/80 px-5 py-4 text-sm text-white shadow-lg sm:text-base">
+          Nie znaleziono oferty.
+        </p>
       </div>
     );
   }
