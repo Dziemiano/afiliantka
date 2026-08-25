@@ -53,7 +53,7 @@ export function Footer({
 
   return (
     <footer className="bg-transparent text-slate-300">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <div className="max-w-6xl mx-4 my-8 rounded-2xl bg-slate-950/80 px-4 py-8 shadow-lg sm:mx-6 sm:px-6 sm:py-10 lg:mx-auto lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-8">
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="text-xl font-bold text-white">
@@ -128,7 +128,7 @@ export function Footer({
 
       <div className="border-t border-slate-800">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-          <p className="text-xs text-slate-500 text-center">
+          <p className="mx-auto w-fit rounded-full bg-slate-950/80 px-4 py-2 text-sm text-slate-200 text-center shadow-sm">
             &copy; {new Date().getFullYear()} Afiliantka Faceless. Wszelkie prawa
             zastrzeżone.
           </p>
