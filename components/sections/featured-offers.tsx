@@ -50,17 +50,32 @@ export function FeaturedOffers({
   return (
     <section className="py-4 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-slate-800 text-xl sm:text-2xl font-bold mb-6">
-          Polecane oferty
-        </h2>
-
         <Carousel
           opts={{
             align: "start",
             loop: featuredOffers.length > 1,
           }}
-          className="w-full px-12 sm:px-14"
+          className="w-full"
         >
+          <div className="mb-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="text-slate-800 text-xl font-bold sm:text-2xl">
+              Polecane oferty
+            </h2>
+
+            {showControls && (
+              <div className="flex gap-2">
+                <CarouselPrevious
+                  aria-label="Poprzednie oferty"
+                  className="static h-11 w-11 min-h-[44px] min-w-[44px] translate-y-0 border-slate-200 bg-white text-brand shadow-md hover:bg-brand-light"
+                />
+                <CarouselNext
+                  aria-label="Następne oferty"
+                  className="static h-11 w-11 min-h-[44px] min-w-[44px] translate-y-0 border-slate-200 bg-white text-brand shadow-md hover:bg-brand-light"
+                />
+              </div>
+            )}
+          </div>
+
           <CarouselContent className="-ml-3">
             {featuredOffers.map((offer) => (
               <CarouselItem
@@ -74,19 +89,6 @@ export function FeaturedOffers({
               </CarouselItem>
             ))}
           </CarouselContent>
-
-          {showControls && (
-            <>
-              <CarouselPrevious
-                aria-label="Poprzednie oferty"
-                className="left-0 sm:-left-3 h-11 w-11 min-h-[44px] min-w-[44px] border-slate-200 bg-white text-brand hover:bg-brand-light shadow-md"
-              />
-              <CarouselNext
-                aria-label="Następne oferty"
-                className="right-0 sm:-right-3 h-11 w-11 min-h-[44px] min-w-[44px] border-slate-200 bg-white text-brand hover:bg-brand-light shadow-md"
-              />
-            </>
-          )}
         </Carousel>
       </div>
     </section>
