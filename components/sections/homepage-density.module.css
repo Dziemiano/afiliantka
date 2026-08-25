@@ -87,10 +87,13 @@
   }
 
   .offerTitle {
+    display: block;
     font-size: 1rem;
     line-height: 1.5rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
   }
 }

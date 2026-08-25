@@ -189,5 +189,8 @@ describe("homepage short-desktop presentation contract", () => {
     expect(densityStyles).toMatch(
       /\.offerMedia\s*\{\s*aspect-ratio:\s*3\s*\/\s*1;\s*\}/
     );
+    expect(densityStyles).toMatch(
+      /\.offerTitle\s*\{[\s\S]*?display:\s*block;[\s\S]*?-webkit-line-clamp:\s*unset;[\s\S]*?-webkit-box-orient:\s*unset;[\s\S]*?\}/
+    );
   });
 });
