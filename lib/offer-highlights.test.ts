@@ -33,6 +33,14 @@ describe("emphasizeOfferAmounts", () => {
       { text: "Załóż konto i wpłać środki", bold: false },
     ]);
   });
+
+  it("bolds spaced thousands and amounts at the edges", () => {
+    expect(emphasizeOfferAmounts("200 000 zł na start i 8%")).toEqual([
+      { text: "200 000 zł", bold: true },
+      { text: " na start i ", bold: false },
+      { text: "8%", bold: true },
+    ]);
+  });
 });
 
 describe("getOfferHighlights", () => {
@@ -126,5 +134,80 @@ describe("getOfferHighlights", () => {
 
   it("returns an empty list when there is no description or bonus", () => {
     expect(getOfferHighlights({})).toEqual([]);
+  });
+
+  it("defaults to four highlights when maxItems is omitted", () => {
+    const highlights = getOfferHighlights({
+      description: [
+        block("A 100 zł", "bullet"),
+        block("B 200 zł", "bullet"),
+        block("C 300 zł", "bullet"),
+        block("D 400 zł", "bullet"),
+        block("E 500 zł", "bullet"),
+      ],
+    });
+
+    expect(highlights).toEqual([
+      "A 100 zł",
+      "B 200 zł",
+      "C 300 zł",
+      "D 400 zł",
+    ]);
+  });
+
+  it("returns no highlights when the limit is zero", () => {
+    expect(
+      getOfferHighlights(
+        {
+          bonusRequirement: "Załóż konto i wpłać 1000 zł w 30 dni",
+          description: [block("Do 700 zł premii", "bullet")],
+        },
+        0
+      )
+    ).toEqual([]);
+  });
+
+  it("prepends bonusRequirement onto unstructured description fallbacks", () => {
+    const fallback =
+      "Oferta jest skierowana do nowych klientów indywidualnych, którzy chcą otworzyć konto i korzystać z bankowości internetowej na co dzień.";
+    const highlights = getOfferHighlights({
+      bonusRequirement: "Załóż konto i wpłać 1000 zł w 30 dni",
+      description: [block(fallback)],
+    });
+
+    expect(highlights[0]).toBe("Załóż konto i wpłać 1000 zł w 30 dni");
+    expect(highlights).toContain(fallback);
+  });
+
+  it("keeps paragraph highlights instead of replacing them with bonusRequirement", () => {
+    const highlights = getOfferHighlights({
+      bonusRequirement: "Załóż konto i wpłać 1000 zł w 30 dni",
+      description: [block("Do 700 zł premii dla nowych klientów")],
+    });
+
+    expect(highlights).toEqual(["Do 700 zł premii dla nowych klientów"]);
+  });
+
+  it("ignores blank bonusRequirement and duplicate highlight wording", () => {
+    expect(
+      getOfferHighlights({
+        bonusRequirement: "   ",
+        description: [
+          block("Do 700 zł premii dla nowych klientów", "bullet"),
+          block("Do 700 zł premii dla nowych klientów", "bullet"),
+        ],
+      })
+    ).toEqual(["Do 700 zł premii dla nowych klientów"]);
+  });
+
+  it("truncates long highlights with an ellipsis", () => {
+    const longBonus = `${"Wpłać środki i utrzymaj saldo przez wymagany okres promocji. ".repeat(4)}Koniec.`;
+    const [highlight] = getOfferHighlights({
+      bonusRequirement: longBonus,
+    });
+
+    expect(highlight.endsWith("…")).toBe(true);
+    expect(highlight.length).toBe(140);
+    expect(longBonus.startsWith(highlight.slice(0, -1))).toBe(true);
   });
 });
