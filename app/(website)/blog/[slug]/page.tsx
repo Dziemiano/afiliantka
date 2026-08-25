@@ -86,7 +86,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         image,
         link,
         featured,
-        category
+        category,
+        description,
+        bonusRequirement
       }
     }`,
     { slug },
