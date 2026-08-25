@@ -73,10 +73,10 @@ export async function HeroSection() {
   return (
     <section
       data-home-section="hero"
-      className={`relative overflow-hidden bg-transparent py-14 sm:py-20 lg:py-28 px-4 sm:px-6 ${density.hero}`}
+      className={`relative overflow-hidden bg-transparent py-14 sm:py-20 lg:py-4 px-4 sm:px-6 ${density.hero}`}
     >
       <div
-        className={`relative max-w-4xl mx-auto text-center flex flex-col items-center gap-6 sm:gap-8 ${density.heroContent}`}
+        className={`relative max-w-4xl mx-auto text-center flex flex-col items-center gap-6 sm:gap-8 lg:gap-3 ${density.heroContent}`}
       >
         <h1
           className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight drop-shadow-md ${density.heroTitle}`}

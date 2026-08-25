@@ -94,10 +94,9 @@ describe("homepage short-desktop presentation contract", () => {
     sanityFetch.mockReset();
   });
 
-  it("activates only at desktop width through 720px height without viewport hacks", () => {
-    expect(densityStyles).toContain(
-      "@media (min-width: 64rem) and (max-height: 45rem)"
-    );
+  it("activates at desktop width without viewport hacks", () => {
+    expect(densityStyles).toContain("@media (min-width: 64rem)");
+    expect(densityStyles).not.toContain("max-height");
     expect(densityStyles).not.toMatch(
       /^\s*(transform|scale|zoom|position|inset|clip-path|max-height)\s*:/m
     );

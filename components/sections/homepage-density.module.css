@@ -1,67 +1,67 @@
-@media (min-width: 64rem) and (max-height: 45rem) {
-  .headerInner {
+@media (min-width: 64rem) {
+  .headerInner.headerInner {
     padding-block: 0.25rem;
   }
 
-  .hero {
+  .hero.hero {
     padding-block: 1rem;
   }
 
-  .heroContent {
+  .heroContent.heroContent {
     gap: 0.75rem;
   }
 
-  .heroTitle {
+  .heroTitle.heroTitle {
     font-size: 2.25rem;
     line-height: 1.1;
   }
 
-  .heroDescription {
+  .heroDescription.heroDescription {
     font-size: 1rem;
     line-height: 1.5;
   }
 
-  .howItWorks {
+  .howItWorks.howItWorks {
     padding-block: 0.75rem;
   }
 
-  .howHeading {
+  .howHeading.howHeading {
     margin-bottom: 0.25rem;
     font-size: 1.5rem;
     line-height: 2rem;
   }
 
-  .howIntro {
+  .howIntro.howIntro {
     margin-bottom: 0.75rem;
     font-size: 0.875rem;
     line-height: 1.25rem;
   }
 
-  .stepsGrid {
+  .stepsGrid.stepsGrid {
     gap: 0.75rem;
   }
 
-  .stepConnector {
+  .stepConnector.stepConnector {
     top: 1.25rem;
   }
 
-  .stepIcon {
+  .stepIcon.stepIcon {
     width: 2.5rem;
     height: 2.5rem;
     margin-bottom: 0.5rem;
   }
 
-  .stepCard {
+  .stepCard.stepCard {
     padding: 0.75rem;
   }
 
-  .stepTitle {
+  .stepTitle.stepTitle {
     margin-bottom: 0.25rem;
     font-size: 1rem;
     line-height: 1.5rem;
   }
 
-  .stepDescription {
+  .stepDescription.stepDescription {
     display: -webkit-box;
     overflow: hidden;
     line-height: 1.25rem;
@@ -69,24 +69,24 @@
     -webkit-line-clamp: 2;
   }
 
-  .featured {
+  .featured.featured {
     padding-block: 0.5rem;
   }
 
-  .featuredHeader {
+  .featuredHeader.featuredHeader {
     margin-bottom: 0.75rem;
   }
 
-  .offerMedia {
+  .offerMedia.offerMedia {
     aspect-ratio: 3 / 1;
   }
 
-  .offerBody {
+  .offerBody.offerBody {
     gap: 0.5rem;
     padding: 0.75rem;
   }
 
-  .offerTitle {
+  .offerTitle.offerTitle {
     display: block;
     font-size: 1rem;
     line-height: 1.5rem;

@@ -100,7 +100,7 @@ export function Header({
       className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/80 backdrop-blur-lg"
     >
       <div
-        className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between ${density.headerInner}`}
+        className={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-1 flex items-center justify-between ${density.headerInner}`}
       >
         <Link href="/" className="flex items-center gap-1.5 min-h-[44px]">
           {logoUrl ? (

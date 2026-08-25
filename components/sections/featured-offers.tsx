@@ -62,7 +62,7 @@ export function FeaturedOffers({
           className="w-full"
         >
           <div
-            className={`mb-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between ${density.featuredHeader}`}
+            className={`mb-6 lg:mb-3 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between ${density.featuredHeader}`}
           >
             <h2 className="text-white text-xl font-bold drop-shadow-sm sm:text-2xl">
               Polecane oferty
