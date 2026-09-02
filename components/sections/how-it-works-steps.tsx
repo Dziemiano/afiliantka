@@ -20,7 +20,7 @@ export function HowItWorksSteps({ steps }: HowItWorksStepsProps) {
   return (
     <div className="relative">
       <div
-        className={`hidden lg:block absolute top-10 left-[calc(16.67%+24px)] right-[calc(16.67%+24px)] h-0.5 bg-gradient-to-r from-brand/20 via-brand/40 to-brand/20 ${density.stepConnector}`}
+        className={`hidden lg:block absolute top-10 left-[calc(16.67%+24px)] right-[calc(16.67%+24px)] h-0.5 bg-gradient-to-r from-white/30 via-white/70 to-white/30 ${density.stepConnector}`}
       />
 
       <div
@@ -40,18 +40,18 @@ export function HowItWorksSteps({ steps }: HowItWorksStepsProps) {
               </div>
 
               {idx < steps.length - 1 && (
-                <div className="absolute -bottom-4 left-1/2 w-0.5 h-8 bg-slate-200 sm:hidden" />
+                <div className="absolute -bottom-4 left-1/2 w-0.5 h-8 bg-white/55 sm:hidden" />
               )}
 
               {idx < steps.length - 1 && (
                 <ArrowRight
-                  className="hidden sm:block lg:hidden absolute -right-3 top-5 h-4 w-4 text-slate-300"
+                  className="hidden sm:block lg:hidden absolute -right-3 top-5 h-4 w-4 text-white/70"
                   aria-hidden="true"
                 />
               )}
 
               <div
-                className={`bg-white border border-slate-100 rounded-xl p-6 hover:shadow-md transition-shadow duration-300 w-full h-full ${density.stepCard}`}
+                className={`w-full h-full rounded-2xl border border-white/45 bg-white/45 p-6 shadow-[0_8px_32px_rgba(15,23,42,0.12)] backdrop-blur-xl transition-all duration-300 hover:border-white/70 hover:bg-white/60 hover:shadow-xl ${density.stepCard}`}
               >
                 <h3
                   className={`text-slate-800 font-semibold text-lg mb-2 ${density.stepTitle}`}
