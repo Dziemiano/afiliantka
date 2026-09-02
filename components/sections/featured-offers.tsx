@@ -51,7 +51,7 @@ export function FeaturedOffers({
   return (
     <section
       data-home-section="featured-offers"
-      className={`py-4 px-4 sm:px-6 lg:px-8 ${density.featured}`}
+      className={`pt-4 pb-10 sm:pb-12 lg:pb-4 px-4 sm:px-6 lg:px-8 ${density.featured}`}
     >
       <div className="max-w-6xl mx-auto">
         <Carousel

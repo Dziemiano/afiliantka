@@ -27,14 +27,16 @@ export async function HowItWorksSection() {
       data-home-section="how-it-works"
       className={`bg-transparent py-16 sm:py-20 lg:py-3 px-4 sm:px-6 lg:px-8 ${density.howItWorks}`}
     >
-      <div className="max-w-5xl mx-auto">
+      <div
+        className={`max-w-5xl mx-auto rounded-3xl border border-white/45 bg-white/45 p-6 sm:p-8 lg:p-3 shadow-[0_8px_32px_rgba(15,23,42,0.12)] backdrop-blur-xl ${density.howSurface}`}
+      >
         <h2
-          className={`text-white text-2xl sm:text-3xl font-bold mb-4 lg:mb-1 text-center drop-shadow-sm ${density.howHeading}`}
+          className={`text-slate-950 text-2xl sm:text-3xl font-bold mb-4 lg:mb-1 text-center ${density.howHeading}`}
         >
           Jak to działa?
         </h2>
         <p
-          className={`text-white/75 text-center mb-12 lg:mb-3 max-w-2xl mx-auto ${density.howIntro}`}
+          className={`text-slate-700 text-center mb-12 lg:mb-3 max-w-2xl mx-auto ${density.howIntro}`}
         >
           Zacznij zarabiać w kilku prostych krokach
         </p>

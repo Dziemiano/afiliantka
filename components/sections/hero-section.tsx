@@ -49,7 +49,7 @@ export async function HeroSection() {
     },
     marks: {
       strong: ({ children }: { children?: React.ReactNode }) => (
-        <strong className="font-semibold text-white">{children}</strong>
+        <strong className="font-semibold text-slate-950">{children}</strong>
       ),
       link: ({
         value,
@@ -76,16 +76,16 @@ export async function HeroSection() {
       className={`relative overflow-hidden bg-transparent py-14 sm:py-20 lg:py-4 px-4 sm:px-6 ${density.hero}`}
     >
       <div
-        className={`relative max-w-4xl mx-auto text-center flex flex-col items-center gap-6 sm:gap-8 lg:gap-3 ${density.heroContent}`}
+        className={`relative max-w-4xl mx-auto text-center flex flex-col items-center gap-6 sm:gap-8 lg:gap-3 rounded-3xl border border-white/45 bg-white/45 p-6 sm:p-8 lg:p-4 shadow-[0_8px_32px_rgba(15,23,42,0.12)] backdrop-blur-xl ${density.heroContent}`}
       >
         <h1
-          className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight drop-shadow-md ${density.heroTitle}`}
+          className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 leading-[1.1] tracking-tight ${density.heroTitle}`}
         >
           {heroContent?.title || "Aktualne oferty bankowe z bonusem"}
         </h1>
 
         <div
-          className={`text-base sm:text-lg lg:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto drop-shadow-sm ${density.heroDescription}`}
+          className={`text-base sm:text-lg lg:text-xl text-slate-700 leading-relaxed max-w-2xl mx-auto ${density.heroDescription}`}
         >
           {heroContent?.description ? (
             <PortableText

@@ -9,6 +9,7 @@
 
   .heroContent.heroContent {
     gap: 0.75rem;
+    padding: 1rem;
   }
 
   .heroTitle.heroTitle {
@@ -23,6 +24,10 @@
 
   .howItWorks.howItWorks {
     padding-block: 0.75rem;
+  }
+
+  .howSurface.howSurface {
+    padding: 0.75rem;
   }
 
   .howHeading.howHeading {
@@ -70,11 +75,20 @@
   }
 
   .featured.featured {
-    padding-block: 0.5rem;
+    padding-block: 0.5rem 1rem;
   }
 
   .featuredHeader.featuredHeader {
     margin-bottom: 0.75rem;
+  }
+
+  .allOffersCta.allOffersCta {
+    padding-top: 0.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .allOffersCtaZone.allOffersCtaZone {
+    padding-top: 1rem;
   }
 
   .offerMedia.offerMedia {
