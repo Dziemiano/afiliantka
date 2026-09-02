@@ -52,9 +52,9 @@ export function Footer({
   ];
 
   return (
-    <footer className="bg-transparent text-slate-300">
-      <div className="max-w-6xl mx-4 my-8 rounded-2xl bg-slate-950/80 px-4 py-8 shadow-lg sm:mx-6 sm:px-6 sm:py-10 lg:mx-auto lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-8">
+    <footer className="bg-transparent text-slate-300 px-4 sm:px-6 lg:px-8 pb-8">
+      <div className="max-w-6xl mx-auto rounded-3xl border border-white/10 bg-slate-950/70 px-4 py-8 shadow-[0_8px_32px_rgba(15,23,42,0.24)] backdrop-blur-xl sm:px-6 sm:py-10 lg:px-10">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="text-xl font-bold text-white">
               Afiliantka
@@ -114,7 +114,7 @@ export function Footer({
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white transition-colors"
+                    className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10 hover:text-white transition-colors"
                     aria-label={link.label}
                   >
                     <link.icon className="h-5 w-5" />
@@ -126,13 +126,11 @@ export function Footer({
         </div>
       </div>
 
-      <div className="border-t border-slate-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-          <p className="mx-auto w-fit rounded-full bg-slate-950/80 px-4 py-2 text-sm text-slate-200 text-center shadow-sm">
-            &copy; {new Date().getFullYear()} Afiliantka Faceless. Wszelkie prawa
-            zastrzeżone.
-          </p>
-        </div>
+      <div className="max-w-6xl mx-auto mt-6">
+        <p className="mx-auto w-fit rounded-full border border-white/10 bg-slate-950/70 px-4 py-2 text-sm text-slate-200 text-center shadow-[0_8px_32px_rgba(15,23,42,0.24)] backdrop-blur-xl">
+          &copy; {new Date().getFullYear()} Afiliantka Faceless. Wszelkie prawa
+          zastrzeżone.
+        </p>
       </div>
     </footer>
   );
