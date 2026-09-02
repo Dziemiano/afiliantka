@@ -24,6 +24,7 @@ async function getFeaturedOffers(): Promise<Offer[]> {
     link,
     featured,
     category,
+    bonusRequirement,
     files[]{
       _key,
       asset->{

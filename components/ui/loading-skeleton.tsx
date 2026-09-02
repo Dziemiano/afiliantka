@@ -8,8 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function OfferCardSkeleton() {
   return (
-    <Card className="overflow-hidden bg-white border-stone-200">
-      <Skeleton className="h-48 w-full bg-stone-100" />
+    <Card className="overflow-hidden border-white/45 bg-white/45 backdrop-blur-xl">
+      <Skeleton className="mx-auto mt-5 h-16 w-32 bg-white/50" />
       <CardHeader>
         <Skeleton className="h-6 w-3/4 bg-stone-100" />
       </CardHeader>

@@ -1,161 +1,83 @@
 # AGENTS.md — Afiliantka Faceless
 
-## Product
+## Project
 
-Dual-host Next.js platform: public bank-offers website (`WEB_HOST`) + invite-only SaaS dashboard (`APP_HOST`) for affiliates (onboarding, materials, admin).
+Dual-host Next.js platform: a public bank-offers website (`WEB_HOST`) and an invite-only affiliate app (`APP_HOST`).
 
-- Spec: [`docs/PROJECT_SPEC.md`](./docs/PROJECT_SPEC.md)
-- Backlog: [`ROADMAP.md`](./ROADMAP.md)
-- Conventions: [`.cursor/rules/guidelines.mdc`](./.cursor/rules/guidelines.mdc)
+- Product requirements: [`docs/PROJECT_SPEC.md`](./docs/PROJECT_SPEC.md)
+- Priorities: [`ROADMAP.md`](./ROADMAP.md)
+- Global conventions: [`.cursor/rules/guidelines.mdc`](./.cursor/rules/guidelines.mdc)
+- Frontend: [`.cursor/rules/frontend.mdc`](./.cursor/rules/frontend.mdc)
+- Backend: [`.cursor/rules/backend.mdc`](./.cursor/rules/backend.mdc)
+- Testing: [`.cursor/rules/testing.mdc`](./.cursor/rules/testing.mdc)
 
-## Stack
+## Linear and branches
 
-- Next.js App Router + TypeScript + React (Vercel)
-- Sanity CMS (`sanity.config.ts`, `sanity/lib/client.ts`)
-- Supabase Auth (magic link OTP), Postgres, RLS
-- Vercel Blob + Google Drive (service account)
-- Tailwind CSS 4, shadcn/ui, Vitest (+ CI)
+- Team: **Dziemiano** (`DZI`)
+- Project: [Afiliantka Faceless](https://linear.app/dziemiano/project/afiliantka-faceless-db72de5feef7)
+- Project ID: `dbce88bb-1fc2-48f2-a138-fb63feab7065`
+- Base and PR target: **`new-spec-development`** until the policy switches to `preview`
+- Branches: `feat/dzi-<n>-short-slug`, `fix/...`, `chore/...`, or `docs/...`
 
-## Linear
+Use this Linear project only. One issue maps to one focused branch and PR; never target `main` unless a human explicitly asks.
 
-- **Team:** Dziemiano (`DZI`)
-- **Project:** [Afiliantka Faceless](https://linear.app/dziemiano/project/afiliantka-faceless-db72de5feef7)
-- **Project ID:** `dbce88bb-1fc2-48f2-a138-fb63feab7065`
+## Required workflow
 
-Always create and filter issues under this project only — never other workspace projects (e.g. MTG).
+Multi-agent delivery is mandatory for Linear issues:
 
-## Integration branch (temporary)
+1. **orchestrator** selects unblocked work and sends a compact assignment.
+2. **frontend-dev** and/or **backend-dev** implement one assigned issue.
+3. **test-dev** validates or adds coverage for every behavioral change.
+4. The implementation PR targets `new-spec-development`.
+5. **pr-reviewer** reviews the open PR.
+6. **Bugbot** reviews non-trivial UI, API, auth, or data changes; **Security Review** is also required for high-risk auth, roles, RLS, migration, upload, or Drive changes.
+7. A human merges, then sends `merged` or `next` before the orchestrator selects more work.
 
-| Now | Later |
-|---|---|
-| **Base / PR target:** `new-spec-development` | Will switch to `preview` |
+Do not replace this pipeline with one general-purpose agent. Model tier controls cost and capability only; it never removes a required test or review gate. Routing details and the handoff format live in [`.cursor/agents/orchestrator.md`](./.cursor/agents/orchestrator.md).
 
-- Every task branch is created **from latest `new-spec-development`**
-- Every PR targets **`new-spec-development`** until policy changes
-- Do not open task PRs against `main` unless a human explicitly asks
+### Parallel work
 
-## Multi-agent workflow
+Run issues in parallel only when they have no blocker relationship and their expected paths do not overlap. Each issue still needs its own branch and PR. Otherwise run sequentially.
 
-**Mandatory.** Do not implement an entire Linear issue end-to-end in a single general chat as a substitute for this pipeline. The parent/orchestrator session **must** launch specialized agents via the Task tool (or equivalent subagents).
+### Ready-for-merge gate
 
-```
-Linear (Afiliantka Faceless)
-        │
-        ▼
-  Orchestrator ── picks unblocked issue(s)
-        │
-        ├─► frontend-dev  ─┐
-        ├─► backend-dev   ─┼─► branch + implement (own branch per issue)
-        └─► test-dev      ─┘   ← required when any logic/UI behavior changes
-                │
-                ▼
-          PR opened (draft OK until reviews pass)
-                │
-                ▼
-          pr-reviewer + Bugbot (+ Security Review if needed)
-                │               ← required before asking human to merge
-                ▼
-          fixes if required
-                │
-                ▼
-          Human merges PR
-                │
-                ▼
-          Human pings orchestrator ("merged" / "next")
-                │
-                ▼
-          Next unblocked Linear issue(s)
-```
+- Acceptance criteria and declared scope are satisfied.
+- Behavioral changes have tests; `npm test` and CI are green. Pure docs/copy may use **Tests: N/A**.
+- test-dev and pr-reviewer completed.
+- Bugbot completed for non-trivial changes.
+- Security Review completed where required.
+- Findings are fixed and checks re-run; known CI, hydration, or security failures block readiness.
 
-1. **Orchestrator** (`.cursor/agents/orchestrator.md`) — selects Linear issues, checks blockers, decides sequential vs parallel, briefs specialized agents.
-2. **frontend-dev** (`.cursor/agents/frontend-dev.md`) — UI / public site / dashboard pages / components.
-3. **backend-dev** (`.cursor/agents/backend-dev.md`) — API routes, Supabase, lib/, Drive/Blob, auth/roles.
-4. **test-dev** (`.cursor/agents/test-dev.md`) — Vitest (and e2e when present); **required** on every non-docs issue that changes behavior; may run after or with a feature agent.
-5. **pr-reviewer** (`.cursor/agents/pr-reviewer.md`) — scope, SPEC, tests, security; **must** run after PR open; triggers Bugbot / Security Review skills.
-6. **Human** — merges PR; tells orchestrator work is unblocked for the next issue.
+## PR contract
 
-### Pre-PR gate (hard)
+Every PR includes:
 
-Before marking a PR ready for human merge:
+- Linear issue link and one-concern scope
+- What changed and why
+- How it was tested, or **Tests: N/A** for pure docs/copy
+- Risk and selected model tier
+- Confirmation of test-dev, pr-reviewer, Bugbot, and Security Review status
 
-1. **test-dev** (or equivalent): tests added/updated for new or changed logic; `npm test` green
-2. **pr-reviewer** agent run on the PR
-3. **Bugbot** skill/subagent run on non-trivial PRs (UI, auth, API, data)
-4. Fix findings; re-run tests; do not ask the human to merge with known hydration/CI failures
+## Definition of done
 
-Skipping specialized agents to “ship faster” is a process failure — fix process, then code.
+- [ ] Acceptance criteria met; out-of-scope work excluded
+- [ ] Tests cover changed behavior; local and CI checks pass
+- [ ] TSX changes are mobile-first
+- [ ] No secrets committed; service role remains server-only
+- [ ] Required specialist and review gates completed; findings addressed
+- [ ] PR contract completed and Linear issue linked
 
-### Testing (hard)
+## Ownership
 
-- Every behavioral change needs corresponding Vitest coverage (pure helpers in `lib/`, parsers, guards, normalize functions). Prefer extracting testable logic from React components.
-- Pure docs / copy-only PRs may skip tests with an explicit **Tests: N/A** note in the PR body.
-- “UI-only” is not an excuse to skip tests when there is filter/toggle/normalize/branching logic — extract it and test it.
-- See [`.cursor/rules/testing.mdc`](./.cursor/rules/testing.mdc).
+| Area | Paths | Detailed owner |
+|---|---|---|
+| Frontend/UI | `app/(website)/**`, `app/(app)/**/{page,layout}.tsx`, `components/**` | `frontend.mdc`, frontend-dev, frontend-ui skill |
+| Backend/API | `app/(app)/api/**`, `lib/**`, `supabase/**`, `middleware.ts` | `backend.mdc`, backend-dev |
+| Testing | `**/*.{test,spec}.*`, `vitest.config.*`, `e2e/**` | `testing.mdc`, test-dev |
+| CMS schemas | `sanity.config.ts`, `sanity/**` | `backend.mdc`, backend-dev |
 
-### Parallelism
+## Hard process constraints
 
-Orchestrator **may** run multiple specialized agents in parallel when:
-
-- Issues have **no** Linear blocker / blocked-by relation to each other
-- Expected file touch sets **do not overlap** (orchestrator must state paths per issue)
-- Each issue still gets its **own branch** and **own PR**
-
-If paths may collide or issues share a feature slice → run **sequentially**.
-
-### After merge (unlock next work)
-
-Cursor has no automatic GitHub merge webhook in this setup. Unlock is:
-
-1. Human merges the PR on GitHub
-2. Human messages the orchestrator session: `merged` / `next` (optionally with PR URL or issue id)
-3. Orchestrator verifies (optional: `gh pr view` / Linear issue status), closes/updates Linear if needed, picks the next unblocked issue(s)
-
-Until that ping, do not start the next issue in the same orchestration loop.
-
-## Linear / PR contract
-
-- One Linear issue → one branch → one focused PR → merge into **`new-spec-development`**
-- Branch naming: `feat/dzi-<n>-short-slug`, `fix/...`, `chore/...`, `docs/...`
-- Target ~1–4 hours; **one concern only**
-- Reject kitchen-sink PRs (do not combine unrelated Linear issues into one PR)
-- Every PR must include:
-  - Link to Linear issue
-  - What / why / how tested
-  - Tests added or updated (or **Tests: N/A** for pure docs) — missing tests = not ready
-  - Confirmation that pr-reviewer + Bugbot ran (or Bugbot N/A for trivial docs)
-
-## Definition of done (per issue)
-
-- [ ] Acceptance criteria in the Linear issue met
-- [ ] Out-of-scope items not implemented
-- [ ] Tests added/updated for changed behavior; `npm test` green; CI green when available
-- [ ] Mobile-first UI for any TSX changes (see frontend-ui skill)
-- [ ] No secrets committed; service role only on server
-- [ ] **pr-reviewer** + **Bugbot** completed on non-trivial PRs; findings addressed
-- [ ] PR explanation present; Linear issue linked
-- [ ] Delivered via specialized agents (not a single ad-hoc implementer skipping the pipeline)
-## Code boundaries
-
-| Area | Paths | Rule / agent |
-|------|-------|----------------|
-| Frontend / UI | `app/(website)/**`, `app/(app)/**/page.tsx`, `components/**` | `.cursor/rules/frontend.mdc`, frontend-dev |
-| Backend / API | `app/(app)/api/**`, `lib/**`, `supabase/**`, `middleware.ts` | `.cursor/rules/backend.mdc`, backend-dev |
-| Testing | `**/*.{test,spec}.*`, `vitest.config.*` | `.cursor/rules/testing.mdc`, test-dev |
-| CMS schemas | `sanity.config.ts`, `sanity/**` | guidelines + backend/frontend as needed |
-
-## Hard rules
-
-- Polish UI copy for user-facing strings
-- Dual hosts: never invent routes outside `app/(website)/` and `app/(app)/` (except root layout/globals)
-- API routes: always Supabase session check; admin routes use `isCurrentUserAdmin()`
-- Single Sanity client; no duplicate clients
-- Mobile-first mandatory for UI
-- Do not edit plan files under `~/.cursor/plans/` as part of implementation
-- Current product priority: Phase 5.5 (public visitor repositioning) before Phase 6 (chat) / Phase 7 (AI)
-
-## Starting work (orchestrator)
-
-1. Read this file + `docs/PROJECT_SPEC.md` + `ROADMAP.md`
-2. List unblocked issues in Linear project **Afiliantka Faceless**
-3. Brief the right specialized agent(s); create branches from `new-spec-development`
-4. After PR: run pr-reviewer (+ Bugbot); fix; wait for human merge + `merged`/`next` ping
+- Do not edit plan files under `~/.cursor/plans/` during implementation.
+- Current priority is Phase 5.5 before Phase 6 or Phase 7.
+- Do not start another issue in the same orchestration loop until the human sends `merged` or `next`.

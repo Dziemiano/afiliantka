@@ -78,7 +78,8 @@
   }
 
   .offerMedia.offerMedia {
-    aspect-ratio: 3 / 1;
+    height: 3.5rem;
+    max-width: 9rem;
   }
 
   .offerBody.offerBody {

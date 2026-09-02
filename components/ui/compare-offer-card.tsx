@@ -27,6 +27,7 @@ export function CompareOfferCard({
       offer={offer}
       className={className}
       presentation={presentation}
+      variant="glass"
       compareMode={compareMode}
       isCompareSelected={isCompareSelected}
       onCompareToggle={onCompareToggle}

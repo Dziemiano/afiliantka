@@ -5,133 +5,32 @@ alwaysApply: true
 
 # Afiliantka Project Guidelines
 
-## Agent workflow
-
-Multi-agent delivery is **mandatory** — see [`AGENTS.md`](../../AGENTS.md) and [`.cursor/agents/`](../agents/).
-
-Orchestrator → **frontend-dev / backend-dev / test-dev** (Task subagents) → PR → **pr-reviewer + Bugbot** → human merge → `merged`/`next` ping.
-
-- Do **not** open a “ready” PR without tests for changed behavior and without running pr-reviewer + Bugbot (non-trivial PRs).
-- Path-scoped rules: `frontend.mdc`, `backend.mdc`, `testing.mdc`.
-- Linear project: **Afiliantka Faceless** only (see `AGENTS.md`)
-- Integration branch **now:** `new-spec-development` (task branch + PR target); later switches to `preview`
-- After human merge, orchestrator continues only on explicit `merged` / `next` ping
-
-### Testing (always)
-
-- Every PR that changes behavior must add or update Vitest tests covering that behavior.
-- Extract pure logic from components into `lib/` (or colocated helpers) so it is unit-testable without a browser.
-- Docs/copy-only: explicit `Tests: N/A` in the PR body.
-- Details: [`.cursor/rules/testing.mdc`](./testing.mdc)
 ## Product Documentation
 
-Pełna specyfikacja produktu (wizja, aktualne i planowane funkcje, przepływy biznesowe, model danych): [`docs/PROJECT_SPEC.md`](../../docs/PROJECT_SPEC.md). Roadmapa: [`ROADMAP.md`](../../ROADMAP.md). Przeczytaj je przed implementacją nowych funkcji biznesowych.
+Read [`docs/PROJECT_SPEC.md`](../../docs/PROJECT_SPEC.md) and [`ROADMAP.md`](../../ROADMAP.md) before implementing product behavior.
 
 ## Architecture
 
-This is a dual-purpose Next.js app (App Router) with two hosts:
-- **Public website** (`WEB_HOST`) — Polish-language bank offers landing (visitor-facing); affiliate narrative on `/wspolpraca`; route group `app/(website)/`
-- **App platform** (`APP_HOST`) — authenticated dashboard/admin, route group `app/(app)/`
-
-Routing between hosts is handled by subdomain-based middleware in `middleware.ts`.
-
-## Tech Stack
-
-- **Framework**: Next.js 15 (App Router, Turbopack)
-- **CMS**: Sanity — schemas defined inline in `sanity.config.ts`, client at `sanity/lib/client.ts`
-- **Auth**: Supabase (magic link OTP) — server client at `lib/supabase/server.ts`, browser client at `lib/supabase/client.ts`
-- **File storage**: Vercel Blob (small files/uploads) + Google Drive API via service account (large content)
-- **Database**: Supabase (roles, user_roles, drive_sources tables)
-- **UI**: Tailwind CSS 4, shadcn/ui components in `components/ui/`, Lucide icons
-- **Language**: TypeScript strict, Polish UI text
-
-## Key Conventions
-
-### Route Groups
-- `app/(website)/` — public pages, no auth required
-- `app/(app)/` — authenticated app: dashboard, admin, studio, auth, API routes
-- Never create routes outside these two groups (except `app/layout.tsx` and `app/globals.css`)
-
-### API Routes
-- All API routes live under `app/(app)/api/`
-- Every API route must check Supabase session: `const { data: { session } } = await supabase.auth.getSession()`
-- Admin-only routes must additionally call `isCurrentUserAdmin()` from `lib/roles.ts`
-- Return `{ message: "..." }` in error responses with appropriate HTTP status
-
-### Auth & Roles
-- Auth uses Supabase magic link OTP — no passwords
-- Roles stored in `roles` + `user_roles` tables, checked via RPC `is_user_admin`
-- Use `createClient()` for user-scoped operations, `createAdminClient()` for service-role operations
-- Admin check: `isCurrentUserAdmin()` from `lib/roles.ts`
-
-### Sanity CMS
-- Single client: `import { client } from "@/sanity/lib/client"` — do NOT create duplicate clients
-- Schemas: `offer`, `heroSection`, `blog`, `faq`, `howItWorks`, `testimonial`, `cooperationPage` (defined in `sanity.config.ts`)
-- Images: `urlFor()` from `lib/sanity-image.ts`
-- Files: `getFileUrl()` from `lib/sanity-file.ts`
-- Portable Text blocks must be filtered before rendering: `blocks.filter(b => b && b._type)`
-
-### Google Drive
-- Service account client at `lib/google-drive.ts`
-- Drive sources (which folders/files to expose) stored in `drive_sources` Supabase table
-- Admin manages sources via `/admin/drive` (browse picker UI)
-- Downloads proxied through `/api/drive/download` which validates access against `drive_sources`
-- Always handle `null`/`undefined` mimeType — default to `"application/octet-stream"`
-
-### File Handling
-- Vercel Blob: upload via `/api/blobs`, list via `/api/blobs/list`
-- Google Drive: list via `/api/drive/list`, download via `/api/drive/download`
-- Shared types in `types/file.ts` — `FileItem` normalizes both sources
-- Dashboard pages fetch both sources in parallel and merge results
-
-### Components
-- UI primitives: `components/ui/` (shadcn/ui — button, card, input, badge, table, skeleton, scroll-area)
-- Layout components: `components/layout/` (header)
-- Section components: `components/sections/` (hero, featured-offers, all-offers-table)
-- Dashboard sidebar: `components/dashboard/sidebar.tsx`
-- Admin sidebar: `components/admin/sidebar.tsx`
-- All new components MUST follow mobile-first responsive patterns (see UI / Responsive Design below)
+- Public website: `WEB_HOST`, route group `app/(website)/`
+- Authenticated app: `APP_HOST`, route group `app/(app)/`
+- Host routing is handled in `middleware.ts`.
+- Do not create routes outside these groups except `app/layout.tsx` and `app/globals.css`.
 
 ## Code Style
 
 - No `console.log` — use `console.error` only in catch blocks for real errors
 - No `any` type — use proper types or `unknown` with type guards
 - No unused imports or variables
-- Polish language for all user-facing text
+- Polish for all user-facing text
 - No comments that just narrate what code does — only explain non-obvious intent
 - Always guard against `null`/`undefined` from external APIs before property access
 - Use `"use client"` only when the component needs browser APIs or interactivity
 
-## UI / Responsive Design
+## Mandatory gates
 
-**Mobile-first is mandatory.** Every page and component must be designed for the smallest viewport first, then enhanced for larger screens with Tailwind breakpoint modifiers.
-
-### Core Rules
-
-- **Start at 320px** — write base styles for mobile, then add `sm:`, `md:`, `lg:`, `xl:` modifiers for larger screens
-- **No fixed widths on containers** — use `w-full`, `max-w-*`, or percentage-based sizing; never hardcode pixel widths on layout elements
-- **Touch targets** — all interactive elements (buttons, links, checkboxes, toggles) must be at least 44x44px on mobile (`min-h-[44px] min-w-[44px]` or equivalent padding)
-- **Typography** — use Tailwind's relative type scale (`text-sm`, `text-base`, `text-lg`); ensure body text is at least `text-sm` (14px) on mobile for readability
-
-### Layout Patterns
-
-- **Sidebar**: must be hidden on mobile with a hamburger toggle or replaced by bottom navigation; visible as a fixed sidebar on `md:` and above
-- **Grids**: use `grid-cols-1` as the base, scale up via `sm:grid-cols-2`, `md:grid-cols-3`, `lg:grid-cols-4`
-- **Flex layouts**: default to `flex-col` (stacked) on mobile, switch to `flex-row` at `sm:` or `md:`
-- **Forms**: inputs and buttons must be `w-full` on mobile, can be constrained on larger screens
-- **Tables**: must be horizontally scrollable (`overflow-x-auto`) on mobile, or restructured as stacked cards
-- **Modals/Drawers**: full-screen on mobile (`fixed inset-0`), centered overlay on desktop
-
-### Anti-Patterns (NEVER do these)
-
-- Do NOT use `hidden` on an element without a responsive `sm:block`/`md:flex` counterpart — this hides content permanently on mobile
-- Do NOT set static `w-64`, `w-80` etc. on layout containers — these break on narrow screens
-- Do NOT build desktop-only layouts and add mobile later — always start mobile-first
-- Do NOT use small tap targets — icon-only buttons must have padding to reach 44px touch area
-
-### Viewport Verification
-
-Before finalizing any UI change, mentally verify the layout works at these widths:
-- **320px** — small phone (iPhone SE)
-- **768px** — tablet
-- **1280px** — desktop
+- Follow the multi-agent workflow and PR contract in [`AGENTS.md`](../../AGENTS.md).
+- Every behavioral change requires tests; pure docs/copy must state **Tests: N/A**.
+- Never commit secrets or expose service-role credentials to the client.
+- Frontend detail: [`frontend.mdc`](./frontend.mdc) and [the frontend UI skill](../skills/frontend-ui/SKILL.md).
+- Backend detail: [`backend.mdc`](./backend.mdc).
+- Test detail: [`testing.mdc`](./testing.mdc).

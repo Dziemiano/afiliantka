@@ -7,7 +7,7 @@ alwaysApply: false
 # Frontend
 
 - Prefer Server Components; `"use client"` only for browser APIs or interactivity.
-- Mobile-first mandatory — follow `.cursor/skills/frontend-ui/SKILL.md` and guidelines UI section.
+- Mobile-first mandatory — follow `.cursor/skills/frontend-ui/SKILL.md`.
 - Polish user-facing copy only.
 - Public routes live in `app/(website)/`; authenticated UI in `app/(app)/` (dashboard, admin, login).
 - Reuse `components/ui/` (shadcn); layout in `components/layout/`; sections in `components/sections/`.

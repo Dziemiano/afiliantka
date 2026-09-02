@@ -56,13 +56,15 @@ vi.mock("next/image", () => ({
 }));
 
 vi.mock("@/lib/sanity-image", () => ({
-  urlFor: () => ({
-    width: () => ({
-      height: () => ({
-        url: () => "https://example.test/offer.jpg",
-      }),
-    }),
-  }),
+  urlFor: () => {
+    const chain = {
+      width: () => chain,
+      height: () => chain,
+      fit: () => chain,
+      url: () => "https://example.test/offer.jpg",
+    };
+    return chain;
+  },
 }));
 
 import { Header } from "@/components/layout/header";
@@ -191,7 +193,7 @@ describe("homepage desktop-width density contract", () => {
       /\.howIntro\.howIntro\s*\{[\s\S]*?margin-bottom:\s*0\.75rem;/
     );
     expect(desktop).toMatch(
-      /\.offerMedia\.offerMedia\s*\{\s*aspect-ratio:\s*3\s*\/\s*1;\s*\}/
+      /\.offerMedia\.offerMedia\s*\{\s*height:\s*3\.5rem;\s*max-width:\s*9rem;\s*\}/
     );
     expect(desktop).toMatch(
       /\.offerTitle\.offerTitle\s*\{[\s\S]*?display:\s*block;[\s\S]*?-webkit-line-clamp:\s*unset;[\s\S]*?-webkit-box-orient:\s*unset;[\s\S]*?\}/
@@ -200,7 +202,7 @@ describe("homepage desktop-width density contract", () => {
       /\.stepDescription\.stepDescription\s*\{[\s\S]*?-webkit-line-clamp:\s*2;[^}]*\}/
     );
 
-    expect(outsideDesktop).not.toMatch(/aspect-ratio:\s*3\s*\/\s*1/);
+    expect(outsideDesktop).not.toMatch(/height:\s*3\.5rem/);
     expect(outsideDesktop).not.toMatch(/-webkit-line-clamp:\s*2/);
     expect(outsideDesktop).not.toMatch(/padding-block:\s*1rem/);
   });
@@ -313,10 +315,12 @@ describe("homepage desktop-width density contract", () => {
     expect(homepageMarkup).toContain("Konto z premią 500 zł");
     expect(homepageMarkup).toContain("Sprawdź ofertę");
     expect(homepageMarkup).toContain("min-h-[44px]");
-    expect(homepageMarkup).toContain("aspect-[16/10]");
+    expect(homepageMarkup).toContain("object-contain");
+    expect(homepageMarkup).not.toContain("aspect-[16/10]");
     expect(defaultMarkup).not.toContain("density-offer-media");
     expect(defaultMarkup).not.toContain("density-offer-body");
     expect(defaultMarkup).not.toContain("density-offer-title");
-    expect(defaultMarkup).toContain("aspect-[16/10]");
+    expect(defaultMarkup).toContain("object-contain");
+    expect(defaultMarkup).not.toContain("aspect-[16/10]");
   });
 });
