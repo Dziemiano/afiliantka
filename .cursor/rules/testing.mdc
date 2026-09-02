@@ -1,7 +1,7 @@
 ---
 description: Testing expectations for Vitest (and e2e when added)
 globs: "**/*.{test,spec}.{ts,tsx}",vitest.config.*,playwright.config.*,e2e/**
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Testing
@@ -12,7 +12,7 @@ alwaysApply: true
 - Missing tests = PR not ready for merge (see `AGENTS.md` Definition of Done).
 - Pure docs / copy-only PRs: write **Tests: N/A** in the PR body; otherwise tests are required.
 - Prefer extracting pure helpers into `lib/` (normalize, filter, guards, parsers) over untested branching inside React components.
-- Feature agents must leave hooks for **test-dev**; orchestrator must schedule test-dev before treating the issue as done.
+- Feature agents must leave testable seams; **test-dev** validates or adds coverage before the issue is ready.
 
 ## What to test
 
