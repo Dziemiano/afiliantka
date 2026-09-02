@@ -97,6 +97,10 @@ const featuredOffersSource = readFileSync(
   new URL("./featured-offers.tsx", import.meta.url),
   "utf8"
 );
+const homePageSource = readFileSync(
+  new URL("../../app/(website)/page.tsx", import.meta.url),
+  "utf8"
+);
 const headerSource = readFileSync(
   new URL("../layout/header.tsx", import.meta.url),
   "utf8"
@@ -146,6 +150,8 @@ const DOUBLED_SELECTORS = [
   ".stepDescription.stepDescription",
   ".featured.featured",
   ".featuredHeader.featuredHeader",
+  ".allOffersCta.allOffersCta",
+  ".allOffersCtaZone.allOffersCtaZone",
   ".offerMedia.offerMedia",
   ".offerBody.offerBody",
   ".offerTitle.offerTitle",
@@ -228,6 +234,12 @@ describe("homepage desktop-width density contract", () => {
     expect(desktop).toMatch(
       /\.stepDescription\.stepDescription\s*\{[\s\S]*?-webkit-line-clamp:\s*2;[^}]*\}/
     );
+    expect(desktop).toMatch(
+      /\.featured\.featured\s*\{[\s\S]*?padding-block:\s*0\.5rem 1rem;/
+    );
+    expect(desktop).toMatch(
+      /\.allOffersCtaZone\.allOffersCtaZone\s*\{[\s\S]*?padding-top:\s*1rem;/
+    );
 
     expect(outsideDesktop).not.toMatch(/height:\s*3\.5rem/);
     expect(outsideDesktop).not.toMatch(/-webkit-line-clamp:\s*2/);
@@ -269,7 +281,11 @@ describe("homepage desktop-width density contract", () => {
     expect(howItWorksSource).not.toContain("lg:py-16");
 
     expect(featuredOffersSource).toContain("density.featured");
+    expect(featuredOffersSource).toContain("pb-10");
     expect(featuredOffersSource).not.toContain("lg:py-28");
+    expect(homePageSource).toContain('data-home-section="all-offers-cta"');
+    expect(homePageSource).toContain("density.allOffersCta");
+    expect(homePageSource).toContain("border-t border-white/20");
     expect(headerSource).toContain("density.headerInner");
   });
 

@@ -120,6 +120,10 @@ describe("FeaturedOffers layout contract", () => {
         "px-4",
         "sm:px-6",
         "lg:px-8",
+        "pt-4",
+        "pb-10",
+        "sm:pb-12",
+        "lg:pb-4",
         "density-featured",
       ])
     );
