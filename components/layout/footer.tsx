@@ -15,8 +15,8 @@ function TikTokIcon({ className }: { className?: string }) {
 }
 
 const LEGAL_LINKS = [
-  { href: "#", label: "Polityka prywatności" },
-  { href: "#", label: "Regulamin" },
+  { href: "/polityka-prywatnosci", label: "Polityka prywatności" },
+  { href: "/regulamin", label: "Regulamin" },
 ];
 
 interface FooterProps {
@@ -105,7 +105,7 @@ export function Footer({
           {socialLinks.length > 0 && (
             <div>
               <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-                Social media
+                Media społecznościowe
               </h3>
               <div className="flex gap-4">
                 {socialLinks.map((link) => (

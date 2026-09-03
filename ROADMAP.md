@@ -139,7 +139,20 @@ Linear: DZI-48 (docs), DZI-49 (layout), DZI-50 (copy).
 - [x] **Blog gate** -- `/blog`, `/blog/[slug]` → `notFound()` gdy `showBlog === false`
 - [x] **Docs** -- ROADMAP + PROJECT_SPEC
 
-Linear: DZI-51 (hero+carousel), DZI-52 (bonusRequirement), DZI-53 (siteSettings). Order: 5.6 → 6 → 7.
+Linear: DZI-51 (hero+carousel), DZI-52 (bonusRequirement), DZI-53 (siteSettings). Order: 5.6 → 5.7 → 6 → 7.
+
+### Phase 5.7: Public Website UI Cohesion
+
+Unified shader + glass design system across all public pages; legal routes, visitor copy, and layout primitives.
+
+- [ ] **Design system** — `PublicSection`, `PublicGlassCard`, `PublicPageHero`, `public-surfaces.ts`; Geist font; website `not-found`
+- [ ] **Homepage** — refactor sections to primitives; bank-offer copy on how-it-works; remove desktop density hack
+- [ ] **Offers pages** — glass filter bar, unified page hero, offer detail glass shell
+- [ ] **Blog + współpraca** — glass cards; Lucide benefit icons on `/wspolpraca`; newsletter styling
+- [ ] **Legal pages** — `/polityka-prywatnosci`, `/regulamin`; footer links + sitemap
+- [ ] **Docs** — ROADMAP + PROJECT_SPEC sync
+
+Linear: DZI-62 (design system), DZI-63 (blog/wspolpraca), DZI-55 (legal), milestone Phase 5.7.
 
 ### Phase 6: Czat społecznościowy
 

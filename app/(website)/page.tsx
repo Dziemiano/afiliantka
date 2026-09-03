@@ -6,7 +6,7 @@ import { HeroSection } from "@/components/sections/hero-section";
 import { HowItWorksSection } from "@/components/sections/how-it-works-section";
 import { FeaturedOffers } from "@/components/sections/featured-offers";
 import { FaqSection } from "@/components/sections/faq-section";
-import density from "@/components/sections/homepage-density.module.css";
+import { PublicSection } from "@/components/layout/public-section";
 import { client } from "@/sanity/lib/client";
 import type { Offer } from "@/types/offer";
 
@@ -51,22 +51,19 @@ async function FeaturedOffersContent() {
 
 function AllOffersCta() {
   return (
-    <section
+    <PublicSection
       data-home-section="all-offers-cta"
-      className={`px-4 sm:px-6 lg:px-8 pt-2 sm:pt-4 lg:pt-2 pb-12 sm:pb-16 ${density.allOffersCta}`}
+      className="py-8 sm:py-12 lg:py-16"
+      innerClassName="flex justify-center border-t border-white/20 pt-8 sm:pt-10"
     >
-      <div
-        className={`max-w-6xl mx-auto flex justify-center border-t border-white/20 pt-8 sm:pt-10 lg:pt-6 ${density.allOffersCtaZone}`}
+      <Link
+        href="/oferty"
+        className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 min-h-[44px] text-base font-semibold text-white bg-cta hover:bg-cta-hover rounded-xl shadow-lg shadow-cta/25 transition-all duration-200 hover:shadow-xl hover:shadow-cta/30 hover:-translate-y-0.5"
       >
-        <Link
-          href="/oferty"
-          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 min-h-[44px] text-base font-semibold text-white bg-cta hover:bg-cta-hover rounded-xl shadow-lg shadow-cta/25 transition-all duration-200 hover:shadow-xl hover:shadow-cta/30 hover:-translate-y-0.5"
-        >
-          Zobacz wszystkie oferty
-          <ArrowRight className="h-5 w-5" aria-hidden="true" />
-        </Link>
-      </div>
-    </section>
+        Zobacz wszystkie oferty
+        <ArrowRight className="h-5 w-5" aria-hidden="true" />
+      </Link>
+    </PublicSection>
   );
 }
 

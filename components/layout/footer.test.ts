@@ -35,6 +35,8 @@ describe("Footer glass contract", () => {
     expect(markup).toContain("Strona główna");
     expect(markup).toContain("Blog");
     expect(markup).toContain("Polityka prywatności");
+    expect(markup).toContain("/polityka-prywatnosci");
+    expect(markup).toContain("/regulamin");
     expect(markup).toContain('aria-label="Instagram"');
     expect(markup).toContain("min-h-[44px]");
   });

@@ -159,7 +159,7 @@ export default async function OfferPage({ params }: OfferPageProps) {
         </div>
       )}
 
-      <main className="max-w-3xl mx-4 my-8 rounded-2xl bg-white/90 px-4 py-8 shadow-sm sm:mx-6 sm:px-6 sm:py-10 md:mx-auto">
+      <main className="max-w-3xl mx-4 my-8 rounded-3xl border border-white/45 bg-white/90 px-4 py-8 shadow-[0_8px_32px_rgba(15,23,42,0.12)] backdrop-blur-xl sm:mx-6 sm:px-6 sm:py-10 md:mx-auto">
         {!offer.image && (
           <>
             <nav

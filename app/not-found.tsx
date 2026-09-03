@@ -1,10 +1,26 @@
-"use client";
-
+import { headers } from "next/headers";
 import Link from "next/link";
 import { FileQuestion } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { normalizeHostname } from "@/lib/hosts";
+import WebsiteLayout from "@/app/(website)/layout";
+import { PublicNotFoundContent } from "@/components/layout/public-not-found-content";
 
-export default function NotFound() {
+const DEFAULT_WEB_HOST = "localhost";
+
+export default async function NotFound() {
+  const headersList = await headers();
+  const host = normalizeHostname(headersList.get("host") || "");
+  const webHost = process.env.WEB_HOST?.trim() || DEFAULT_WEB_HOST;
+
+  if (host === webHost) {
+    return (
+      <WebsiteLayout>
+        <PublicNotFoundContent />
+      </WebsiteLayout>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="max-w-md w-full text-center">
@@ -23,7 +39,7 @@ export default function NotFound() {
             <Link href="/">Strona główna</Link>
           </Button>
           <Button asChild variant="outline" className="min-h-[44px]">
-            <Link href="/oferty">Oferty</Link>
+            <Link href="/login">Logowanie</Link>
           </Button>
         </div>
       </div>

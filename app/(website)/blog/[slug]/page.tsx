@@ -13,6 +13,7 @@ import {
 import { RelatedOffers } from "@/components/sections/related-offers";
 import type { Offer } from "@/types/offer";
 import { getSiteSettings } from "@/lib/site-settings";
+import { publicSolidContent } from "@/lib/public-surfaces";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://afiliantkafaceless.pl";
@@ -142,7 +143,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
       )}
 
-      <main className="max-w-3xl mx-4 my-8 rounded-2xl bg-white/90 px-4 py-8 shadow-sm sm:mx-6 sm:px-6 sm:py-10 md:mx-auto">
+      <main
+        className={publicSolidContent(
+          "max-w-3xl mx-4 my-8 px-4 py-8 sm:mx-6 sm:px-6 sm:py-10 md:mx-auto"
+        )}
+      >
         <nav
           className="flex items-center gap-1.5 text-sm text-slate-400 mb-6"
           aria-label="Breadcrumb"

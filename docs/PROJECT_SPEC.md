@@ -19,7 +19,7 @@
 
 **Język UI:** polski.
 
-**Stan projektu:** rdzeń platformy (onboarding, role, pliki, panel admina, strona publiczna z ofertami, blogiem, newsletterem, analityką, `/wspolpraca`) jest zaimplementowany (fazy 1–5). Phase 5.5 (visitor repositioning) i Phase 5.6 (UI + Sanity: hero, carousel, `bonusRequirement`, `siteSettings`) są zrobione. **Następne:** strony prawne, czat (Phase 6), AI (Phase 7).
+**Stan projektu:** rdzeń platformy (onboarding, role, pliki, panel admina, strona publiczna z ofertami, blogiem, newsletterem, analityką, `/wspolpraca`) jest zaimplementowany (fazy 1–5). Phase 5.5 (visitor repositioning) i Phase 5.6 (UI + Sanity: hero, carousel, `bonusRequirement`, `siteSettings`) są zrobione. **Phase 5.7** (public UI cohesion — glass design system, legal pages) w toku. **Następne:** czat (Phase 6), AI (Phase 7).
 
 ---
 
@@ -122,6 +122,8 @@ flowchart TB
 | `/blog` | `app/(website)/blog/page.tsx` | Lista wpisów (wyróżniony + siatka) |
 | `/blog/[slug]` | `app/(website)/blog/[slug]/page.tsx` | Szczegóły wpisu (Portable Text), powiązane oferty, czas czytania, JSON-LD |
 | `/wspolpraca` | `app/(website)/wspolpraca/page.tsx` | Model współpracy faceless (CMS `cooperationPage`), CTA login / prośba o zaproszenie |
+| `/polityka-prywatnosci` | `app/(website)/polityka-prywatnosci/page.tsx` | Polityka prywatności (statyczna treść PL) |
+| `/regulamin` | `app/(website)/regulamin/page.tsx` | Regulamin serwisu publicznego (statyczna treść PL) |
 | `/go/[slug]` | `app/(website)/go/[slug]/route.ts` | Proxy redirect z trackingiem kliknięć |
 
 **Layout:** `app/(website)/layout.tsx` — `Header` + `Footer`.
@@ -156,7 +158,7 @@ flowchart TB
 
 **Nawigacja:**
 - Header: Oferty, Blog (gdy `showBlog`), Współpraca, Login/Dashboard (gdy `showLogin`); logo z `siteSettings` lub fallback tekstowy
-- Footer: linki nawigacyjne + social tylko gdy URL w `siteSettings`; polityka prywatności i regulamin nadal placeholdery (`href="#"`)
+- Footer: linki nawigacyjne + social tylko gdy URL w `siteSettings`; polityka prywatności i regulamin na `/polityka-prywatnosci` i `/regulamin`
 - Brak dokumentu `siteSettings` → `showBlog` i `showLogin` = `true`
 
 **Przepływ kliknięcia oferty (publiczny):**
@@ -170,6 +172,10 @@ Header → hero (tytuł + opis, bez CTA/obrazka) → Jak to działa → polecane
 
 Usunięte z home: pełna lista / filtr / compare, testimonials, newsletter (newsletter zostaje na blogu). Messaging afiliacyjny tylko na `/wspolpraca`.
 
+### 4.2.1 Design system publiczny (Phase 5.7)
+
+Wspólne prymitywy w `components/layout/` (`PublicSection`, `PublicGlassCard`, `PublicPageHero`) i tokeny w `lib/public-surfaces.ts`. Wszystkie strony publiczne używają shader + glass; długie treści (blog, oferta, legal) na półprzezroczystym panelu `bg-white/90`. Font: Geist (zgodny z `globals.css`). Publiczny 404: `app/(website)/not-found.tsx`.
+
 ### 4.3 Ukończone wcześniej — fazy publiczne (A–D / 4.5–4.8)
 
 | Faza | Zakres | Status |
@@ -179,7 +185,7 @@ Usunięte z home: pełna lista / filtr / compare, testimonials, newsletter (news
 | C / 4.7 | Newsletter, testimonials, compare, Portable Text blog | ✅ |
 | D / 4.8 | `/go/[slug]`, analytics, `/admin/analytics` | ✅ |
 
-Pozostałe otwarte poza 5.5: strony prawne (Polityka / Regulamin), rozszerzenie schematu `offer` (bonus, bank, data ważności).
+Pozostałe otwarte poza 5.7: rozszerzenie schematu `offer` (bank, data ważności).
 
 ---
 
@@ -506,7 +512,7 @@ Agent kodujący powinien uwzględniać te punkty przy każdej pracy:
 | 4 | `/api/blobs/list` bez filtrowania serwerowego | Wszystkie bloby widoczne dla zalogowanych | Filtrować po roli/sekcji server-side |
 | 5 | Tabela `invitations` niedowykorzystana | Token-based invite flow słaby | Zintegrować lub usunąć |
 | 6 | `NEXT_PUBLIC_SITE_URL` fallback `afiliantka.pl` | Niezgodność z produkcyjną domeną | Zmienić na `afiliantkafaceless.pl` |
-| 7 | Footer: linki prawne `#` | Brak compliance | Dodać Politykę i Regulamin |
+| 7 | ~~Footer: linki prawne `#`~~ | ~~Brak compliance~~ | Done — Phase 5.7 `/polityka-prywatnosci`, `/regulamin` |
 | 8 | Social footer bez URL w CMS | Brak ikon do czasu uzupełnienia `siteSettings` | Uzupełnić URL w Studio |
 | 9 | README może być nieaktualny | Mylące dla nowych deweloperów | Zaktualizować przy okazji |
 | 10 | ~~Phase 5.5 home layout / copy~~ | ~~Done~~ | DZI-49, DZI-50 |

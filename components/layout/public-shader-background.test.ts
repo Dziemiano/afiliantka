@@ -55,7 +55,7 @@ describe("PublicShaderBackground", () => {
       style: { backgroundColor: "#000000" },
     });
     expect(shaderCalls[1]).toMatchObject({
-      className: "absolute inset-0 w-full h-full opacity-60",
+      className: "absolute inset-0 w-full h-full opacity-50",
       colors: ["#000000", "#ffffff", "#06b6d4", "#f97316"],
       speed: 0,
       style: { backgroundColor: "transparent" },

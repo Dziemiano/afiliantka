@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import { Mail, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PublicSection } from "@/components/layout/public-section";
+import { PublicGlassCard } from "@/components/layout/public-glass-card";
 
 interface NewsletterSignupProps {
   source?: "home" | "blog";
@@ -74,7 +76,7 @@ export function NewsletterSignup({
         onChange={(e) => setEmail(e.target.value)}
         required
         disabled={status === "loading" || status === "success"}
-        className="min-h-[44px] border-slate-200 focus:border-brand focus:ring-brand/30 bg-white"
+        className="min-h-[44px] border-white/60 focus:border-brand focus:ring-brand/30 bg-white/90"
       />
       <Button
         type="submit"
@@ -111,15 +113,15 @@ export function NewsletterSignup({
   }
 
   return (
-    <section className="bg-transparent py-14 sm:py-16 px-4 sm:px-6 text-white">
-      <div className="max-w-2xl mx-auto rounded-2xl bg-slate-900/90 px-4 py-10 text-center sm:px-8">
+    <PublicSection className="py-12 sm:py-16">
+      <PublicGlassCard className="max-w-2xl mx-auto px-4 py-10 text-center sm:px-8">
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-brand/20 text-brand mb-4">
           <Mail className="h-6 w-6" aria-hidden="true" />
         </div>
-        <h2 className="text-2xl sm:text-3xl font-bold mb-3">
+        <h2 className="text-2xl sm:text-3xl font-bold text-slate-950 mb-3">
           Zapisz się do newslettera
         </h2>
-        <p className="text-slate-300 text-sm sm:text-base mb-6">
+        <p className="text-slate-600 text-sm sm:text-base mb-6">
           Otrzymuj informacje o nowych promocjach bankowych i poradach dotyczących
           ofert.
         </p>
@@ -127,13 +129,13 @@ export function NewsletterSignup({
         {message && (
           <p
             className={`mt-4 text-sm ${
-              status === "success" ? "text-green-400" : "text-red-400"
+              status === "success" ? "text-green-700" : "text-red-600"
             }`}
           >
             {message}
           </p>
         )}
-      </div>
-    </section>
+      </PublicGlassCard>
+    </PublicSection>
   );
 }

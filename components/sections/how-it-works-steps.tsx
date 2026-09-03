@@ -2,7 +2,7 @@
 
 import { FadeIn } from "@/components/ui/fade-in";
 import { ArrowRight } from "lucide-react";
-import density from "@/components/sections/homepage-density.module.css";
+import { PublicGlassCard } from "@/components/layout/public-glass-card";
 
 interface HowItWorksStep {
   _id: string;
@@ -19,19 +19,13 @@ interface HowItWorksStepsProps {
 export function HowItWorksSteps({ steps }: HowItWorksStepsProps) {
   return (
     <div className="relative">
-      <div
-        className={`hidden lg:block absolute top-10 left-[calc(16.67%+24px)] right-[calc(16.67%+24px)] h-0.5 bg-gradient-to-r from-white/30 via-white/70 to-white/30 ${density.stepConnector}`}
-      />
+      <div className="hidden lg:block absolute top-10 left-[calc(16.67%+24px)] right-[calc(16.67%+24px)] h-0.5 bg-gradient-to-r from-white/30 via-white/70 to-white/30" />
 
-      <div
-        className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-6 ${density.stepsGrid}`}
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-6">
         {steps.map((step, idx) => (
           <FadeIn key={step._id} delay={idx * 100}>
             <div className="relative flex flex-col items-center text-center h-full">
-              <div
-                className={`relative z-10 w-14 h-14 bg-brand text-white rounded-full flex items-center justify-center mb-5 shadow-lg shadow-brand/25 ${density.stepIcon}`}
-              >
+              <div className="relative z-10 w-14 h-14 bg-brand text-white rounded-full flex items-center justify-center mb-5 shadow-lg shadow-brand/25">
                 {step.icon ? (
                   <span className="text-xl">{step.icon}</span>
                 ) : (
@@ -50,20 +44,17 @@ export function HowItWorksSteps({ steps }: HowItWorksStepsProps) {
                 />
               )}
 
-              <div
-                className={`w-full h-full rounded-2xl border border-white/45 bg-white/45 p-6 shadow-[0_8px_32px_rgba(15,23,42,0.12)] backdrop-blur-xl transition-all duration-300 hover:border-white/70 hover:bg-white/60 hover:shadow-xl ${density.stepCard}`}
+              <PublicGlassCard
+                hover
+                className="w-full h-full rounded-2xl p-6"
               >
-                <h3
-                  className={`text-slate-800 font-semibold text-lg mb-2 ${density.stepTitle}`}
-                >
+                <h3 className="text-slate-800 font-semibold text-lg mb-2">
                   {step.title}
                 </h3>
-                <p
-                  className={`text-slate-500 text-sm leading-relaxed ${density.stepDescription}`}
-                >
+                <p className="text-slate-500 text-sm leading-relaxed">
                   {step.description}
                 </p>
-              </div>
+              </PublicGlassCard>
             </div>
           </FadeIn>
         ))}

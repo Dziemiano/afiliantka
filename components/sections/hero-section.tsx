@@ -1,6 +1,7 @@
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react";
-import density from "@/components/sections/homepage-density.module.css";
+import { PublicSection } from "@/components/layout/public-section";
+import { PublicGlassCard } from "@/components/layout/public-glass-card";
 
 interface PortableTextBlock {
   _type: string;
@@ -71,22 +72,18 @@ export async function HeroSection() {
   };
 
   return (
-    <section
+    <PublicSection
       data-home-section="hero"
-      className={`relative overflow-hidden bg-transparent py-14 sm:py-20 lg:py-4 px-4 sm:px-6 ${density.hero}`}
+      maxWidth="4xl"
+      className="py-14 sm:py-20 lg:py-24"
+      innerClassName="text-center"
     >
-      <div
-        className={`relative max-w-4xl mx-auto text-center flex flex-col items-center gap-6 sm:gap-8 lg:gap-3 rounded-3xl border border-white/45 bg-white/45 p-6 sm:p-8 lg:p-4 shadow-[0_8px_32px_rgba(15,23,42,0.12)] backdrop-blur-xl ${density.heroContent}`}
-      >
-        <h1
-          className={`text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 leading-[1.1] tracking-tight ${density.heroTitle}`}
-        >
+      <PublicGlassCard className="flex flex-col items-center gap-6 sm:gap-8 p-6 sm:p-8 lg:p-10">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-950 leading-[1.1] tracking-tight">
           {heroContent?.title || "Aktualne oferty bankowe z bonusem"}
         </h1>
 
-        <div
-          className={`text-base sm:text-lg lg:text-xl text-slate-700 leading-relaxed max-w-2xl mx-auto ${density.heroDescription}`}
-        >
+        <div className="text-base sm:text-lg lg:text-xl text-slate-700 leading-relaxed max-w-2xl mx-auto">
           {heroContent?.description ? (
             <PortableText
               value={heroContent.description}
@@ -96,7 +93,7 @@ export async function HeroSection() {
             "Porównaj promocje kont osobistych, firmowych i kart kredytowych. Spełnij warunki i odbierz korzyści za założenie konta."
           )}
         </div>
-      </div>
-    </section>
+      </PublicGlassCard>
+    </PublicSection>
   );
 }

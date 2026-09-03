@@ -3,13 +3,6 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import type { Offer } from "@/types/offer";
 
-vi.mock("@/components/sections/homepage-density.module.css", () => ({
-  default: {
-    featured: "density-featured",
-    featuredHeader: "density-featured-header",
-  },
-}));
-
 vi.mock("@/components/ui/carousel", async () => {
   const { createElement: createMockElement } = await import("react");
 
@@ -116,16 +109,7 @@ describe("FeaturedOffers layout contract", () => {
 
     expect(markup).toContain('data-home-section="featured-offers"');
     expect(section).toEqual(
-      expect.arrayContaining([
-        "px-4",
-        "sm:px-6",
-        "lg:px-8",
-        "pt-4",
-        "pb-10",
-        "sm:pb-12",
-        "lg:pb-4",
-        "density-featured",
-      ])
+      expect.arrayContaining(["px-4", "sm:px-6", "lg:px-8", "py-8", "sm:py-12"])
     );
     expect(outerContainer).toEqual(
       expect.arrayContaining(["max-w-6xl", "mx-auto"])
@@ -155,7 +139,6 @@ describe("FeaturedOffers layout contract", () => {
         "sm:flex-row",
         "sm:items-center",
         "sm:justify-between",
-        "density-featured-header",
       ])
     );
     expect(markup).toContain('aria-label="Poprzednie oferty"');

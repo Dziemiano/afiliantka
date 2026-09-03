@@ -5,14 +5,6 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import type { Offer } from "@/types/offer";
 
-vi.mock("@/components/sections/homepage-density.module.css", () => ({
-  default: {
-    offerMedia: "density-offer-media",
-    offerBody: "density-offer-body",
-    offerTitle: "density-offer-title",
-  },
-}));
-
 vi.mock("next/link", () => ({
   default: ({
     href,

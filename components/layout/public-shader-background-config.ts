@@ -22,7 +22,7 @@ export const PUBLIC_SHADER_LAYER_STYLES = Object.freeze({
     backgroundColor: "#000000",
   }),
   overlay: Object.freeze({
-    className: "absolute inset-0 w-full h-full opacity-60",
+    className: "absolute inset-0 w-full h-full opacity-50",
     backgroundColor: "transparent",
   }),
 });

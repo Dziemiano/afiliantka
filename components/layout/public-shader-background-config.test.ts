@@ -38,7 +38,7 @@ describe("public shader background contract", () => {
       "#f97316",
     ]);
     expect(PUBLIC_SHADER_LAYER_STYLES.overlay).toEqual({
-      className: "absolute inset-0 w-full h-full opacity-60",
+      className: "absolute inset-0 w-full h-full opacity-50",
       backgroundColor: "transparent",
     });
     expect(Object.isFrozen(PUBLIC_SHADER_OVERLAY_COLORS)).toBe(true);

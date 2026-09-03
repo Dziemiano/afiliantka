@@ -11,7 +11,6 @@ import {
   emphasizeOfferAmounts,
   getOfferHighlights,
 } from "@/lib/offer-highlights";
-import density from "@/components/sections/homepage-density.module.css";
 
 interface OfferCardProps {
   offer: Offer;
@@ -103,12 +102,7 @@ export function OfferCard({
             isCompareSelected && "ring-2 ring-brand border-brand"
           )}
         >
-          <div
-            className={cn(
-              "flex flex-1 flex-col gap-3 p-4 sm:p-5",
-              isHomepagePresentation && density.offerBody
-            )}
-          >
+          <div className="flex flex-1 flex-col gap-3 p-4 sm:p-5">
             <div
               className={cn(
                 "flex flex-wrap gap-1.5",
@@ -136,12 +130,7 @@ export function OfferCard({
               )}
             </div>
 
-            <div
-              className={cn(
-                "relative mx-auto h-16 w-full max-w-[11rem] sm:h-20",
-                isHomepagePresentation && density.offerMedia
-              )}
-            >
+            <div className="relative mx-auto h-16 w-full max-w-[11rem] sm:h-20">
               <Image
                 src={urlFor(offer.image).width(480).fit("max").url()}
                 alt={offer.title}
@@ -152,12 +141,7 @@ export function OfferCard({
               />
             </div>
 
-            <h3
-              className={cn(
-                "text-center text-base sm:text-lg font-bold text-slate-900 leading-snug group-hover:text-brand transition-colors",
-                isHomepagePresentation && density.offerTitle
-              )}
-            >
+            <h3 className="text-center text-base sm:text-lg font-bold text-slate-900 leading-snug group-hover:text-brand transition-colors">
               {offer.title}
             </h3>
 

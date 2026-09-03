@@ -1,5 +1,7 @@
 import { client } from "@/sanity/lib/client";
 import { ChevronDown, CircleHelp } from "lucide-react";
+import { PublicSection } from "@/components/layout/public-section";
+import { PublicGlassCard } from "@/components/layout/public-glass-card";
 
 interface FaqItem {
   _id: string;
@@ -21,11 +23,12 @@ export async function FaqSection() {
   if (items.length === 0) return null;
 
   return (
-    <section
+    <PublicSection
       data-home-section="faq"
-      className="bg-transparent py-16 sm:py-20 px-4 sm:px-6 lg:px-8"
+      maxWidth="3xl"
+      className="py-12 sm:py-16 lg:py-20"
     >
-      <div className="max-w-3xl mx-auto rounded-3xl border border-white/45 bg-white/45 p-6 sm:p-8 shadow-[0_8px_32px_rgba(15,23,42,0.12)] backdrop-blur-xl">
+      <PublicGlassCard className="p-6 sm:p-8">
         <h2 className="text-slate-950 text-2xl sm:text-3xl font-bold mb-4 text-center">
           Często zadawane pytania
         </h2>
@@ -35,9 +38,11 @@ export async function FaqSection() {
 
         <div className="space-y-3">
           {items.map((item) => (
-            <details
+            <PublicGlassCard
               key={item._id}
-              className="group rounded-2xl border border-white/45 bg-white/45 shadow-[0_8px_32px_rgba(15,23,42,0.12)] backdrop-blur-xl overflow-hidden transition-all duration-200 hover:border-white/70 hover:bg-white/60 hover:shadow-xl"
+              hover
+              as="details"
+              className="group rounded-2xl overflow-hidden"
             >
               <summary className="flex items-center justify-between gap-4 px-5 sm:px-6 py-5 cursor-pointer text-slate-900 font-medium text-sm sm:text-base min-h-[44px] list-none [&::-webkit-details-marker]:hidden select-none">
                 <span className="flex items-center gap-3 text-left">
@@ -56,10 +61,10 @@ export async function FaqSection() {
                   </div>
                 </div>
               </div>
-            </details>
+            </PublicGlassCard>
           ))}
         </div>
-      </div>
-    </section>
+      </PublicGlassCard>
+    </PublicSection>
   );
 }

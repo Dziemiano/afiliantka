@@ -8,6 +8,9 @@ import {
   OfferComparison,
   OfferCompareBar,
 } from "@/components/sections/offer-comparison";
+import { PublicPageHero } from "@/components/layout/public-page-hero";
+import { PublicSection } from "@/components/layout/public-section";
+import { PublicGlassCard } from "@/components/layout/public-glass-card";
 import type { Offer } from "@/types/offer";
 
 const MAX_COMPARE = 3;
@@ -79,21 +82,14 @@ export function OffersFilter({ offers, showPageHeader = false }: OffersFilterPro
   return (
     <>
       {showPageHeader && (
-        <section className="bg-transparent py-10 sm:py-14 px-4 sm:px-6">
-          <div className="max-w-6xl mx-auto text-center">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 drop-shadow-sm">
-              Oferty bankowe
-            </h1>
-            <p className="text-white/80 text-base sm:text-lg max-w-xl mx-auto">
-              Przeglądaj sprawdzone promocje bankowe — konta osobiste, firmowe i
-              karty kredytowe.
-            </p>
-          </div>
-        </section>
+        <PublicPageHero
+          title="Oferty bankowe"
+          subtitle="Przeglądaj sprawdzone promocje bankowe — konta osobiste, firmowe i karty kredytowe."
+        />
       )}
 
-      <div className="px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-2">
-        <div className="max-w-6xl mx-auto">
+      <PublicSection className="py-6 sm:py-8" innerClassName="">
+        <PublicGlassCard className="p-4 sm:p-6">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="overflow-x-auto -mx-2 px-2 sm:mx-0 sm:px-0">
@@ -105,7 +101,7 @@ export function OffersFilter({ offers, showPageHeader = false }: OffersFilterPro
                       className={`px-5 py-2.5 min-h-[44px] text-sm font-medium rounded-full transition-all duration-200 whitespace-nowrap ${
                         activeCategory === cat.key
                           ? "bg-brand text-white shadow-md shadow-brand/20"
-                          : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                          : "bg-white/80 text-slate-600 border border-white/60 hover:border-white hover:bg-white"
                       }`}
                     >
                       {cat.label}
@@ -122,7 +118,7 @@ export function OffersFilter({ offers, showPageHeader = false }: OffersFilterPro
                     placeholder="Szukaj ofert..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 pr-5 py-2.5 min-h-[44px] text-sm border border-slate-200 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand focus:shadow-md w-full sm:w-72 bg-white transition-shadow"
+                    className="pl-10 pr-5 py-2.5 min-h-[44px] text-sm border border-white/60 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand focus:shadow-md w-full sm:w-72 bg-white/90 transition-shadow"
                   />
                 </div>
                 <button
@@ -131,7 +127,7 @@ export function OffersFilter({ offers, showPageHeader = false }: OffersFilterPro
                   className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] text-sm font-medium rounded-full transition-all whitespace-nowrap ${
                     compareMode
                       ? "bg-brand text-white shadow-md"
-                      : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300"
+                      : "bg-white/80 text-slate-600 border border-white/60 hover:border-white hover:bg-white"
                   }`}
                 >
                   <Scale className="h-4 w-4" aria-hidden="true" />
@@ -141,13 +137,13 @@ export function OffersFilter({ offers, showPageHeader = false }: OffersFilterPro
             </div>
 
             {compareMode && (
-              <p className="text-sm text-white/75">
+              <p className="text-sm text-slate-600">
                 Wybierz od 2 do {MAX_COMPARE} ofert, aby je porównać obok siebie.
               </p>
             )}
           </div>
-        </div>
-      </div>
+        </PublicGlassCard>
+      </PublicSection>
 
       {showFeatured && featuredFiltered.length > 0 && (
         <FeaturedOffers offers={filtered} {...compareProps} />

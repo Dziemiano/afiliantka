@@ -13,26 +13,15 @@ import { FaqSection } from "./faq-section";
 
 const source = readFileSync(new URL("./faq-section.tsx", import.meta.url), "utf8");
 
-const GLASS_TOKENS = [
-  "border-white/45",
-  "bg-white/45",
-  "shadow-[0_8px_32px_rgba(15,23,42,0.12)]",
-  "backdrop-blur-xl",
-] as const;
-
 describe("FaqSection glass contract", () => {
   beforeEach(() => {
     sanityFetch.mockReset();
   });
 
-  it("uses glass styling aligned with homepage cards", () => {
-    for (const token of GLASS_TOKENS) {
-      expect(source, `missing ${token}`).toContain(token);
-    }
-
+  it("uses public glass primitives aligned with homepage cards", () => {
+    expect(source).toContain("PublicGlassCard");
+    expect(source).toContain("PublicSection");
     expect(source).toContain('data-home-section="faq"');
-    expect(source).toContain("rounded-3xl");
-    expect(source).toContain("rounded-2xl");
     expect(source).not.toContain("bg-white border border-slate-200");
   });
 
